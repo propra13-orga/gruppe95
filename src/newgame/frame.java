@@ -58,10 +58,11 @@ System.exit(0);
 }
 
 public static void game(){								// Fenster fuer's Spiel
-	JFrame game = new JFrame();
+	JFrame game = new JFrame("PLAY DUNGEON CRAWLER");
 	game.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	game.setSize(990,740);
 	game.setVisible(true);
+	game.getContentPane().setBackground(Color.LIGHT_GRAY);
 	game.setLocationRelativeTo(null);
 	game.add(new Board());								// Board
 	

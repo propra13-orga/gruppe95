@@ -15,7 +15,7 @@ public class Character extends Movement {
 		this.setImage(image);
 	}
 	
-	public void move(int x, int y){						// führt die Berechnung zb. für rechts (BLOCK,0)
+	public void move(int x, int y){						// fï¿½hrt die Berechnung zb. fï¿½r rechts (BLOCK,0)
 		int nx = this.getX() + x;
 		int ny = this.getY() + y;
 		this.setX(nx);

@@ -4,7 +4,7 @@ import java.awt.Image;
 
 public class Movement {
 	
-private final int BLOCK = 70;									// für die Aktualisierung der Bewegung
+private final int BLOCK = 35;									// fï¿½r die Aktualisierung der Bewegung
 	
 	
 	private int x;
