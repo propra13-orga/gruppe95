@@ -21,7 +21,7 @@ frame.setLayout(null);
 frame.setVisible(true);
 frame.setLocationRelativeTo(null); 						//setzt das Fenster in der mitte
 }
-
+//hallo
 
 public frame(String title){
 super(title);
