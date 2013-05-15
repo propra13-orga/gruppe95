@@ -10,39 +10,42 @@ public class frame extends JFrame implements ActionListener{
 
 private JButton starten; // 2 Buttons
 private JButton beenden;
+private JLabel l1;
 
 public static void main(String[] args){ 
 
-frame frame = new frame ("DUNGEON CRAWLER * Menü*");			// Menue
-frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-frame.setSize(500,500);
-frame.getContentPane().setBackground(Color.DARK_GRAY);
-frame.setLayout(null);
-frame.setVisible(true);
-frame.setLocationRelativeTo(null); 						//setzt das Fenster in der mitte
+frame frame = new frame ("DUNGEON CRAWLER * Menü*");			// Menue						//setzt das Fenster in der mitte
 }
-
 
 public frame(String title){
 super(title);
 
+setSize(500,500);
+setLocationRelativeTo(null);
+setDefaultCloseOperation(EXIT_ON_CLOSE);
+setVisible(true);
+setLayout(new BorderLayout());
+setContentPane(new JLabel(new ImageIcon("C:\\Users\\Tobias\\Documents\\Studium\\Programmierpraktikum\\Start Screen.png")));
+setLayout(null);
+l1=new JLabel();
+
 starten = new JButton("Spiel Starten");
-starten.setBounds(160,80,160,80);
+starten.setBounds(170,95,150,80);
 starten.setFocusPainted(false);
-starten.setBackground(Color.BLACK);
-starten.setForeground(Color.WHITE);
+starten.setIcon(new ImageIcon("C:\\Users\\Tobias\\Documents\\Studium\\Programmierpraktikum\\Start Screen start.png"));
 starten.addActionListener(this);
-add(starten);
-
-
 
 beenden = new JButton("Beenden");
-beenden.setBounds(160,250,160,80);
-beenden.setBackground(Color.BLACK);
-beenden.setForeground(Color.WHITE);
+beenden.setBounds(170,265,150,80);
+beenden.setIcon(new ImageIcon("C:\\Users\\Tobias\\Documents\\Studium\\Programmierpraktikum\\Start Screen end.png"));
 beenden.addActionListener(this);
-add(beenden);
 
+add(l1);
+add(starten);
+add(beenden);
+// refresh
+setSize(499,499);
+setSize(500,500);
 }
 
 
