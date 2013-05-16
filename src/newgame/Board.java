@@ -31,7 +31,7 @@ Image img;
 	private int w = 0;
 	private int h = 0;
 	
-<<<<<<< HEAD
+
 	private String level1 ="########### #######\n"									//Level 11 ist dafür da, wenn man von Level 2 umkehrt. Unterschied zu level1: Spieler liegt am Ausgang des Raums.
 						+	"#  #        ##    #\n"
 						+	"# ## ###### #######\n"
@@ -61,49 +61,7 @@ Image img;
 						+	"#              ## #\n"
 						+	"    ##########    #\n"
 						+	"###################\n";
-=======
-	private String level1 ="########### ################\n"									//Level 11 ist dafuer da, wenn man von Level 2 umkehrt. Unterschied zu level1: Spieler liegt am Ausgang des Raums.
-						+	"####        ##           ###\n"
-						+	"#### ###### ###########  ###\n"
-						+	"#### ######              ###\n"
-						+	"#### #######################\n"
-						+	"#### #######################\n"
-						+	"####                      ##\n"
-						+	"##################### ### ##\n"
-						+	"##################### ### ##\n"
-						+	"#                         ##\n"
-						+	"########################  ##\n"			
-						+	"#                     #  ###\n"
-						+	"#  ###   #  ###        #  ##\n"
-						+	"#  ##### #  ###        #  ##\n"
-						+	"#  ####  #  ###        #  ##\n"
-						+	"#       #######        #  ##\n"
-						+	"#           ##########   ###\n"
-						+	"########  ####         #####\n"
-						+	"#@          ###           ##\n"
-						+	"############################\n";
-	
-	private String level11 ="###########@################\n"									//Level 11 ist dafuer da, wenn man von Level 2 umkehrt. Unterschied zu level1: Spieler liegt am Ausgang des Raums.
-						+	"####        ##           ###\n"
-						+	"#### ###### ###########  ###\n"
-						+	"#### ######              ###\n"
-						+	"#### #######################\n"
-						+	"#### #######################\n"
-						+	"####                      ##\n"
-						+	"##################### ### ##\n"
-						+	"##################### ### ##\n"
-						+	"#                         ##\n"
-						+	"########################  ##\n"			
-						+	"#                     #  ###\n"
-						+	"#  ###   #  ###        #  ##\n"
-						+	"#  ##### #  ###        #  ##\n"
-						+	"#  ####  #  ###        #  ##\n"
-						+	"#       #######        #  ##\n"
-						+	"#           ##########   ###\n"
-						+	"########  ####         #####\n"
-						+	"#           ###           ##\n"
-						+	"############################\n";
->>>>>>> 283e202c1904b94deaacbfbea526d6657217c171
+
 	
 	private String level2 ="###################\n"									//Level 11 ist dafür da, wenn man von Level 2 umkehrt. Unterschied zu level1: Spieler liegt am Ausgang des Raums.
 						+	"####        ##    #\n"
