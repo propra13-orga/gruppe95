@@ -23,7 +23,7 @@ Image img;
 	ImageIcon t = new ImageIcon("src/Resources/rechts.png");
 	ImageIcon b = new ImageIcon("src/Resources/rechts.png");
 	
-	private int BLOCK = 35;
+	private int BLOCK = 50;
 	
 	java.util.List<Movement> walls = new java.util.ArrayList<Movement>();		// Array f�r die W�nde
 	java.util.List<Movement> gegners = new java.util.ArrayList<Movement>();
@@ -31,91 +31,94 @@ Image img;
 	private int w = 0;
 	private int h = 0;
 	
-	private String level1 ="########### ################\n"									//Level 11 ist dafür da, wenn man von Level 2 umkehrt. Unterschied zu level1: Spieler liegt am Ausgang des Raums.
-						+	"####        ##           ###\n"
-						+	"#### ###### ###########  ###\n"
-						+	"#### ######              ###\n"
-						+	"#### #######################\n"
-						+	"#### #######################\n"
-						+	"####                      ##\n"
-						+	"##################### ### ##\n"
-						+	"##################### ### ##\n"
-						+	"#                         ##\n"
-						+	"########################  ##\n"			
-						+	"#                     #  ###\n"
-						+	"#  ###   #  ###        #  ##\n"
-						+	"#  ##### #  ###        #  ##\n"
-						+	"#  ####  #  ###        #  ##\n"
-						+	"#       #######        #  ##\n"
-						+	"#           ##########   ###\n"
-						+	"########  ####         #####\n"
-						+	"#@          ###           ##\n"
-						+	"############################\n";
+	private String level1 ="########### #######\n"									//Level 11 ist dafür da, wenn man von Level 2 umkehrt. Unterschied zu level1: Spieler liegt am Ausgang des Raums.
+						+	"#  #        ##    #\n"
+						+	"# ## ###### #######\n"
+						+	"# ## #   ##       #\n"
+						+	"# ## # # ##########\n"
+						+	"# ## # # ##########\n"
+						+	"#                 #\n"
+						+	"### ###############\n"
+						+	"### ########    ###\n"
+						+	"###          ##   #\n"
+						+	"################# #\n"			
+						+	"#              ## #\n"
+						+	"@   ##########    #\n"
+						+	"###################\n";
 	
-	private String level11 ="###########@################\n"									//Level 11 ist dafür da, wenn man von Level 2 umkehrt. Unterschied zu level1: Spieler liegt am Ausgang des Raums.
-						+	"####        ##           ###\n"
-						+	"#### ###### ###########  ###\n"
-						+	"#### ######              ###\n"
-						+	"#### #######################\n"
-						+	"#### #######################\n"
-						+	"####                      ##\n"
-						+	"##################### ### ##\n"
-						+	"##################### ### ##\n"
-						+	"#                         ##\n"
-						+	"########################  ##\n"			
-						+	"#                     #  ###\n"
-						+	"#  ###   #  ###        #  ##\n"
-						+	"#  ##### #  ###        #  ##\n"
-						+	"#  ####  #  ###        #  ##\n"
-						+	"#       #######        #  ##\n"
-						+	"#           ##########   ###\n"
-						+	"########  ####         #####\n"
-						+	"#           ###           ##\n"
-						+	"############################\n";
+	private String level11 ="###########@#######\n"									//Level 11 ist dafür da, wenn man von Level 2 umkehrt. Unterschied zu level1: Spieler liegt am Ausgang des Raums.
+						+	"#  #        ##    #\n"
+						+	"# ## ###### #######\n"
+						+	"# ## #   ##       #\n"
+						+	"# ## # # ##########\n"
+						+	"# ## # # ##########\n"
+						+	"#                 #\n"
+						+	"### ###############\n"
+						+	"### ########    ###\n"
+						+	"###          ##   #\n"
+						+	"################# #\n"			
+						+	"#              ## #\n"
+						+	"    ##########    #\n"
+						+	"###################\n";
 	
-	private String level2 ="##############\n"				//genauso sind level2 und level 22.				
-						+	"#            #\n"
-						+	"#  #### ### ##\n"
-						+	"#           ##\n"
-						+	"#  ######## ##\n"
-						+	"#  ###  ##  ##\n"
-						+	"#    #  ##  ##\n"
-						+	"#### ## ##    \n"
-						+	"@       ##  ##\n"
-						+	"##############\n";
+	private String level2 ="###################\n"									//Level 11 ist dafür da, wenn man von Level 2 umkehrt. Unterschied zu level1: Spieler liegt am Ausgang des Raums.
+						+	"####        ##    #\n"
+						+	"#### ###### ####  #\n"
+						+	"#### ######       #\n"
+						+	"####        ##### #\n"
+						+	"##   ###########  #\n"
+						+	"## ##########     #\n"
+						+	"##           ##  ##\n"
+						+	"############ ### ##\n"
+						+	"#              #  #\n"
+						+	"#  ####  #######  #\n"			
+						+	"#  ####  #    ##  #\n"
+						+	"@        #  ####   \n"
+						+	"###################\n";
 	
-	private String level22 ="##############\n"
-						  +	 "#            #\n"
-						  +	 "#  #### ### ##\n"
-						  +	 "#           ##\n"
-						  +	 "#  ######## ##\n"
-						  +	 "#  ###  ##  ##\n"
-						  +	 "#    #  ##  ##\n"
-						  +	 "#### ##%##   @\n"
-						  +	 "        ##  ##\n"
-						  +	 "##############\n";
+	private String level22="###################\n"									//Level 11 ist dafür da, wenn man von Level 2 umkehrt. Unterschied zu level1: Spieler liegt am Ausgang des Raums.
+						+	"####        ##    #\n"
+						+	"#### ###### ####  #\n"
+						+	"#### ######       #\n"
+						+	"####        ##### #\n"
+						+	"##   ###########  #\n"
+						+	"## ##########     #\n"
+						+	"##           ##  ##\n"
+						+	"############ ### ##\n"
+						+	"#              #  #\n"
+						+	"#  ####  #######  #\n"			
+						+	"#  ####  #    ##  #\n"
+						+	"         #  ####  @\n"
+						+	"###################\n";
 	
-	private String level3 ="# ############\n"
-						+	"#            #\n"
-						+	"#  ###  ##  ##\n"
-						+	"#  ###  ##  ##\n"
-						+	"#       ##  ##\n"
-						+	"#       ##  ##\n"
-						+	"#       ##  ##\n"
-						+	"##########  ##\n"
-						+	"@           ##\n"
-						+	"##############\n";
-	
-	private String levelend ="##############\n"				
-						+	  "              \n"
-						+  	  "#### #  # ##  \n"
-						+	  "#    ## # # # \n"
-						+	  "###  # ## #  #\n"
-						+	  "#    #  # # # \n"
-						+	  "#### #  # ##  \n"
-						+	  "              \n"
-						+	  "              \n"
-						+	  "##############\n";
+	private String level3 =	"##### #############\n"
+						+	"##### #####       #\n"
+						+	"#           ##### #\n"
+						+	"################  #\n"
+						+	"######    #####  ##\n"
+						+	"#      ## ##    ###\n"
+						+	"#####  ## ## ######\n"
+						+	"##        ##      #\n"
+						+	"## ############## #\n"
+						+	"## ###     #####  #\n"
+						+	"## ###  ##  #### ##\n"
+						+	"## #### ###  ##  ##\n"
+						+	"@       ####      #\n"
+						+	"###################\n";
+	private String levelend ="################# #\n"				
+						+	  "#                 #\n"
+						+	  "#                 #\n"
+						+	  "#                 #\n"
+						+  	  "# #### #  # ##    #\n"
+						+	  "# #    ## # # #   #\n"
+						+	  "# ###  # ## #  #  #\n"
+						+	  "# #    #  # # #   #\n"
+						+	  "# #### #  # ##    #\n"
+						+	  "#                 #\n"
+						+	  "#                 #\n"
+						+	  "#                 #\n"
+						+	  "#                 #\n"
+						+	  "##################\n";
 	
 	private String level=level1;
 	
@@ -165,7 +168,6 @@ Image img;
 	
 	public void buildWorld(Graphics g){
 		
-		g.setColor(Color.LIGHT_GRAY);
 		g.drawImage(img, 0, 0, null);
 		
 		ArrayList<Movement> world = new ArrayList<Movement>();
@@ -203,11 +205,11 @@ Image img;
 				Jay.setImage(image);
 				xx = (Jay.getX()/BLOCK)+1;
 				yy=Jay.getY()/BLOCK;
-				if ((level.charAt(yy*29+xx)!='#')||(xx*yy<0))
+				if ((level.charAt(yy*20+xx)!='#')||(xx*yy<0))
 				{
 					Jay.move(BLOCK,0);
 				}
-				if (level.charAt(yy*29+xx)=='%'){
+				if (level.charAt(yy*20+xx)=='%'){
 					level=levelend;
 					walls.clear();
 					gegners.clear();
@@ -221,15 +223,9 @@ Image img;
 				Jay.setImage(image);
 				xx = (Jay.getX()/BLOCK)-1;
 				yy=Jay.getY()/BLOCK;
-				if ((level.charAt(yy*29+xx)!='#')||(xx*yy<0))
+				if ((level.charAt(yy*20+xx)!='#')||(xx*yy<0))
 				{
 				Jay.move(-BLOCK,0);
-				}
-				if (level.charAt(yy*29+xx)=='%'){
-					level=levelend;
-					walls.clear();
-					gegners.clear();
-					initWorld();
 				}
 				
 			}
@@ -243,18 +239,12 @@ Image img;
 				xx = (Jay.getX()/BLOCK);
 				yy=Jay.getY()/BLOCK -1;
 								
-				if (level.charAt(yy*29+xx)!='#')
+				if (level.charAt(yy*20+xx)!='#')
 				{
 				Jay.move(0, -BLOCK);
 				}
 				if (Jay.getY()==0){
 					Jay.move(0, -BLOCK);
-				}
-				if (level.charAt(yy*29+xx)=='%'){
-					level=levelend;
-					walls.clear();
-					gegners.clear();
-					initWorld();
 				}
 			}
 			
@@ -264,36 +254,30 @@ Image img;
 				Jay.setImage(image);
 				xx = (Jay.getX()/BLOCK);
 				yy=Jay.getY()/BLOCK + 1;
-				if ((level.charAt(yy*29+xx)!='#')||(xx*yy<0))
+				if ((level.charAt(yy*20+xx)!='#')||(xx*yy<0))
 				{
 				Jay.move(0, BLOCK);
-				}
-				
-				if (level.charAt(yy*29+xx)=='%'){
-					level=levelend;
-					walls.clear();
-					gegners.clear();
-					initWorld();
 				}
 			}
 			
 			repaint();
-			
+			System.out.println(Jay.getX());
+			System.out.println(Jay.getY());
 						
-			if ((Jay.getX() == 385) & (Jay.getY()==-35) & ((level==level1)||(level==level11))) {
+			if ((Jay.getY()==-BLOCK) & ((level==level1)||(level==level11))) {
 				level=level2;
 				walls.clear();
 				gegners.clear();
 				initWorld();
 				
 			}
-			if ((Jay.getX() == 490) & (Jay.getY()==(245)) & ((level==level2) || (level==level22))){
+			if ((Jay.getX() ==950 )& ((level==level2) || (level==level22))){
 				level=level3;
 				walls.clear();
 				gegners.clear();
 				initWorld();
 			}
-			if ((Jay.getX() == -35) & (Jay.getY()==(255))){
+			if (Jay.getX() == -BLOCK){
 				if (level==level2){
 				level=level11;}
 				else if (level==level3){
@@ -302,7 +286,7 @@ Image img;
 				gegners.clear();
 				initWorld();
 			}
-			if (Jay.getX()==35 & Jay.getY()<0 & level==level3){
+			if ( Jay.getY()<0 & level==level3){
 				level=levelend;
 				walls.clear();
 				gegners.clear();
