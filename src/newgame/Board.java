@@ -18,10 +18,10 @@ public class Board extends JPanel{
 Image image;
 Image img;
 	
-	ImageIcon r = new ImageIcon("src/Resources/right.png");				// fuer versch. Positionen rechts,links,oben,unten
-	ImageIcon l = new ImageIcon("src/Resources/left.png");
+	ImageIcon r = new ImageIcon("src/Resources/r1.png");				// fuer versch. Positionen rechts,links,oben,unten
+	ImageIcon l = new ImageIcon("src/Resources/l1.png");
 	ImageIcon t = new ImageIcon("src/Resources/rechts.png");
-	ImageIcon b = new ImageIcon("src/Resources/rechts.png");
+	ImageIcon b = new ImageIcon("src/Resources/Character.png");
 	
 	private int BLOCK = 35;
 	
