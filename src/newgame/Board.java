@@ -11,15 +11,15 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.Timer;
-
+//hallo
 
 public class Board extends JPanel{
 
 Image image;
 Image img;
 	
-	ImageIcon r = new ImageIcon("src/Resources/rechts.png");				// fuer versch. Positionen rechts,links,oben,unten
-	ImageIcon l = new ImageIcon("src/Resources/rechts.png");
+	ImageIcon r = new ImageIcon("src/Resources/right.png");				// fuer versch. Positionen rechts,links,oben,unten
+	ImageIcon l = new ImageIcon("src/Resources/left.png");
 	ImageIcon t = new ImageIcon("src/Resources/rechts.png");
 	ImageIcon b = new ImageIcon("src/Resources/rechts.png");
 	
