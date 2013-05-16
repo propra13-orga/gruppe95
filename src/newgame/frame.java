@@ -25,19 +25,19 @@ setLocationRelativeTo(null);
 setDefaultCloseOperation(EXIT_ON_CLOSE);
 setVisible(true);
 setLayout(new BorderLayout());
-setContentPane(new JLabel(new ImageIcon("C:\\Users\\Tobias\\Documents\\Studium\\Programmierpraktikum\\Start Screen.png")));
+setContentPane(new JLabel(new ImageIcon("src/Resources/Start Screen.png")));
 setLayout(null);
 l1=new JLabel();
 
 starten = new JButton("Spiel Starten");
 starten.setBounds(170,95,150,80);
 starten.setFocusPainted(false);
-starten.setIcon(new ImageIcon("C:\\Users\\Tobias\\Documents\\Studium\\Programmierpraktikum\\Start Screen start.png"));
+starten.setIcon(new ImageIcon("src/Resources/Start Screen start.png"));
 starten.addActionListener(this);
 
 beenden = new JButton("Beenden");
 beenden.setBounds(170,265,150,80);
-beenden.setIcon(new ImageIcon("C:\\Users\\Tobias\\Documents\\Studium\\Programmierpraktikum\\Start Screen end.png"));
+beenden.setIcon(new ImageIcon("src/Resources/Start Screen end.png"));
 beenden.addActionListener(this);
 
 add(l1);

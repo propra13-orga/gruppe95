@@ -11,26 +11,27 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.Timer;
-
+//hallo
 
 public class Board extends JPanel{
 
 Image image;
 Image img;
 	
-	ImageIcon r = new ImageIcon("src/Resources/rechts.png");				// fuer versch. Positionen rechts,links,oben,unten
-	ImageIcon l = new ImageIcon("src/Resources/rechts.png");
+	ImageIcon r = new ImageIcon("src/Resources/r1.png");				// fuer versch. Positionen rechts,links,oben,unten
+	ImageIcon l = new ImageIcon("src/Resources/l1.png");
 	ImageIcon t = new ImageIcon("src/Resources/rechts.png");
-	ImageIcon b = new ImageIcon("src/Resources/rechts.png");
+	ImageIcon b = new ImageIcon("src/Resources/Character.png");
 	
 	private int BLOCK = 50;
 	
-	java.util.List<Movement> walls = new java.util.ArrayList<Movement>();		// Array f�r die W�nde
+	java.util.List<Movement> walls = new java.util.ArrayList<Movement>();		// Array fuer die Waende
 	java.util.List<Movement> gegners = new java.util.ArrayList<Movement>();
 	private Character Jay;
 	private int w = 0;
 	private int h = 0;
 	
+<<<<<<< HEAD
 	private String level1 ="########### #######\n"									//Level 11 ist dafür da, wenn man von Level 2 umkehrt. Unterschied zu level1: Spieler liegt am Ausgang des Raums.
 						+	"#  #        ##    #\n"
 						+	"# ## ###### #######\n"
@@ -60,6 +61,49 @@ Image img;
 						+	"#              ## #\n"
 						+	"    ##########    #\n"
 						+	"###################\n";
+=======
+	private String level1 ="########### ################\n"									//Level 11 ist dafuer da, wenn man von Level 2 umkehrt. Unterschied zu level1: Spieler liegt am Ausgang des Raums.
+						+	"####        ##           ###\n"
+						+	"#### ###### ###########  ###\n"
+						+	"#### ######              ###\n"
+						+	"#### #######################\n"
+						+	"#### #######################\n"
+						+	"####                      ##\n"
+						+	"##################### ### ##\n"
+						+	"##################### ### ##\n"
+						+	"#                         ##\n"
+						+	"########################  ##\n"			
+						+	"#                     #  ###\n"
+						+	"#  ###   #  ###        #  ##\n"
+						+	"#  ##### #  ###        #  ##\n"
+						+	"#  ####  #  ###        #  ##\n"
+						+	"#       #######        #  ##\n"
+						+	"#           ##########   ###\n"
+						+	"########  ####         #####\n"
+						+	"#@          ###           ##\n"
+						+	"############################\n";
+	
+	private String level11 ="###########@################\n"									//Level 11 ist dafuer da, wenn man von Level 2 umkehrt. Unterschied zu level1: Spieler liegt am Ausgang des Raums.
+						+	"####        ##           ###\n"
+						+	"#### ###### ###########  ###\n"
+						+	"#### ######              ###\n"
+						+	"#### #######################\n"
+						+	"#### #######################\n"
+						+	"####                      ##\n"
+						+	"##################### ### ##\n"
+						+	"##################### ### ##\n"
+						+	"#                         ##\n"
+						+	"########################  ##\n"			
+						+	"#                     #  ###\n"
+						+	"#  ###   #  ###        #  ##\n"
+						+	"#  ##### #  ###        #  ##\n"
+						+	"#  ####  #  ###        #  ##\n"
+						+	"#       #######        #  ##\n"
+						+	"#           ##########   ###\n"
+						+	"########  ####         #####\n"
+						+	"#           ###           ##\n"
+						+	"############################\n";
+>>>>>>> 283e202c1904b94deaacbfbea526d6657217c171
 	
 	private String level2 ="###################\n"									//Level 11 ist dafür da, wenn man von Level 2 umkehrt. Unterschied zu level1: Spieler liegt am Ausgang des Raums.
 						+	"####        ##    #\n"
@@ -137,7 +181,7 @@ Image img;
 		
 	}
 	
-	public final void initWorld(){								// zeichnet den level mit walls, character und gegeners.
+	public final void initWorld(){								// zeichnet das level mit walls, character und gegner.
 
 		int x = 0;
 		int y = 0;
@@ -191,7 +235,7 @@ Image img;
 		buildWorld(g);
 	}
 	
-	private class Ap extends KeyAdapter{											// f�r rechts: holt das Bild mit Position rechts
+	private class Ap extends KeyAdapter{											// fuer rechts: holt das Bild mit Position rechts
 																					// durch die class Charackter bewegt sich Jay ein Block nach rechts..
 		public  void keyPressed(KeyEvent e){
 			
