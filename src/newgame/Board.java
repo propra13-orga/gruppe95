@@ -23,7 +23,7 @@ Image img;
 	ImageIcon t = new ImageIcon("src/Resources/rechts.png");
 	ImageIcon b = new ImageIcon("src/Resources/Character.png");
 	
-	private int BLOCK = 50;
+	private int BLOCK = 50;								// 50* 50 Pixel
 	
 	java.util.List<Movement> walls = new java.util.ArrayList<Movement>();		// Array fuer die Waende
 	java.util.List<Movement> gegners = new java.util.ArrayList<Movement>();
@@ -139,7 +139,7 @@ Image img;
 		
 	}
 	
-	public final void initWorld(){								// zeichnet das level mit walls, character und gegner.
+	public final void initWorld(){						// zeichnet das level mit walls, character und gegner.
 
 		int x = 0;
 		int y = 0;
@@ -156,7 +156,7 @@ Image img;
 				wall = new Wall(x,y);
 				walls.add(wall);
 				x = x + BLOCK;
-			}else if(obj == '@'){														// wo character sich beim Start befinden soll
+			}else if(obj == '@'){						// wo character sich beim Start befinden soll beim starten der Level
 				if (level!=levelend)
 					{Jay = new Character(x,y);
 				x = x + BLOCK;}
@@ -180,7 +180,7 @@ Image img;
 		world.addAll(gegners);
 		
 		
-		for(int i = 0; i < world.size(); i++){
+		for(int i = 0; i < world.size(); i++){						// g.drawImage für die Grafsische Zeichnung
 			Movement obj = (Movement) world.get(i);
 			g.drawImage(obj.getImage(), obj.getX(), obj.getY(), this);
 			
@@ -193,8 +193,8 @@ Image img;
 		buildWorld(g);
 	}
 	
-	private class Ap extends KeyAdapter{											// fuer rechts: holt das Bild mit Position rechts
-																					// durch die class Charackter bewegt sich Jay ein Block nach rechts..
+	private class Ap extends KeyAdapter{					// fuer rechts: holt das Bild mit Position rechts
+										// durch die class Charackter bewegt sich Jay ein Block nach rechts..
 		public  void keyPressed(KeyEvent e){
 			
 			int key = e.getKeyCode();
