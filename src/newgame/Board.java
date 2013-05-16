@@ -25,13 +25,13 @@ Image img;
 	
 	private int BLOCK = 35;
 	
-	java.util.List<Movement> walls = new java.util.ArrayList<Movement>();		// Array f�r die W�nde
+	java.util.List<Movement> walls = new java.util.ArrayList<Movement>();		// Array fuer die Waende
 	java.util.List<Movement> gegners = new java.util.ArrayList<Movement>();
 	private Character Jay;
 	private int w = 0;
 	private int h = 0;
 	
-	private String level1 ="########### ################\n"									//Level 11 ist dafür da, wenn man von Level 2 umkehrt. Unterschied zu level1: Spieler liegt am Ausgang des Raums.
+	private String level1 ="########### ################\n"									//Level 11 ist dafuer da, wenn man von Level 2 umkehrt. Unterschied zu level1: Spieler liegt am Ausgang des Raums.
 						+	"####        ##           ###\n"
 						+	"#### ###### ###########  ###\n"
 						+	"#### ######              ###\n"
@@ -52,7 +52,7 @@ Image img;
 						+	"#@          ###           ##\n"
 						+	"############################\n";
 	
-	private String level11 ="###########@################\n"									//Level 11 ist dafür da, wenn man von Level 2 umkehrt. Unterschied zu level1: Spieler liegt am Ausgang des Raums.
+	private String level11 ="###########@################\n"									//Level 11 ist dafuer da, wenn man von Level 2 umkehrt. Unterschied zu level1: Spieler liegt am Ausgang des Raums.
 						+	"####        ##           ###\n"
 						+	"#### ###### ###########  ###\n"
 						+	"#### ######              ###\n"
@@ -134,7 +134,7 @@ Image img;
 		
 	}
 	
-	public final void initWorld(){								// zeichnet den level mit walls, character und gegeners.
+	public final void initWorld(){								// zeichnet das level mit walls, character und gegner.
 
 		int x = 0;
 		int y = 0;
@@ -189,7 +189,7 @@ Image img;
 		buildWorld(g);
 	}
 	
-	private class Ap extends KeyAdapter{											// f�r rechts: holt das Bild mit Position rechts
+	private class Ap extends KeyAdapter{											// fuer rechts: holt das Bild mit Position rechts
 																					// durch die class Charackter bewegt sich Jay ein Block nach rechts..
 		public  void keyPressed(KeyEvent e){
 			
