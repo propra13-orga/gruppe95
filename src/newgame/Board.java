@@ -8,6 +8,7 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
+import javax.swing.JPanel;
 
 
 public class Board extends JPanel{
@@ -17,11 +18,12 @@ Image img;
 	
 	ImageIcon r = new ImageIcon("src/Resources/r1.png");				// fuer versch. Positionen rechts,links,oben,unten
 	ImageIcon l = new ImageIcon("src/Resources/l1.png");
-	ImageIcon t = new ImageIcon("src/Resources/rechts.png");
+	ImageIcon t = new ImageIcon("src/Resources/Character top.png");
 	ImageIcon b = new ImageIcon("src/Resources/Character.png");
 	
 	private int BLOCK = 50;								// 50* 50 Pixel
 	
+	java.util.List<Movement> enemys = new java.util.ArrayList<Movement>();
 	java.util.List<Movement> walls = new java.util.ArrayList<Movement>();		// Array fuer die Waende
 	java.util.List<Movement> gegners = new java.util.ArrayList<Movement>();
 	private Character Jay;
@@ -35,7 +37,7 @@ Image img;
 						+	"# ## #   ##       #\n"
 						+	"# ## # # ##########\n"
 						+	"# ## # # ##########\n"
-						+	"#                 #\n"
+						+	"# *               #\n"
 						+	"### ###############\n"
 						+	"### ########    ###\n"
 						+	"###          ##   #\n"
@@ -125,7 +127,7 @@ Image img;
 		
 		addKeyListener(new Ap());
 		setFocusable(true);
-		ImageIcon i= new ImageIcon ("src/Resources/back1.png");		//Backgroung image vom Raum (Die Wege)
+		ImageIcon i= new ImageIcon ("src/Resources/back1.png");		//Background image vom Raum (Die Wege)
 		img=i.getImage();
 		initWorld();
 	}
@@ -141,6 +143,7 @@ Image img;
 		int x = 0;
 		int y = 0;
 		Wall wall;
+		Enemy enemy;
 		
 		for(int i = 0; i < level.length(); i++){
 			
@@ -159,8 +162,16 @@ Image img;
 				x = x + BLOCK;}
 			}
 			else if(obj == ' '){
+				x = x + BLOCK;}
+			
+			else if(obj == '*'){                // stellt den Enemy in den Levels als * dar
+				enemy = new Enemy(x,y);
+				enemys.add(enemy);
 				x = x + BLOCK;
+			
+				
 			}
+			
 			
 		}
 	}
@@ -174,7 +185,7 @@ Image img;
 		world.addAll(walls);
 		if (level!=levelend)
 			{world.add(Jay);}
-		world.addAll(gegners);
+		world.addAll(enemys);
 		
 		
 		for(int i = 0; i < world.size(); i++){						// g.drawImage für die Grafsische Zeichnung
@@ -211,7 +222,7 @@ Image img;
 				if (level.charAt(yy*20+xx)=='%'){
 					level=levelend;
 					walls.clear();
-					gegners.clear();
+					enemys.clear();
 					initWorld();
 				}
 				
@@ -266,14 +277,14 @@ Image img;
 			if ((Jay.getY()==-BLOCK) & ((level==level1)||(level==level11))) {
 				level=level2;
 				walls.clear();
-				gegners.clear();
+				enemys.clear();
 				initWorld();
 				
 			}
 			if ((Jay.getX() ==950 )& ((level==level2) || (level==level22))){
 				level=level3;
 				walls.clear();
-				gegners.clear();
+				enemys.clear();
 				initWorld();
 			}
 			if (Jay.getX() == -BLOCK){
@@ -282,13 +293,13 @@ Image img;
 				else if (level==level3){
 				level=level22;}	
 				walls.clear();
-				gegners.clear();
+				enemys.clear();
 				initWorld();
 			}
 			if ( Jay.getY()<0 & level==level3){
 				level=levelend;
 				walls.clear();
-				gegners.clear();
+				enemys.clear();
 				initWorld();
 			}
 			
