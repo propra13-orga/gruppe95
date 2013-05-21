@@ -8,44 +8,43 @@ import java.awt.*;
 public class frame extends JFrame implements ActionListener{
 
 
-private JButton starten; // 2 Buttons
+private JButton starten; 																// fuegt der Klasse die Buttons und das Label hinzu
 private JButton beenden;
 private JLabel l1;
 
 public static void main(String[] args){ 
 
-frame frame = new frame ("DUNGEON CRAWLER * Menü*");			// Menue						//setzt das Fenster in der mitte
+frame frame = new frame ("DUNGEON CRAWLER * Menue*");									// Menuetitel
 }
 
 public frame(String title){
 super(title);
 
 setSize(500,500);
-setLocationRelativeTo(null);
+setLocationRelativeTo(null);															// zentriert das Fenster
 setDefaultCloseOperation(EXIT_ON_CLOSE);
 setVisible(true);
 setLayout(new BorderLayout());
-setContentPane(new JLabel(new ImageIcon("src/Resources/Start Screen.png")));
+setContentPane(new JLabel(new ImageIcon("src/Resources/Start Screen.png")));			// setzt die Groesse des Fensters, den Hintergrund, sowie die Operation zum Schliessen fest
 setLayout(null);
 l1=new JLabel();
 
 starten = new JButton("Spiel Starten");
 starten.setBounds(170,95,150,80);
 starten.setFocusPainted(false);
-starten.setIcon(new ImageIcon("src/Resources/Start Screen start.png"));
-starten.addActionListener(this);
+starten.setIcon(new ImageIcon("src/Resources/Start Screen start.png")); 				// setzt Groesse und Hintergruende fuer die Buttons fest
+starten.addActionListener(this);														// fuegt Aktion dem Buttonklick hinzu
 
 beenden = new JButton("Beenden");
 beenden.setBounds(170,265,150,80);
-beenden.setIcon(new ImageIcon("src/Resources/Start Screen end.png"));
+beenden.setIcon(new ImageIcon("src/Resources/Start Screen end.png"));					// gleiches Verhalten wie beim Button "starten"
 beenden.addActionListener(this);
 
 add(l1);
 add(starten);
-add(beenden);
-// refresh
+add(beenden);																			// fuegt dem Frame die noetigen Buttons hinzu
 setSize(499,499);
-setSize(500,500);
+setSize(500,500);																		// aktualisiert das Fenster; noetig damit Einstellungen uebernommen werden
 }
 
 
@@ -53,21 +52,21 @@ setSize(500,500);
 public void actionPerformed(ActionEvent e) {
 // TODO Auto-generated method stub
 
-if (e.getSource()==starten)						
+if (e.getSource()==starten)																// startet das Spiel
 game();
 
-if (e.getSource()==beenden)								// schliesst Menue
+if (e.getSource()==beenden)																// schliesst Menue
 System.exit(0);
 }
 
-public static void game(){								// Fenster fuer's Spiel
+public static void game(){																// Fenster fuer's Spiel
 	JFrame game = new JFrame("PLAY DUNGEON CRAWLER");
-	game.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	game.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);	
 	game.setSize(950,720);
 	game.setVisible(true);
 	game.getContentPane().setBackground(Color.LIGHT_GRAY);
 	game.setLocationRelativeTo(null);
-	game.add(new Board());								// Board
+	game.add(new Board());																// oeffnet Klasse board (das eigentliche Spiel)
 
 	}
 }

@@ -11,7 +11,7 @@ private Image image;
 	public Enemy(int x, int y){
 		super(x,y);
 
-		ImageIcon i = new ImageIcon("src/Resources/fire.png");
+		ImageIcon i = new ImageIcon("src/Resources/fire.png");					// holt sich die Grafiken für das Feuer, die im Board eingebunden werden
 		image = i.getImage();
 		this.setImage(image);
 

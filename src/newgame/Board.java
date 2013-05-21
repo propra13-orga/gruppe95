@@ -16,7 +16,7 @@ public class Board extends JPanel{
 Image image;
 Image img;
 
-	ImageIcon r = new ImageIcon("src/Resources/r1.png");				// fuer versch. Positionen rechts,links,oben,unten
+	ImageIcon r = new ImageIcon("src/Resources/r1.png");									// fuer versch. Positionen rechts, links, oben, unten
 	ImageIcon l = new ImageIcon("src/Resources/l1.png");
 	ImageIcon t = new ImageIcon("src/Resources/Character top.png");
 	ImageIcon b = new ImageIcon("src/Resources/Character.png");
@@ -24,7 +24,7 @@ Image img;
 	private int BLOCK = 50;								// 50* 50 Pixel
 
 	java.util.List<Movement> enemys = new java.util.ArrayList<Movement>();
-	java.util.List<Movement> walls = new java.util.ArrayList<Movement>();		// Array fuer die Waende
+	java.util.List<Movement> walls = new java.util.ArrayList<Movement>();					// Array fuer die Waende
 	java.util.List<Movement> gegners = new java.util.ArrayList<Movement>();
 	java.util.List<Movement> keys = new java.util.ArrayList<Movement>();
 	private Character Jay;
@@ -32,7 +32,7 @@ Image img;
 	private int h = 0;
 
 
-	private String level1 = "########### #######\n"									//Level 11 ist dafür da, wenn man von Level 2 umkehrt. Unterschied zu level1: Spieler liegt am Ausgang des Raums.
+	private String level1 = "########### #######\n"											//Level 11 ist dafuer da, wenn man von Level 2 umkehrt. Unterschied zu level1: Spieler liegt am Ausgang des Raums.
 		 	+	"#         #       #\n"
 			+	"# ## ####  ###### #\n"
 			+	"# ## #   #        #\n"
@@ -47,7 +47,7 @@ Image img;
 			+	"@   ##########    #\n"
 			+	"###################\n";
 
-	private String level11 ="###########@#######\n"									//Level 11 ist dafür da, wenn man von Level 2 umkehrt. Unterschied zu level1: Spieler liegt am Ausgang des Raums.
+	private String level11 ="###########@#######\n"											//Level 11 ist dafuer da, wenn man von Level 2 umkehrt. Unterschied zu level1: Spieler liegt am Ausgang des Raums.
 		 	+	"#         #       #\n"
 			+	"# ## ####  ###### #\n"
 			+	"# ## #   #        #\n"
@@ -63,7 +63,7 @@ Image img;
 			+	"###################\n";
 
 
-	private String level2 = "###################\n"									//Level 11 ist dafür da, wenn man von Level 2 umkehrt. Unterschied zu level1: Spieler liegt am Ausgang des Raums.
+	private String level2 = "###################\n"											//Level 11 ist dafuer da, wenn man von Level 2 umkehrt. Unterschied zu level1: Spieler liegt am Ausgang des Raums.
 			+	"####        ##    #\n"
 			+	"#### ###### ##    #\n"
 			+	"#### ######       #\n"
@@ -78,7 +78,7 @@ Image img;
 			+	"@        #  ####   \n"
 			+	"###################\n";
 
-	private String level22= "###################\n"									//Level 11 ist dafür da, wenn man von Level 2 umkehrt. Unterschied zu level1: Spieler liegt am Ausgang des Raums.
+	private String level22= "###################\n"											//Level 11 ist dafuer da, wenn man von Level 2 umkehrt. Unterschied zu level1: Spieler liegt am Ausgang des Raums.
 			+	"####        ##    #\n"
 			+	"#### ###### ##    #\n"
 			+	"#### ######       #\n"
@@ -128,7 +128,7 @@ Image img;
 
 		addKeyListener(new Ap());
 		setFocusable(true);
-		ImageIcon i= new ImageIcon ("src/Resources/back1.png");		//Background image vom Raum (Die Wege)
+		ImageIcon i= new ImageIcon ("src/Resources/back1.png");								// Background Image vom Raum (Die Wege)
 		img=i.getImage();
 		initWorld();
 	}
@@ -139,7 +139,7 @@ Image img;
 
 	}
 
-	public final void initWorld(){						// zeichnet das level mit walls, character und gegner.
+	public final void initWorld(){															// zeichnet das Level mit Walls, Character, dem Schluessel und Gegner.
 
 		int x = 0;
 		int y = 0;
@@ -158,7 +158,7 @@ Image img;
 				wall = new Wall(x,y);
 				walls.add(wall);
 				x = x + BLOCK;
-			}else if(obj == '@'){						// wo character sich beim Start befinden soll beim starten der Level
+			}else if(obj == '@'){															// Legt die Position des Charakters beim Levelstart fest
 				if (level!=levelend)
 					{Jay = new Character(x,y);
 				x = x + BLOCK;}
@@ -166,13 +166,13 @@ Image img;
 			else if(obj == ' '){
 				x = x + BLOCK;}
 
-			else if(obj == '*'){                // stellt den Enemy in den Levels als * dar
+			else if(obj == '*'){                											// stellt den Enemy in den Levels als * dar
 				enemy = new Enemy(x,y);
 				enemys.add(enemy);
 				x = x + BLOCK;
 				}
-			else if(obj == '$'){                // stellt den Enemy in den Levels als * dar
-				key = new Key(x,y);
+			else if(obj == '$'){                											// stellt den Schluessel in den Levels als $ dar
+				key = new Key(x,y);	
 				keys.add(key);
 				x = x + BLOCK;
 			}
@@ -194,7 +194,7 @@ Image img;
 		world.addAll(keys);
 
 
-		for(int i = 0; i < world.size(); i++){						// g.drawImage für die Grafsische Zeichnung
+		for(int i = 0; i < world.size(); i++){												// g.drawImage fuer die Grafische Zeichnung
 			Movement obj = (Movement) world.get(i);
 			g.drawImage(obj.getImage(), obj.getX(), obj.getY(), this);
 
@@ -207,8 +207,8 @@ Image img;
 		buildWorld(g);
 	}
 
-	private class Ap extends KeyAdapter{					// fuer rechts: holt das Bild mit Position rechts
-										// durch die class Charackter bewegt sich Jay ein Block nach rechts..
+	private class Ap extends KeyAdapter{													// fuer rechts: holt das Bild mit Position rechts
+																							// durch die class Character bewegt sich Diggy in die entsprechende Richtung
 		public  void keyPressed(KeyEvent e){
 
 			int key = e.getKeyCode();
@@ -232,7 +232,7 @@ Image img;
 					keys.clear();
 					initWorld();
 				}
-				if (level.charAt(yy*20+xx)=='*'){     //Kollision mit dem Gegner
+				if (level.charAt(yy*20+xx)=='*'){     										// Kollision mit dem Gegner, Neustart des Spiels
 					restartLevel();
 				}
 				if (level.charAt(yy*20+xx)=='$')
