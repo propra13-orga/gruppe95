@@ -26,6 +26,7 @@ Image img;
 	java.util.List<Movement> enemys = new java.util.ArrayList<Movement>();
 	java.util.List<Movement> walls = new java.util.ArrayList<Movement>();		// Array fuer die Waende
 	java.util.List<Movement> gegners = new java.util.ArrayList<Movement>();
+	java.util.List<Movement> keys = new java.util.ArrayList<Movement>();
 	private Character Jay;
 	private int w = 0;
 	private int h = 0;
@@ -92,8 +93,8 @@ Image img;
 			+	"         #  ####  @\n"
 			+	"###################\n";
 
-	private String level3 =	"##### #############\n"
-			+	"##### #####       #\n"
+	private String level3 =	"###################\n"
+			+	"####*$*####       #\n"
 			+	"#           ##### #\n"
 			+	"###########  *    #\n"
 			+	"######    #####  ##\n"
@@ -144,6 +145,7 @@ Image img;
 		int y = 0;
 		Wall wall;
 		Enemy enemy;
+		Key key;
 
 		for(int i = 0; i < level.length(); i++){
 
@@ -168,8 +170,11 @@ Image img;
 				enemy = new Enemy(x,y);
 				enemys.add(enemy);
 				x = x + BLOCK;
-
-
+				}
+			else if(obj == '$'){                // stellt den Enemy in den Levels als * dar
+				key = new Key(x,y);
+				keys.add(key);
+				x = x + BLOCK;
 			}
 
 
@@ -186,6 +191,7 @@ Image img;
 		if (level!=levelend)
 			{world.add(Jay);}
 		world.addAll(enemys);
+		world.addAll(keys);
 
 
 		for(int i = 0; i < world.size(); i++){						// g.drawImage für die Grafsische Zeichnung
@@ -223,11 +229,21 @@ Image img;
 					level=levelend;
 					walls.clear();
 					enemys.clear();
+					keys.clear();
 					initWorld();
 				}
 				if (level.charAt(yy*20+xx)=='*'){     //Kollision mit dem Gegner
 					restartLevel();
 				}
+				if (level.charAt(yy*20+xx)=='$')
+				{
+					level=levelend;
+					walls.clear();
+					enemys.clear();
+					keys.clear();
+					initWorld();
+				}
+
 
 			}
 
@@ -243,6 +259,14 @@ Image img;
 				if (level.charAt(yy*20+xx)=='*')
 				{
 					restartLevel();
+				}
+				if (level.charAt(yy*20+xx)=='$')
+				{
+					level=levelend;
+					walls.clear();
+					enemys.clear();
+					keys.clear();
+					initWorld();
 				}
 
 			}
@@ -267,6 +291,15 @@ Image img;
 				{
 					restartLevel();
 				}
+				if (level.charAt(yy*20+xx)=='$')
+				{
+					level=levelend;
+					walls.clear();
+					enemys.clear();
+					keys.clear();
+					initWorld();
+				}
+
 			}
 
 
@@ -283,6 +316,15 @@ Image img;
 				{
 					restartLevel();
 				}
+				if (level.charAt(yy*20+xx)=='$')
+				{
+					level=levelend;
+					walls.clear();
+					enemys.clear();
+					keys.clear();
+					initWorld();
+				}
+
 			}
 
 			repaint();
@@ -293,6 +335,7 @@ Image img;
 				level=level2;
 				walls.clear();
 				enemys.clear();
+				keys.clear();
 				initWorld();
 
 			}
@@ -300,6 +343,7 @@ Image img;
 				level=level3;
 				walls.clear();
 				enemys.clear();
+				keys.clear();
 				initWorld();
 			}
 			if (Jay.getX() == -BLOCK){
@@ -309,12 +353,7 @@ Image img;
 				level=level22;}	
 				walls.clear();
 				enemys.clear();
-				initWorld();
-			}
-			if ( Jay.getY()<0 & level==level3){
-				level=levelend;
-				walls.clear();
-				enemys.clear();
+				keys.clear();
 				initWorld();
 			}
 
@@ -324,6 +363,7 @@ Image img;
 			level=level1;
 			walls.clear();
 			enemys.clear();
+			keys.clear();
 			initWorld();
 			
 		}
