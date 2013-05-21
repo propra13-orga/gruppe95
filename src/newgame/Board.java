@@ -219,14 +219,14 @@ Image img;
 				{
 					Jay.move(BLOCK,0);
 				}
-				if (level.charAt(yy*20+xx)=='*'){     //Kollision mit dem Gegner
-					restartLevel();
-				}
 				if (level.charAt(yy*20+xx)=='%'){
 					level=levelend;
 					walls.clear();
 					enemys.clear();
 					initWorld();
+				}
+				if (level.charAt(yy*20+xx)=='*'){     //Kollision mit dem Gegner
+					restartLevel();
 				}
 
 			}
@@ -240,7 +240,8 @@ Image img;
 				{
 				Jay.move(-BLOCK,0);
 				}
-				if (level.charAt(yy*20+xx)=='*'){
+				if (level.charAt(yy*20+xx)=='*')
+				{
 					restartLevel();
 				}
 
@@ -254,9 +255,10 @@ Image img;
 				Jay.setImage(image);
 				xx = (Jay.getX()/BLOCK);
 				yy=Jay.getY()/BLOCK -1;
-				if ((level.charAt(yy*20+xx)!='#')||(xx*yy<0))
+
+				if (level.charAt(yy*20+xx)!='#')
 				{
-				Jay.move(0, -BLOCK);	
+				Jay.move(0, -BLOCK);
 				}
 				if (Jay.getY()==0){
 					Jay.move(0, -BLOCK);
@@ -277,7 +279,8 @@ Image img;
 				{
 				Jay.move(0, BLOCK);
 				}
-				if (level.charAt(yy*20+xx)=='*'){
+				if (level.charAt(yy*20+xx)=='*')
+				{
 					restartLevel();
 				}
 			}
@@ -317,15 +320,13 @@ Image img;
 
 		}
 
-		private void restartLevel() {     //Neustart nach Berührung des Gegners
+		private void restartLevel() {
 			level=level1;
 			walls.clear();
 			enemys.clear();
 			initWorld();
 			
 		}
-
-		
 
 	}
 
