@@ -42,5 +42,4 @@ private final int BLOCK = 50;									// fuer die Aktualisierung der Bewegung
 		this.y = y;
 	}
 	
-
 }

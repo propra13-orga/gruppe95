@@ -68,6 +68,6 @@ public static void game(){								// Fenster fuer's Spiel
 	game.getContentPane().setBackground(Color.LIGHT_GRAY);
 	game.setLocationRelativeTo(null);
 	game.add(new Board());								// Board
-	
+
 	}
 }
