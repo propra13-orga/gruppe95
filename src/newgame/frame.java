@@ -64,7 +64,7 @@ public static void game(){																// Fenster fuer's Spiel
 	game.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);	
 	game.setSize(950,720);
 	game.setVisible(true);
-	game.getContentPane().setBackground(Color.LIGHT_GRAY);
+	//game.getContentPane().setBackground(Color.LIGHT_GRAY);
 	game.setLocationRelativeTo(null);
 	game.add(new Board());																// oeffnet Klasse board (das eigentliche Spiel)
 

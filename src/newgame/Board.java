@@ -8,7 +8,10 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
+
+
 
 
 public class Board extends JPanel{
@@ -25,11 +28,11 @@ Image img;
 
 	java.util.List<Movement> enemys = new java.util.ArrayList<Movement>();
 	java.util.List<Movement> walls = new java.util.ArrayList<Movement>();					// Array fuer die Waende
-	java.util.List<Movement> gegners = new java.util.ArrayList<Movement>();
 	java.util.List<Movement> keys = new java.util.ArrayList<Movement>();
+	
 	private Character Jay;
-	private int w = 0;
-	private int h = 0;
+
+	
 
 
 	private String level1 = "########### #######\n"											//Level 11 ist dafuer da, wenn man von Level 2 umkehrt. Unterschied zu level1: Spieler liegt am Ausgang des Raums.
@@ -232,8 +235,10 @@ Image img;
 					keys.clear();
 					initWorld();
 				}
-				if (level.charAt(yy*20+xx)=='*'){     										// Kollision mit dem Gegner, Neustart des Spiels
-					restartLevel();
+				if (level.charAt(yy*20+xx)=='*'){    // Kollision mit dem Gegner, Neustart des Spiels
+					Game_over();
+					//restartLevel();
+					
 				}
 				if (level.charAt(yy*20+xx)=='$')
 				{
@@ -258,7 +263,8 @@ Image img;
 				}
 				if (level.charAt(yy*20+xx)=='*')
 				{
-					restartLevel();
+					Game_over();
+					//restartLevel();
 				}
 				if (level.charAt(yy*20+xx)=='$')
 				{
@@ -289,7 +295,8 @@ Image img;
 				}
 				if (level.charAt(yy*20+xx)=='*')
 				{
-					restartLevel();
+					Game_over();
+					//restartLevel();
 				}
 				if (level.charAt(yy*20+xx)=='$')
 				{
@@ -314,7 +321,8 @@ Image img;
 				}
 				if (level.charAt(yy*20+xx)=='*')
 				{
-					restartLevel();
+					Game_over();
+					//restartLevel();
 				}
 				if (level.charAt(yy*20+xx)=='$')
 				{
@@ -328,8 +336,8 @@ Image img;
 			}
 
 			repaint();
-			System.out.println(Jay.getX());
-			System.out.println(Jay.getY());
+		//	System.out.println(Jay.getX());
+		//	System.out.println(Jay.getY());
 
 			if ((Jay.getY()==-BLOCK) & ((level==level1)||(level==level11))) {
 				level=level2;
@@ -359,14 +367,39 @@ Image img;
 
 		}
 
-		private void restartLevel() {
+		/**private void restartLevel() {			// Durch Game_over ersetzt...zum Start Menü
 			level=level1;
 			walls.clear();
 			enemys.clear();
 			keys.clear();
 			initWorld();
 			
-		}
+		}*/
+		
+		 public void Game_over(){
+			 
+
+				
+			 JFrame Game_over = new JFrame();
+			 
+			 
+			 Game_over.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			 Game_over.setSize(500,500);
+			 Game_over.setVisible(true);
+			 Game_over.setFocusable(true);
+			 Game_over.setLocationRelativeTo(null);   // Fenster in der MItte 
+			 Game_over.add(new Game_over());
+			
+			
+			 
+
+			
+				
+				
+
+					
+				}
+		 
 
 	}
 
