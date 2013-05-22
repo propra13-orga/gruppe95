@@ -209,22 +209,15 @@ Image img;		//Bild fuer den Hintergrund (WEG)
 				xx = (Jay.getX()/BLOCK)+1;				//xx und yy sind die imaginaere Koordinatensystem innerhalb des String Variable (level).
 				yy=Jay.getY()/BLOCK;					//xx und yy werden dafuer gerechnet um zu erkennen, ob an der Stelle wohin sich die Spielfigur bewegen will, kein # im variable level bzw kein Stueck Mauer im Spielfeld gibt
 				if ((level.charAt(yy*20+xx)!='#')||(xx*yy<0))		//yy wird mal 20 multipliziert weil in jeder linie des Spielfelds gibts 20 Bloecke (also in jeder linie der string level gibts 20 zeichen)
-				{
+				{							//Wandkollision:
 					Jay.move(BLOCK,0);				//erst wenn es keinen Stueck Mauer oder ein Ein-Ausgang gibt(entweder xx oder yy <0 ist) darf/kann sich die Spielfigur bewegen
 				}
-				if (level.charAt(yy*20+xx)=='%'){
-					level=levelend;
-					walls.clear();
-					enemys.clear();
-					keys.clear();
-					initWorld();
-				}
-				if (level.charAt(yy*20+xx)=='*'){    // Kollision mit dem Gegner, Neustart des Spiels
+				if (level.charAt(yy*20+xx)=='*'){    			// Kollision mit dem Gegner, Neustart des Spiels
 					//Game_over();
 					restartLevel();
 					
 				}
-				if (level.charAt(yy*20+xx)=='$')
+				if (level.charAt(yy*20+xx)=='$')			//schluessel gefunden!
 				{
 					level=levelend;
 					walls.clear();
@@ -320,26 +313,26 @@ Image img;		//Bild fuer den Hintergrund (WEG)
 			}
 
 			repaint();
-		//	System.out.println(Jay.getX());
-		//	System.out.println(Jay.getY());
+			
 
-			if ((Jay.getY()==-BLOCK) & ((level==level1)||(level==level11))) {
-				level=level2;
-				walls.clear();
+			if ((Jay.getY()==-BLOCK) & ((level==level1)||(level==level11))) {		//Wenn der Spieler am Ausgang des 1. Raums ist dann 
+				level=level2;								//zu level2 wechseln (Raum 2)
+				walls.clear();								//alle Waende, Keys und Gegners des vorherigen level loeschen (arrays wieder initialisieren)
 				enemys.clear();
 				keys.clear();
-				initWorld();
+				initWorld();								//world initialisieren 
 
 			}
-			if ((Jay.getX() ==950 )& ((level==level2) || (level==level22))){
+			if ((Jay.getX() ==950 )& ((level==level2) || (level==level22))){		//Bedingungen erfuellt nur am Ausgang des 2. Raums
 				level=level3;
 				walls.clear();
 				enemys.clear();
 				keys.clear();
 				initWorld();
 			}
-			if (Jay.getX() == -BLOCK){
-				if (level==level2){
+			if (Jay.getX() == -BLOCK){							//wenn x=-BLOCK ist, befindet sich der Spieler am eingang der Raum 2 oder 3
+													//und wenn er dadurch geht dann kehrt er zu einem vorherigen Raum (Raum3-->Raum2 oder Raum2-->Raum1)
+				if ((level==level2) || (level==level22)){
 				level=level11;}
 				else if (level==level3){
 				level=level22;}	
