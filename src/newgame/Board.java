@@ -110,7 +110,7 @@ Image img;		//Bild fuer den Hintergrund (WEG)
 			+	"## #### ###  ##  ##\n"
 			+	"@       ####      #\n"
 			+	"###################\n";
-	private String levelend = "###################\n"				
+	private String levelend = "###################\n"				//levelend oeffnet sich beim Sieg
 			+	  "#                 #\n"
 			+	  "#                 #\n"
 			+	  "#                 #\n"
@@ -190,7 +190,8 @@ Image img;		//Bild fuer den Hintergrund (WEG)
 		ArrayList<Movement> world = new ArrayList<Movement>();
 
 		world.addAll(walls);							//Alle Objekte in einem Array world speichern
-		world.add(Jay);
+		if (level!=levelend){							//im levelend soll kein Spielfigur geben
+		world.add(Jay);}
 		world.addAll(enemys);
 		world.addAll(keys);
 
