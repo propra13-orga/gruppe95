@@ -332,11 +332,11 @@ Image img;		//Bild fuer den Hintergrund (WEG)
 			}
 			if (Jay.getX() == -BLOCK){							//wenn x=-BLOCK ist, befindet sich der Spieler am eingang der Raum 2 oder 3
 													//und wenn er dadurch geht dann kehrt er zu einem vorherigen Raum (Raum3-->Raum2 oder Raum2-->Raum1)
-				if ((level==level2) || (level==level22)){
+				if ((level==level2) || (level==level22)){				//Raum2-->Raum1 (level11 weil spieler wird am Ausgang des Raums sein)
 				level=level11;}
-				else if (level==level3){
+				else if (level==level3){						//Raum3-->Raum2
 				level=level22;}	
-				walls.clear();
+				walls.clear();								//Das Raum wieder initialisieren (alle Objekte loeschen)
 				enemys.clear();
 				keys.clear();
 				initWorld();
