@@ -236,8 +236,8 @@ Image img;
 					initWorld();
 				}
 				if (level.charAt(yy*20+xx)=='*'){    // Kollision mit dem Gegner, Neustart des Spiels
-					Game_over();
-					//restartLevel();
+					//Game_over();
+					restartLevel();
 					
 				}
 				if (level.charAt(yy*20+xx)=='$')
@@ -263,8 +263,8 @@ Image img;
 				}
 				if (level.charAt(yy*20+xx)=='*')
 				{
-					Game_over();
-					//restartLevel();
+					//Game_over();
+					restartLevel();
 				}
 				if (level.charAt(yy*20+xx)=='$')
 				{
@@ -295,8 +295,8 @@ Image img;
 				}
 				if (level.charAt(yy*20+xx)=='*')
 				{
-					Game_over();
-					//restartLevel();
+					//Game_over();
+					restartLevel();
 				}
 				if (level.charAt(yy*20+xx)=='$')
 				{
@@ -321,8 +321,8 @@ Image img;
 				}
 				if (level.charAt(yy*20+xx)=='*')
 				{
-					Game_over();
-					//restartLevel();
+					//Game_over();
+					restartLevel();
 				}
 				if (level.charAt(yy*20+xx)=='$')
 				{
@@ -367,16 +367,16 @@ Image img;
 
 		}
 
-		/**private void restartLevel() {			// Durch Game_over ersetzt...zum Start Menü
+		private void restartLevel() {			
 			level=level1;
 			walls.clear();
 			enemys.clear();
 			keys.clear();
 			initWorld();
 			
-		}*/
-		
-		 public void Game_over(){
+		}
+																					// coming soon
+		 /**public void Game_over(){
 			 
 
 				
@@ -390,16 +390,10 @@ Image img;
 			 Game_over.setLocationRelativeTo(null);   // Fenster in der MItte 
 			 Game_over.add(new Game_over());
 			
-			
-			 
-
-			
-				
-				
 
 					
 				}
-		 
+		 */
 
 	}
 
