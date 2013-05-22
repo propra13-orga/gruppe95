@@ -110,20 +110,6 @@ Image img;		//Bild fuer den Hintergrund (WEG)
 			+	"## #### ###  ##  ##\n"
 			+	"@       ####      #\n"
 			+	"###################\n";
-	private String levelend = "###################\n"				
-			+	  "#                 #\n"
-			+	  "#                 #\n"
-			+	  "#                 #\n"
-			+  	  "# #### #  # ##    #\n"
-			+	  "# #    ## # # #   #\n"
-			+	  "# ###  # ## #  #  #\n"
-			+	  "# #    #  # # #   #\n"
-			+	  "# #### #  # ##    #\n"
-			+	  "#                 #\n"
-			+	  "#                 #\n"
-			+	  "#                 #\n"
-			+	  "#                 #\n"
-			+	  "###################\n";
 
 	private String level=level1;							//level mit level1 initialisieren, weil level1 als erster geoeffnet wird.
 
@@ -185,20 +171,19 @@ Image img;		//Bild fuer den Hintergrund (WEG)
 
 	public void buildWorld(Graphics g){
 
-		g.drawImage(img, 0, 0, null);
+		g.drawImage(img, 0, 0, null);						//Background Image zeichnen
 
 		ArrayList<Movement> world = new ArrayList<Movement>();
 
-		world.addAll(walls);
-		if (level!=levelend)
-			{world.add(Jay);}
+		world.addAll(walls);							//Alle Objekte in einem Array world speichern
+		world.add(Jay);
 		world.addAll(enemys);
 		world.addAll(keys);
 
 
-		for(int i = 0; i < world.size(); i++){					// g.drawImage fuer die Grafische Zeichnung
+		for(int i = 0; i < world.size(); i++){					// Array world durchgehen um objekte zu zeichnen.
 			Movement obj = (Movement) world.get(i);
-			g.drawImage(obj.getImage(), obj.getX(), obj.getY(), this);
+			g.drawImage(obj.getImage(), obj.getX(), obj.getY(), this);	// g.drawImage fuer die Grafische Zeichnung
 
 		}
 
@@ -217,11 +202,11 @@ Image img;		//Bild fuer den Hintergrund (WEG)
 			int xx;
 			int yy;
 
-			if(key == KeyEvent.VK_RIGHT){
+			if(key == KeyEvent.VK_RIGHT){		
 
-				image = r.getImage();
+				image = r.getImage();					//Image vom Spieler der nach rechts laeuft
 				Jay.setImage(image);
-				xx = (Jay.getX()/BLOCK)+1;
+				xx = (Jay.getX()/BLOCK)+1;				
 				yy=Jay.getY()/BLOCK;
 				if ((level.charAt(yy*20+xx)!='#')||(xx*yy<0))
 				{
