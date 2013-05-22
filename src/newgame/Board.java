@@ -110,6 +110,20 @@ Image img;		//Bild fuer den Hintergrund (WEG)
 			+	"## #### ###  ##  ##\n"
 			+	"@       ####      #\n"
 			+	"###################\n";
+	private String levelend = "###################\n"				
+			+	  "#                 #\n"
+			+	  "#                 #\n"
+			+	  "#                 #\n"
+			+  	  "# #### #  # ##    #\n"
+			+	  "# #    ## # # #   #\n"
+			+	  "# ###  # ## #  #  #\n"
+			+	  "# #    #  # # #   #\n"
+			+	  "# #### #  # ##    #\n"
+			+	  "#                 #\n"
+			+	  "#                 #\n"
+			+	  "#                 #\n"
+			+	  "#                 #\n"
+			+	  "###################\n";
 
 	private String level=level1;							//level mit level1 initialisieren, weil level1 als erster geoeffnet wird.
 
@@ -218,8 +232,7 @@ Image img;		//Bild fuer den Hintergrund (WEG)
 					
 				}
 				if (level.charAt(yy*20+xx)=='$')			//schluessel gefunden!
-				{
-					level=levelend;
+				{	level=levelend;
 					walls.clear();
 					enemys.clear();
 					keys.clear();
