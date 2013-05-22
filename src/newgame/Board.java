@@ -206,11 +206,11 @@ Image img;		//Bild fuer den Hintergrund (WEG)
 
 				image = r.getImage();					//Image vom Spieler der nach rechts laeuft
 				Jay.setImage(image);
-				xx = (Jay.getX()/BLOCK)+1;				
-				yy=Jay.getY()/BLOCK;
-				if ((level.charAt(yy*20+xx)!='#')||(xx*yy<0))
+				xx = (Jay.getX()/BLOCK)+1;				//xx und yy sind die imaginaere Koordinatensystem innerhalb des String Variable (level).
+				yy=Jay.getY()/BLOCK;					//xx und yy werden dafuer gerechnet um zu erkennen, ob an der Stelle wohin sich die Spielfigur bewegen will, kein # im variable level bzw kein Stueck Mauer im Spielfeld gibt
+				if ((level.charAt(yy*20+xx)!='#')||(xx*yy<0))		//yy wird mal 20 multipliziert weil in jeder linie des Spielfelds gibts 20 Bloecke (also in jeder linie der string level gibts 20 zeichen)
 				{
-					Jay.move(BLOCK,0);
+					Jay.move(BLOCK,0);				//erst wenn es keinen Stueck Mauer oder ein Ein-Ausgang gibt(entweder xx oder yy <0 ist) darf/kann sich die Spielfigur bewegen
 				}
 				if (level.charAt(yy*20+xx)=='%'){
 					level=levelend;
