@@ -5,6 +5,10 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
@@ -31,11 +35,11 @@ Image img;		//Bild fuer den Hintergrund (WEG)
 	java.util.List<Movement> keys = new java.util.ArrayList<Movement>();
 	
 	private Character Jay;
-
+	private String raum;
+	private String lr;
 	
 
-
-	private String level1 = "########### #######\n"								//Level1 : Gestaltung von Raum 1. #:wand, @:Spielfigur , *:Gegner
+	/*private String level1 = "########### #######\n"								//Level1 : Gestaltung von Raum 1. #:wand, @:Spielfigur , *:Gegner
 		 	+	"#         #       #\n"
 			+	"# ## ####  ###### #\n"
 			+	"# ## # * #        #\n"
@@ -125,14 +129,14 @@ Image img;		//Bild fuer den Hintergrund (WEG)
 			+	  "#                 #\n"
 			+	  "###################\n";
 
-	private String level=level1;												//level mit level1 initialisieren, weil level1 als erstes geoeffnet wird.
+	private String level=level1;*/												//level mit level1 initialisieren, weil level1 als erstes geoeffnet wird.
 
-	public Board(){
-
+	public Board() throws IOException{
+		lr="l1r1";
 		addKeyListener(new Ap());
 		setFocusable(true);
 		ImageIcon i= new ImageIcon ("src/Resources/back1.png");					// Den Pfad fuers Hintergrundbild angeben.
-		img=i.getImage();														//Image importieren.
+		img=i.getImage();		//Image importieren.		
 		initWorld();
 	}
 
@@ -142,7 +146,20 @@ Image img;		//Bild fuer den Hintergrund (WEG)
 
 	}
 
-	public final void initWorld(){												// zeichnet das Level mit Walls, Character, dem Schluessel und Gegner.
+	public final void initWorld() throws IOException{												// zeichnet das Level mit Walls, Character, dem Schluessel und Gegner.
+
+		raum="";
+		 FileReader fr = new FileReader("src/Resources/"+lr+".txt");
+		    BufferedReader br = new BufferedReader(fr);
+		    String zeile = br.readLine();
+		    while (zeile != null)
+		    {
+		      raum=raum+zeile+'\n';
+		      zeile = br.readLine();
+		      System.out.println(zeile);
+		    }
+		    br.close();
+		    System.out.println("raum= "+raum);
 
 		int x = 0;
 		int y = 0;
@@ -150,9 +167,9 @@ Image img;		//Bild fuer den Hintergrund (WEG)
 		Enemy enemy;
 		Key key;
 
-		for(int i = 0; i < level.length(); i++){								// level variable Buchstabe fuer Buchstabe durchgehen.
+		for(int i = 0; i < raum.length(); i++){								// level variable Buchstabe fuer Buchstabe durchgehen.
 
-			char obj = level.charAt(i);										
+			char obj = raum.charAt(i);										
 
 			if(obj == '\n'){													//y erhoeht sich um ein BLOCK wenn man ein /n im String Level findet.
 				y = y + BLOCK;
@@ -189,9 +206,8 @@ Image img;		//Bild fuer den Hintergrund (WEG)
 
 		ArrayList<Movement> world = new ArrayList<Movement>();
 
-		world.addAll(walls);													//Alle Objekte in einem Array world speichern
-		if (level!=levelend){													//im levelend soll es kein Spielfigur geben
-		world.add(Jay);}
+		world.addAll(walls);													//Alle Objekte in einem Array world speichern													//im levelend soll es kein Spielfigur geben
+		world.add(Jay);
 		world.addAll(enemys);
 		world.addAll(keys);
 
@@ -223,21 +239,31 @@ Image img;		//Bild fuer den Hintergrund (WEG)
 				Jay.setImage(image);
 				xx = (Jay.getX()/BLOCK)+1;										//xx und yy sind die imaginaere Koordinaten innerhalb des Strings Variable (level).
 				yy=Jay.getY()/BLOCK;											//xx und yy werden dafuer gerechnet um zu erkennen, ob an der Stelle wohin sich die Spielfigur bewegen will, kein # im variable level bzw kein Stueck Mauer im Spielfeld gibt
-				if ((level.charAt(yy*20+xx)!='#')||(xx*yy<0))					//yy wird mal 20 multipliziert da es in jeder linie des Spielfelds 20 Bloecke gibt(also in jeder linie des strings level gibt es 20 zeichen)
+				if ((raum.charAt(yy*20+xx)!='#')||(xx*yy<0))					//yy wird mal 20 multipliziert da es in jeder linie des Spielfelds 20 Bloecke gibt(also in jeder linie des strings level gibt es 20 zeichen)
 				{																//Wandkollision:
 					Jay.move(BLOCK,0);											//erst wenn es kein Stueck Mauer oder einen Ein-Ausgang gibt(entweder xx oder yy <0 ist) darf/kann sich die Spielfigur bewegen
 				}
-				if (level.charAt(yy*20+xx)=='*'){    							// Kollision mit dem Gegner, Neustart des Spiels
+				if (raum.charAt(yy*20+xx)=='*'){    							// Kollision mit dem Gegner, Neustart des Spiels
 					//Game_over();
-					restartLevel();
+					try {
+						restartLevel();
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 					
 				}
-				if (level.charAt(yy*20+xx)=='$')								//schluessel gefunden!
-				{	level=levelend;
+				if (raum.charAt(yy*20+xx)=='$')								//schluessel gefunden!
+				{	lr="lrend";
 					walls.clear();
 					enemys.clear();
 					keys.clear();
-					initWorld();
+					try {
+						initWorld();
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 				}
 
 
@@ -248,22 +274,32 @@ Image img;		//Bild fuer den Hintergrund (WEG)
 				Jay.setImage(image);
 				xx = (Jay.getX()/BLOCK)-1;
 				yy=Jay.getY()/BLOCK;
-				if ((level.charAt(yy*20+xx)!='#')||(xx*yy<0))
+				if ((raum.charAt(yy*20+xx)!='#')||(xx*yy<0))
 				{
 				Jay.move(-BLOCK,0);
 				}
-				if (level.charAt(yy*20+xx)=='*')
+				if (raum.charAt(yy*20+xx)=='*')
 				{
 					//Game_over();
-					restartLevel();
+					try {
+						restartLevel();
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 				}
-				if (level.charAt(yy*20+xx)=='$')
+				if (raum.charAt(yy*20+xx)=='$')
 				{
-					level=levelend;
+					lr="lrend";
 					walls.clear();
 					enemys.clear();
 					keys.clear();
-					initWorld();
+					try {
+						initWorld();
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 				}
 
 			}
@@ -277,25 +313,35 @@ Image img;		//Bild fuer den Hintergrund (WEG)
 				xx = (Jay.getX()/BLOCK);
 				yy=Jay.getY()/BLOCK -1;
 
-				if (level.charAt(yy*20+xx)!='#')
+				if (raum.charAt(yy*20+xx)!='#')
 				{
 				Jay.move(0, -BLOCK);
 				}
 				if (Jay.getY()==0){
 					Jay.move(0, -BLOCK);
 				}
-				if (level.charAt(yy*20+xx)=='*')
+				if (raum.charAt(yy*20+xx)=='*')
 				{
 					//Game_over();
-					restartLevel();
+					try {
+						restartLevel();
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 				}
-				if (level.charAt(yy*20+xx)=='$')
+				if (raum.charAt(yy*20+xx)=='$')
 				{
-					level=levelend;
+					lr="lrend";
 					walls.clear();
 					enemys.clear();
 					keys.clear();
-					initWorld();
+					try {
+						initWorld();
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 				}
 
 			}
@@ -306,22 +352,32 @@ Image img;		//Bild fuer den Hintergrund (WEG)
 				Jay.setImage(image);
 				xx = (Jay.getX()/BLOCK);
 				yy=Jay.getY()/BLOCK + 1;
-				if ((level.charAt(yy*20+xx)!='#')||(xx*yy<0))
+				if ((raum.charAt(yy*20+xx)!='#')||(xx*yy<0))
 				{
 				Jay.move(0, BLOCK);
 				}
-				if (level.charAt(yy*20+xx)=='*')
+				if (raum.charAt(yy*20+xx)=='*')
 				{
 					//Game_over();
-					restartLevel();
+					try {
+						restartLevel();
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 				}
-				if (level.charAt(yy*20+xx)=='$')
+				if (raum.charAt(yy*20+xx)=='$')
 				{
-					level=levelend;
+					lr="lrend";
 					walls.clear();
 					enemys.clear();
 					keys.clear();
-					initWorld();
+					try {
+						initWorld();
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 				}
 
 			}
@@ -329,39 +385,72 @@ Image img;		//Bild fuer den Hintergrund (WEG)
 			repaint();
 			
 
-			if ((Jay.getY()==-BLOCK) & ((level==level1)||(level==level11))) {		//Wenn der Spieler am Ausgang des 1. Raums ist dann 
-				level=level2;														//zu level2 wechseln (Raum 2)
+			if (Jay.getY()==-BLOCK)  {		//Wenn der Spieler am Ausgang des 1. Raums ist dann 
+				/*if (lr.charAt(3)=='1')
+					{lr=lr.substring(0,2)+'2';}//zu level2 wechseln (Raum 2)
+				if (lr.charAt(3)=='2')
+				{lr=lr.substring(0,2)+'3';}
+				if (lr.charAt(4)=='a')
+				{lr=lr.substring(0,3);}*/
+				if (lr.length()==4){
+				if (lr.charAt(3)=='1') lr=lr.substring(0,3)+"2";
+				else if (lr.charAt(3)=='2') lr=lr.substring(0,3)+'3';
+				}
+				else lr=lr.substring(0,4);
+				System.out.println("lr = "+lr);
 				walls.clear();														//alle Waende, Keys und Gegners des vorherigen level loeschen (arrays wieder initialisieren)
 				enemys.clear();
 				keys.clear();
-				initWorld();														//world initialisieren 
+				try {
+					initWorld();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}														//world initialisieren 
 
 			}
-			if ((Jay.getX() ==950 )& ((level==level2) || (level==level22))){		//Bedingung erfuellt nur am Ausgang des 2. Raums
-				level=level3;
+			if (Jay.getX() ==950 ){		//Bedingung erfuellt nur am Ausgang des 2. Raums
+				/*if (lr.charAt(3)=='1')
+					{lr=lr.substring(0,2)+'2';}//zu level2 wechseln (Raum 2)
+				if (lr.charAt(3)=='2')
+				{lr=lr.substring(0,2)+'3';}
+				if (lr.charAt(4)=='a')
+					{lr=lr.substring(0,3);}*/
+				if (lr.length()==4){
+					if (lr.charAt(3)=='1') lr=lr.substring(0,3)+"2";
+					else if (lr.charAt(3)=='2') lr=lr.substring(0,3)+'3';
+				}
+				else lr=lr.substring(0,4);
+				System.out.println(lr);
 				walls.clear();
 				enemys.clear();
 				keys.clear();
-				initWorld();
+				try {
+					initWorld();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
-			if (Jay.getX() == -BLOCK){												//wenn x=-BLOCK ist, befindet sich der Spieler am eingang von Raum 2 oder 3
-																					//und wenn er dadurch geht dann kehrt er zu einem vorherigen Raum (Raum3-->Raum2 oder Raum2-->Raum1) zurück
-				if ((level==level2) || (level==level22)){							//Raum2-->Raum1 (level11 weil spieler am Ausgang des Raums sein wird)
-				level=level11;}
-				else if (level==level3){											//Raum3-->Raum2
-				level=level22;}	
+			if (Jay.getX() == -BLOCK){												//wenn x=-BLOCK ist, befindet sich der Spieler am eingang von Raum 2 oder 3														//und wenn er dadurch geht dann kehrt er zu einem vorherigen Raum (Raum3-->Raum2 oder Raum2-->Raum1) zurï¿½ck
+				lr=lr+'a';	
 				walls.clear();														//Den Raum wieder initialisieren (alle Objekte loeschen)
 				enemys.clear();
 				keys.clear();
-				initWorld();
+				try {
+					initWorld();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 
 		}
 
 			
 
-		private void restartLevel() {			
-			level=level1;
+		private void restartLevel() throws IOException {			
+			lr="l1r1";
 			walls.clear();
 			enemys.clear();
 			keys.clear();

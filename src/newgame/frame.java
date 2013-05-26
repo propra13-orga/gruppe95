@@ -4,6 +4,7 @@ import java.awt.event.*;
 import javax.swing.*; //JButton, JFrame..
 
 import java.awt.*;
+import java.io.IOException;
 
 public class frame extends JFrame implements ActionListener{
 
@@ -52,14 +53,19 @@ setSize(500,500);																		// aktualisiert das Fenster; noetig damit Ein
 public void actionPerformed(ActionEvent e) {
 // TODO Auto-generated method stub
 
-if (e.getSource()==starten)																// startet das Spiel
-game();
+if (e.getSource()==starten)
+	try {
+		game();
+	} catch (IOException e1) {
+		// TODO Auto-generated catch block
+		e1.printStackTrace();
+	}
 
 if (e.getSource()==beenden)																// schliesst Menue
 System.exit(0);
 }
 
-public static void game(){																// Fenster fuer's Spiel
+public static void game() throws IOException{																// Fenster fuer's Spiel
 	JFrame game = new JFrame("PLAY DUNGEON CRAWLER");
 	game.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);	
 	game.setSize(950,720);
