@@ -36,107 +36,13 @@ Image img;		//Bild fuer den Hintergrund (WEG)
 	
 	private Character Jay;
 	private String raum;
-	private String lr;
+	private String lr,w,h; 			//lr fuer der Name der raumdatei, w:wandbild , h:hintergrundsbild
 	
-
-	/*private String level1 = "########### #######\n"								//Level1 : Gestaltung von Raum 1. #:wand, @:Spielfigur , *:Gegner
-		 	+	"#         #       #\n"
-			+	"# ## ####  ###### #\n"
-			+	"# ## # * #        #\n"
-			+	"# ##*# # ##########\n"
-			+	"# ## # # ##########\n"
-			+	"#                *#\n"
-			+	"### ###############\n"
-			+	"### ########    ###\n"
-			+	"###          ##   #\n"
-			+	"################# #\n"			
-			+	"#              ## #\n"
-			+	"@   ##########    #\n"
-			+	"###################\n";
-
-	private String level11 ="###########@#######\n"								//Level 11 ist dafuer da, wenn man von Level 2 zu Level 1 umkehrt. Unterschied zu level1: Spieler liegt am Ausgang des Raums.
-		 	+	"#         #       #\n"
-			+	"# ## ####  ###### #\n"
-			+	"# ## # * #        #\n"
-			+	"# ##*# # ##########\n"
-			+	"# ## # # ##########\n"
-			+	"#                *#\n"
-			+	"### ###############\n"
-			+	"### ########    ###\n"
-			+	"###          ##   #\n"
-			+	"################# #\n"			
-			+	"#              ## #\n"
-			+	"    ##########    #\n"
-			+	"###################\n";
-
-
-	private String level2 = "###################\n"								//Level2 : Gestaltung von Raum 2. Startpunkt Eingang
-			+	"####        ##    #\n"
-			+	"#### ###### ##    #\n"
-			+	"#### ######       #\n"
-			+	"####    *   ##### #\n"
-			+	"##   ### #######  #\n"
-			+	"## ##### ####*    #\n"
-			+	"##           ##  ##\n"
-			+	"############ ### ##\n"
-			+	"#              #  #\n"
-			+	"#  #### *#######  #\n"			
-			+	"#  ####* #        #\n"
-			+	"@        #*#####   \n"
-			+	"###################\n";
-
-	private String level22= "###################\n"								//Genauso wie Level11 und Level1, oeffnet sich Level22 bei Umkehr von Level3. Spieler liegt am Ausgang.
-			+	"####        ##    #\n"
-			+	"#### ###### ##    #\n"
-			+	"#### ######       #\n"
-			+	"####    *   ##### #\n"
-			+	"##   ### #######  #\n"
-			+	"## ##### ####*    #\n"
-			+	"##           ##  ##\n"
-			+	"############ ### ##\n"
-			+	"#              #  #\n"
-			+	"#  #### *#######  #\n"			
-			+	"#  ####* #        #\n"
-			+	"         #*#####  @\n"
-			+	"###################\n";
-
-	private String level3 =	"###################\n"								//Gestaltung von Raum 3. $: Schluessel.
-			+	"####*$*####       #\n"
-			+	"#           ##### #\n"
-			+	"###########  *    #\n"
-			+	"######    #####  ##\n"
-			+	"#      ## ##    ###\n"
-			+	"#####  ## ## ######\n"
-			+	"##       *##      #\n"
-			+	"## ############## #\n"
-			+	"## ###     #####  #\n"
-			+	"## ###  ##  #### ##\n"
-			+	"## #### ###  ##  ##\n"
-			+	"@       ####      #\n"
-			+	"###################\n";
-	private String levelend = "###################\n"							//levelend oeffnet sich beim Sieg
-			+	  "#                 #\n"
-			+	  "#                 #\n"
-			+	  "#                 #\n"
-			+  	  "# #### #  # ##    #\n"
-			+	  "# #    ## # # #   #\n"
-			+	  "# ###  # ## #  #  #\n"
-			+	  "# #    #  # # #   #\n"
-			+	  "# #### #  # ##    #\n"
-			+	  "#                 #\n"
-			+	  "#                 #\n"
-			+	  "#                 #\n"
-			+	  "#                 #\n"
-			+	  "###################\n";
-
-	private String level=level1;*/												//level mit level1 initialisieren, weil level1 als erstes geoeffnet wird.
 
 	public Board() throws IOException{
 		lr="l1r1";
 		addKeyListener(new Ap());
-		setFocusable(true);
-		ImageIcon i= new ImageIcon ("src/Resources/back1.png");					// Den Pfad fuers Hintergrundbild angeben.
-		img=i.getImage();		//Image importieren.		
+		setFocusable(true);		
 		initWorld();
 	}
 
@@ -147,7 +53,9 @@ Image img;		//Bild fuer den Hintergrund (WEG)
 	}
 
 	public final void initWorld() throws IOException{												// zeichnet das Level mit Walls, Character, dem Schluessel und Gegner.
-
+		ImageIcon ii= new ImageIcon ("src/Resources/back"+lr.charAt(1)+".png");					// Den Pfad fuers Hintergrundbild angeben.
+		img=ii.getImage();		//Image importieren.		
+		
 		raum="";
 		 FileReader fr = new FileReader("src/Resources/"+lr+".txt");
 		    BufferedReader br = new BufferedReader(fr);
@@ -156,10 +64,8 @@ Image img;		//Bild fuer den Hintergrund (WEG)
 		    {
 		      raum=raum+zeile+'\n';
 		      zeile = br.readLine();
-		      System.out.println(zeile);
 		    }
-		    br.close();
-		    System.out.println("raum= "+raum);
+		  br.close();
 
 		int x = 0;
 		int y = 0;
@@ -175,12 +81,13 @@ Image img;		//Bild fuer den Hintergrund (WEG)
 				y = y + BLOCK;
 				x = 0;
 			}else if(obj == '#'){												// # bezeichnet ein Stueck Mauer. eine Mauer im array walls an seine Position speichern.
-				wall = new Wall(x,y);
+				wall = new Wall(x,y,"wand"+lr.charAt(1));
 				walls.add(wall);
 				x = x + BLOCK;
 			}else if(obj == '@'){												// Legt die Position des Charakters beim Levelstart fest
+				if (lr!="l3r4"){
 				Jay = new Character(x,y);
-				x = x + BLOCK;
+				x = x + BLOCK;}
 			}
 			else if(obj == ' '){												//x erhoeht sich um einen Block(' ':Bereich wo sich der Spieler bewegen kann)
 				x = x + BLOCK;
@@ -254,7 +161,9 @@ Image img;		//Bild fuer den Hintergrund (WEG)
 					
 				}
 				if (raum.charAt(yy*20+xx)=='$')								//schluessel gefunden!
-				{	lr="lrend";
+				{	if (lr.charAt(1)=='1') lr="l2r1";
+					else if (lr.charAt(1)=='2')lr="l3r1"; 
+					else if (lr.charAt(1)=='3')lr="l4r1";
 					walls.clear();
 					enemys.clear();
 					keys.clear();
@@ -290,7 +199,9 @@ Image img;		//Bild fuer den Hintergrund (WEG)
 				}
 				if (raum.charAt(yy*20+xx)=='$')
 				{
-					lr="lrend";
+					if (lr.charAt(1)=='1') lr="l2r1";
+					else if (lr.charAt(1)=='2')lr="l3r1";
+					else if (lr.charAt(1)=='3')lr="l4r1";
 					walls.clear();
 					enemys.clear();
 					keys.clear();
@@ -332,7 +243,9 @@ Image img;		//Bild fuer den Hintergrund (WEG)
 				}
 				if (raum.charAt(yy*20+xx)=='$')
 				{
-					lr="lrend";
+					if (lr.charAt(1)=='1') lr="l2r1";
+					else if (lr.charAt(1)=='2')lr="l3r1";
+					else if (lr.charAt(1)=='3')lr="l4r1";
 					walls.clear();
 					enemys.clear();
 					keys.clear();
@@ -368,7 +281,9 @@ Image img;		//Bild fuer den Hintergrund (WEG)
 				}
 				if (raum.charAt(yy*20+xx)=='$')
 				{
-					lr="lrend";
+					if (lr.charAt(1)=='1') lr="l2r1";
+					else if (lr.charAt(1)=='2')lr="l3r1";
+					else if (lr.charAt(1)=='3')lr="l3r4";
 					walls.clear();
 					enemys.clear();
 					keys.clear();
@@ -386,18 +301,11 @@ Image img;		//Bild fuer den Hintergrund (WEG)
 			
 
 			if (Jay.getY()==-BLOCK)  {		//Wenn der Spieler am Ausgang des 1. Raums ist dann 
-				/*if (lr.charAt(3)=='1')
-					{lr=lr.substring(0,2)+'2';}//zu level2 wechseln (Raum 2)
-				if (lr.charAt(3)=='2')
-				{lr=lr.substring(0,2)+'3';}
-				if (lr.charAt(4)=='a')
-				{lr=lr.substring(0,3);}*/
 				if (lr.length()==4){
 				if (lr.charAt(3)=='1') lr=lr.substring(0,3)+"2";
 				else if (lr.charAt(3)=='2') lr=lr.substring(0,3)+'3';
 				}
 				else lr=lr.substring(0,4);
-				System.out.println("lr = "+lr);
 				walls.clear();														//alle Waende, Keys und Gegners des vorherigen level loeschen (arrays wieder initialisieren)
 				enemys.clear();
 				keys.clear();
@@ -410,18 +318,11 @@ Image img;		//Bild fuer den Hintergrund (WEG)
 
 			}
 			if (Jay.getX() ==950 ){		//Bedingung erfuellt nur am Ausgang des 2. Raums
-				/*if (lr.charAt(3)=='1')
-					{lr=lr.substring(0,2)+'2';}//zu level2 wechseln (Raum 2)
-				if (lr.charAt(3)=='2')
-				{lr=lr.substring(0,2)+'3';}
-				if (lr.charAt(4)=='a')
-					{lr=lr.substring(0,3);}*/
 				if (lr.length()==4){
 					if (lr.charAt(3)=='1') lr=lr.substring(0,3)+"2";
 					else if (lr.charAt(3)=='2') lr=lr.substring(0,3)+'3';
 				}
 				else lr=lr.substring(0,4);
-				System.out.println(lr);
 				walls.clear();
 				enemys.clear();
 				keys.clear();
@@ -433,7 +334,7 @@ Image img;		//Bild fuer den Hintergrund (WEG)
 				}
 			}
 			if (Jay.getX() == -BLOCK){												//wenn x=-BLOCK ist, befindet sich der Spieler am eingang von Raum 2 oder 3														//und wenn er dadurch geht dann kehrt er zu einem vorherigen Raum (Raum3-->Raum2 oder Raum2-->Raum1) zur�ck
-				lr=lr+'a';	
+				if (lr.charAt(3)!='1') lr=lr+'a';	
 				walls.clear();														//Den Raum wieder initialisieren (alle Objekte loeschen)
 				enemys.clear();
 				keys.clear();
@@ -450,7 +351,10 @@ Image img;		//Bild fuer den Hintergrund (WEG)
 			
 
 		private void restartLevel() throws IOException {			
-			lr="l1r1";
+			if (lr.length()==5){
+				if (lr.charAt(3)=='2') lr=lr.substring(0, 3)+'1';
+				else if (lr.charAt(3)=='3') lr=lr.substring(0, 3)+'2';
+			}
 			walls.clear();
 			enemys.clear();
 			keys.clear();
