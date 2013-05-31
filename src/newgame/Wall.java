@@ -7,6 +7,8 @@ import javax.swing.ImageIcon;
 public class Wall extends Movement{
 	
 private Image image;
+
+
 	
 	public Wall(int x, int y, String f){
 		super(x,y);

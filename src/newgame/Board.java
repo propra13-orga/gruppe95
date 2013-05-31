@@ -1,49 +1,56 @@
 package newgame;
 
 
+
+
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.Timer;
 
 
 
 
-public class Board extends JPanel{
+public class Board extends JPanel implements ActionListener{
 
-Image image;
-Image img;		//Bild fuer den Hintergrund (WEG)
+	Image image;
+	Image img;											//Bild fuer den Hintergrund (WEG)
+	private Character Jay;
+	private String raum;
+	private String lr,w,h; 								//lr fuer der Name der raumdatei, w:wandbild , h:hintergrundsbild
+	private ArrayList<Shot> shots;						//Array fuer die Zeichnung der Schuesse
+	private Timer timer;
+	private int BLOCK = 50;								// 50* 50 Pixel
+
 
 	ImageIcon r = new ImageIcon("src/Resources/r1.png");						// fuer versch. Positionen rechts, links, oben, unten
 	ImageIcon l = new ImageIcon("src/Resources/l1.png");
 	ImageIcon t = new ImageIcon("src/Resources/Character top.png");
 	ImageIcon b = new ImageIcon("src/Resources/Character.png");
 
-	private int BLOCK = 50;								// 50* 50 Pixel
-
 	java.util.List<Movement> enemys = new java.util.ArrayList<Movement>();
-	java.util.List<Movement> walls = new java.util.ArrayList<Movement>();		// Array fuer die Waende
+	java.util.List<Movement> walls = new java.util.ArrayList<Movement>();		// Array fuer die Waende..
 	java.util.List<Movement> keys = new java.util.ArrayList<Movement>();
 	
-	private Character Jay;
-	private String raum;
-	private String lr,w,h; 			//lr fuer der Name der raumdatei, w:wandbild , h:hintergrundsbild
 	
-
 	public Board() throws IOException{
 		lr="l1r1";
 		addKeyListener(new Ap());
 		setFocusable(true);		
 		initWorld();
+	    shots = new ArrayList<Shot>();
+		timer = new Timer(5, this);												//zeichnet alle  5ms den Board (Schuesse)
+        timer.start();
 	}
 
 
@@ -52,7 +59,7 @@ Image img;		//Bild fuer den Hintergrund (WEG)
 
 	}
 
-	public final void initWorld() throws IOException{												// zeichnet das Level mit Walls, Character, dem Schluessel und Gegner.
+	public final void initWorld() throws IOException{											// zeichnet das Level mit Walls, Character, dem Schluessel und Gegner.
 		ImageIcon ii= new ImageIcon ("src/Resources/back"+lr.charAt(1)+".png");					// Den Pfad fuers Hintergrundbild angeben.
 		img=ii.getImage();		//Image importieren.		
 		
@@ -73,7 +80,7 @@ Image img;		//Bild fuer den Hintergrund (WEG)
 		Enemy enemy;
 		Key key;
 
-		for(int i = 0; i < raum.length(); i++){								// level variable Buchstabe fuer Buchstabe durchgehen.
+		for(int i = 0; i < raum.length(); i++){									// level variable Buchstabe fuer Buchstabe durchgehen.
 
 			char obj = raum.charAt(i);										
 
@@ -81,7 +88,7 @@ Image img;		//Bild fuer den Hintergrund (WEG)
 				y = y + BLOCK;
 				x = 0;
 			}else if(obj == '#'){												// # bezeichnet ein Stueck Mauer. eine Mauer im array walls an seine Position speichern.
-				wall = new Wall(x,y,"wand"+lr.charAt(1));
+				wall = new Wall(x,y, "wand"+ lr.charAt(1));
 				walls.add(wall);
 				x = x + BLOCK;
 			}else if(obj == '@'){												// Legt die Position des Charakters beim Levelstart fest
@@ -130,7 +137,17 @@ Image img;		//Bild fuer den Hintergrund (WEG)
 	public void paint(Graphics g){
 		super.paint(g);
 		buildWorld(g);
+		  ArrayList shots = getShots();											// fuer die grafische Zeichnung der Schuesse
+
+	        for (int i = 0; i < shots.size(); i++ ) {
+	            Shot m = (Shot) shots.get(i);
+	            g.drawImage(m.getImage(), m.getX(), m.getY(), this);
+	        }
 	}
+	
+	 public ArrayList getShots() {												// gibt die Schuesse der Positionen wieder
+	        return shots;
+	    }
 
 	private class Ap extends KeyAdapter{										// fuer rechts: holt das Bild mit Position rechts
 																				// durch die class Character bewegt sich Diggy in die entsprechende Richtung
@@ -160,7 +177,7 @@ Image img;		//Bild fuer den Hintergrund (WEG)
 					}
 					
 				}
-				if (raum.charAt(yy*20+xx)=='$')								//schluessel gefunden!
+				if (raum.charAt(yy*20+xx)=='$')									//schluessel gefunden!
 				{	if (lr.charAt(1)=='1') lr="l2r1";
 					else if (lr.charAt(1)=='2')lr="l3r1"; 
 					else if (lr.charAt(1)=='3')lr="l4r1";
@@ -258,7 +275,9 @@ Image img;		//Bild fuer den Hintergrund (WEG)
 				}
 
 			}
-
+			else if (key == KeyEvent.VK_SPACE) {							// Taste -Space ruft die Funktion fire auf
+	            fire();
+	        }
 
 			else if(key == KeyEvent.VK_DOWN){
 				image = b.getImage();
@@ -297,16 +316,17 @@ Image img;		//Bild fuer den Hintergrund (WEG)
 
 			}
 
+
 			repaint();
 			
 
-			if (Jay.getY()==-BLOCK)  {		//Wenn der Spieler am Ausgang des 1. Raums ist dann 
+			if (Jay.getY()==-BLOCK)  {										//Wenn der Spieler am Ausgang des 1. Raums ist dann 
 				if (lr.length()==4){
 				if (lr.charAt(3)=='1') lr=lr.substring(0,3)+"2";
 				else if (lr.charAt(3)=='2') lr=lr.substring(0,3)+'3';
 				}
 				else lr=lr.substring(0,4);
-				walls.clear();														//alle Waende, Keys und Gegners des vorherigen level loeschen (arrays wieder initialisieren)
+				walls.clear();												//alle Waende, Keys und Gegners des vorherigen level loeschen (arrays wieder initialisieren)
 				enemys.clear();
 				keys.clear();
 				try {
@@ -314,10 +334,10 @@ Image img;		//Bild fuer den Hintergrund (WEG)
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
-				}														//world initialisieren 
+				}															//world initialisieren 
 
 			}
-			if (Jay.getX() ==950 ){		//Bedingung erfuellt nur am Ausgang des 2. Raums
+			if (Jay.getX() ==950 ){											//Bedingung erfuellt nur am Ausgang des 2. Raums
 				if (lr.length()==4){
 					if (lr.charAt(3)=='1') lr=lr.substring(0,3)+"2";
 					else if (lr.charAt(3)=='2') lr=lr.substring(0,3)+'3';
@@ -361,26 +381,45 @@ Image img;		//Bild fuer den Hintergrund (WEG)
 			initWorld();
 			
 		}
-																					// coming soon
-		 /**public void Game_over(){
-			 
-
-				
-			 JFrame Game_over = new JFrame();
-			 
-			 
-			 Game_over.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-			 Game_over.setSize(500,500);
-			 Game_over.setVisible(true);
-			 Game_over.setFocusable(true);
-			 Game_over.setLocationRelativeTo(null);   // Fenster in der MItte 
-			 Game_over.add(new Game_over());
-			
-
-					
-				}
-		 */
-
 	}
+																					
+		 public void fire() {
+		        shots.add(new Shot(Jay.getX() + BLOCK, Jay.getY() ));			// setzt die Entfernung des Schusses vom Character fest
+		    }
+		
+	
+		 @Override
+		 public void actionPerformed(ActionEvent e) {							// zeichnet die Schuesse bis w = 950,dann remove
+			 ArrayList shots = getShots();										// mit Geschwindigkeit 10 (Shot classe)
 
+			 	for (int i = 0; i < shots.size(); i++) {
+			 		Shot m = (Shot) shots.get(i);
+			 		if (m.getVisible()) 
+	                m.move();
+			 		else shots.remove(i);										
+			 	}
+			 	repaint();														// alle 5 ms werden die Schuss-Bewegungen gezeichnet
+		// TODO Auto-generated method stub
+		
+	}
 }
+
+
+/**public void Game_over(){
+	 
+
+		
+	 JFrame Game_over = new JFrame();
+	 
+	 
+	 Game_over.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	 Game_over.setSize(500,500);
+	 Game_over.setVisible(true);
+	 Game_over.setFocusable(true);
+	 Game_over.setLocationRelativeTo(null);   // Fenster in der MItte 
+	 Game_over.add(new Game_over());
+	
+
+			
+		}
+*/
