@@ -41,6 +41,8 @@ public class Board extends JPanel implements ActionListener{
 	java.util.List<Movement> enemys = new java.util.ArrayList<Movement>();
 	java.util.List<Movement> walls = new java.util.ArrayList<Movement>();		// Array fuer die Waende..
 	java.util.List<Movement> keys = new java.util.ArrayList<Movement>();
+	java.util.List<Movement> wizards = new java.util.ArrayList<Movement>();
+	java.util.List<Movement> storyfields = new java.util.ArrayList<Movement>();
 	
 	
 	public Board() throws IOException{
@@ -79,6 +81,8 @@ public class Board extends JPanel implements ActionListener{
 		Wall wall;
 		Enemy enemy;
 		Key key;
+		Wizard wizard;
+		Storyfield storyfield;
 
 		for(int i = 0; i < raum.length(); i++){									// level variable Buchstabe fuer Buchstabe durchgehen.
 
@@ -109,8 +113,17 @@ public class Board extends JPanel implements ActionListener{
 				keys.add(key);
 				x = x + BLOCK;
 			}
-
-
+			else if(obj == '~'){												//stellt den NPC in den Levels als ein ~ dar
+				wizard = new Wizard(x,y);
+				wizards.add(wizard);
+				x = x + BLOCK;
+			}
+			else if(obj == '+'){
+				storyfield = new Storyfield(x,y);
+				storyfields.add(storyfield);
+				x = x + BLOCK;
+				
+			}
 		}
 	}
 
@@ -120,10 +133,12 @@ public class Board extends JPanel implements ActionListener{
 
 		ArrayList<Movement> world = new ArrayList<Movement>();
 
-		world.addAll(walls);													//Alle Objekte in einem Array world speichern													//im levelend soll es kein Spielfigur geben
+		world.addAll(walls);													//Alle Objekte in einem Array world speichern				//im levelend soll es kein Spielfigur geben
 		world.add(Jay);
 		world.addAll(enemys);
 		world.addAll(keys);
+		world.addAll(wizards);
+		world.addAll(storyfields);
 
 
 		for(int i = 0; i < world.size(); i++){									// Array world durchgehen um objekte zu zeichnen.
@@ -159,15 +174,15 @@ public class Board extends JPanel implements ActionListener{
 
 			if(key == KeyEvent.VK_RIGHT){		
 
-				image = r.getImage();											//Image vom Spieler der nach rechts laeuft
+				image = r.getImage();																		//Image vom Spieler der nach rechts laeuft
 				Jay.setImage(image);
-				xx = (Jay.getX()/BLOCK)+1;										//xx und yy sind die imaginaere Koordinaten innerhalb des Strings Variable (level).
-				yy=Jay.getY()/BLOCK;											//xx und yy werden dafuer gerechnet um zu erkennen, ob an der Stelle wohin sich die Spielfigur bewegen will, kein # im variable level bzw kein Stueck Mauer im Spielfeld gibt
-				if ((raum.charAt(yy*20+xx)!='#')||(xx*yy<0))					//yy wird mal 20 multipliziert da es in jeder linie des Spielfelds 20 Bloecke gibt(also in jeder linie des strings level gibt es 20 zeichen)
-				{																//Wandkollision:
-					Jay.move(BLOCK,0);											//erst wenn es kein Stueck Mauer oder einen Ein-Ausgang gibt(entweder xx oder yy <0 ist) darf/kann sich die Spielfigur bewegen
+				xx = (Jay.getX()/BLOCK)+1;																	//xx und yy sind die imaginaere Koordinaten innerhalb des Strings Variable (level).
+				yy=Jay.getY()/BLOCK;																		//xx und yy werden dafuer gerechnet um zu erkennen, ob an der Stelle wohin sich die Spielfigur bewegen will, kein # im variable level bzw kein Stueck Mauer im Spielfeld gibt
+				if ((raum.charAt(yy*20+xx)!='#')&&(raum.charAt(yy*20+xx)!='~')||(xx*yy<0))					//yy wird mal 20 multipliziert da es in jeder linie des Spielfelds 20 Bloecke gibt(also in jeder linie des strings level gibt es 20 zeichen)
+				{																							//Wandkollision:
+					Jay.move(BLOCK,0);																		//erst wenn es kein Stueck Mauer, keinen NPC oder einen Ein-Ausgang gibt(entweder xx oder yy <0 ist) darf/kann sich die Spielfigur bewegen
 				}
-				if (raum.charAt(yy*20+xx)=='*'){    							// Kollision mit dem Gegner, Neustart des Spiels
+				if (raum.charAt(yy*20+xx)=='*'){    														// Kollision mit dem Gegner, Neustart des Spiels
 					//Game_over();
 					try {
 						restartLevel();
@@ -177,6 +192,7 @@ public class Board extends JPanel implements ActionListener{
 					}
 					
 				}
+				
 				if (raum.charAt(yy*20+xx)=='$')									//schluessel gefunden!
 				{	if (lr.charAt(1)=='1') lr="l2r1";
 					else if (lr.charAt(1)=='2')lr="l3r1"; 
@@ -184,6 +200,8 @@ public class Board extends JPanel implements ActionListener{
 					walls.clear();
 					enemys.clear();
 					keys.clear();
+					wizards.clear();
+					storyfields.clear();
 					try {
 						initWorld();
 					} catch (IOException e1) {
@@ -200,7 +218,7 @@ public class Board extends JPanel implements ActionListener{
 				Jay.setImage(image);
 				xx = (Jay.getX()/BLOCK)-1;
 				yy=Jay.getY()/BLOCK;
-				if ((raum.charAt(yy*20+xx)!='#')||(xx*yy<0))
+				if ((raum.charAt(yy*20+xx)!='#')&&(raum.charAt(yy*20+xx)!='~')||(xx*yy<0))
 				{
 				Jay.move(-BLOCK,0);
 				}
@@ -222,6 +240,8 @@ public class Board extends JPanel implements ActionListener{
 					walls.clear();
 					enemys.clear();
 					keys.clear();
+					wizards.clear();
+					storyfields.clear();
 					try {
 						initWorld();
 					} catch (IOException e1) {
@@ -241,7 +261,7 @@ public class Board extends JPanel implements ActionListener{
 				xx = (Jay.getX()/BLOCK);
 				yy=Jay.getY()/BLOCK -1;
 
-				if (raum.charAt(yy*20+xx)!='#')
+				if ((raum.charAt(yy*20+xx)!='#')&&(raum.charAt(yy*20+xx)!='~'))
 				{
 				Jay.move(0, -BLOCK);
 				}
@@ -266,6 +286,8 @@ public class Board extends JPanel implements ActionListener{
 					walls.clear();
 					enemys.clear();
 					keys.clear();
+					wizards.clear();
+					storyfields.clear();
 					try {
 						initWorld();
 					} catch (IOException e1) {
@@ -284,7 +306,7 @@ public class Board extends JPanel implements ActionListener{
 				Jay.setImage(image);
 				xx = (Jay.getX()/BLOCK);
 				yy=Jay.getY()/BLOCK + 1;
-				if ((raum.charAt(yy*20+xx)!='#')||(xx*yy<0))
+				if ((raum.charAt(yy*20+xx)!='#')&&(raum.charAt(yy*20+xx)!='~')||(xx*yy<0))
 				{
 				Jay.move(0, BLOCK);
 				}
@@ -306,6 +328,8 @@ public class Board extends JPanel implements ActionListener{
 					walls.clear();
 					enemys.clear();
 					keys.clear();
+					wizards.clear();
+					storyfields.clear();
 					try {
 						initWorld();
 					} catch (IOException e1) {
@@ -329,6 +353,8 @@ public class Board extends JPanel implements ActionListener{
 				walls.clear();												//alle Waende, Keys und Gegners des vorherigen level loeschen (arrays wieder initialisieren)
 				enemys.clear();
 				keys.clear();
+				wizards.clear();
+				storyfields.clear();
 				try {
 					initWorld();
 				} catch (IOException e1) {
@@ -346,6 +372,8 @@ public class Board extends JPanel implements ActionListener{
 				walls.clear();
 				enemys.clear();
 				keys.clear();
+				wizards.clear();
+				storyfields.clear();
 				try {
 					initWorld();
 				} catch (IOException e1) {
@@ -358,6 +386,8 @@ public class Board extends JPanel implements ActionListener{
 				walls.clear();														//Den Raum wieder initialisieren (alle Objekte loeschen)
 				enemys.clear();
 				keys.clear();
+				wizards.clear();
+				storyfields.clear();
 				try {
 					initWorld();
 				} catch (IOException e1) {
@@ -378,6 +408,8 @@ public class Board extends JPanel implements ActionListener{
 			walls.clear();
 			enemys.clear();
 			keys.clear();
+			wizards.clear();
+			storyfields.clear();
 			initWorld();
 			
 		}

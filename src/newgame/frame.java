@@ -48,7 +48,6 @@ setSize(499,499);
 setSize(500,500);																		// aktualisiert das Fenster; noetig damit Einstellungen uebernommen werden
 }
 
-
 @Override
 public void actionPerformed(ActionEvent e) {
 // TODO Auto-generated method stub
