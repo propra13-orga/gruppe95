@@ -31,6 +31,7 @@ public class Board extends JPanel implements ActionListener{
 	private ArrayList<Shot> shots;						//Array fuer die Zeichnung der Schuesse
 	private Timer timer;
 	private int BLOCK = 50;								// 50* 50 Pixel
+	private int position;
 
 
 	ImageIcon r = new ImageIcon("src/Resources/r1.png");						// fuer versch. Positionen rechts, links, oben, unten
@@ -176,6 +177,7 @@ public class Board extends JPanel implements ActionListener{
 
 				image = r.getImage();																		//Image vom Spieler der nach rechts laeuft
 				Jay.setImage(image);
+				position = 1;
 				xx = (Jay.getX()/BLOCK)+1;																	//xx und yy sind die imaginaere Koordinaten innerhalb des Strings Variable (level).
 				yy=Jay.getY()/BLOCK;																		//xx und yy werden dafuer gerechnet um zu erkennen, ob an der Stelle wohin sich die Spielfigur bewegen will, kein # im variable level bzw kein Stueck Mauer im Spielfeld gibt
 				if ((raum.charAt(yy*20+xx)!='#')&&(raum.charAt(yy*20+xx)!='~')||(xx*yy<0))					//yy wird mal 20 multipliziert da es in jeder linie des Spielfelds 20 Bloecke gibt(also in jeder linie des strings level gibt es 20 zeichen)
@@ -216,6 +218,7 @@ public class Board extends JPanel implements ActionListener{
 			else if(key == KeyEvent.VK_LEFT){
 				image = l.getImage();
 				Jay.setImage(image);
+				position = 2;
 				xx = (Jay.getX()/BLOCK)-1;
 				yy=Jay.getY()/BLOCK;
 				if ((raum.charAt(yy*20+xx)!='#')&&(raum.charAt(yy*20+xx)!='~')||(xx*yy<0))
@@ -258,6 +261,7 @@ public class Board extends JPanel implements ActionListener{
 
 				image = t.getImage();
 				Jay.setImage(image);
+				position = 3;
 				xx = (Jay.getX()/BLOCK);
 				yy=Jay.getY()/BLOCK -1;
 
@@ -304,6 +308,7 @@ public class Board extends JPanel implements ActionListener{
 			else if(key == KeyEvent.VK_DOWN){
 				image = b.getImage();
 				Jay.setImage(image);
+				position = 4;
 				xx = (Jay.getX()/BLOCK);
 				yy=Jay.getY()/BLOCK + 1;
 				if ((raum.charAt(yy*20+xx)!='#')&&(raum.charAt(yy*20+xx)!='~')||(xx*yy<0))
@@ -415,26 +420,43 @@ public class Board extends JPanel implements ActionListener{
 		}
 	}
 																					
-		 public void fire() {
-		        shots.add(new Shot(Jay.getX() + BLOCK, Jay.getY() ));			// setzt die Entfernung des Schusses vom Character fest
-		    }
-		
-	
-		 @Override
-		 public void actionPerformed(ActionEvent e) {							// zeichnet die Schuesse bis w = 950,dann remove
-			 ArrayList shots = getShots();										// mit Geschwindigkeit 10 (Shot classe)
-
-			 	for (int i = 0; i < shots.size(); i++) {
-			 		Shot m = (Shot) shots.get(i);
-			 		if (m.getVisible()) 
-	                m.move();
-			 		else shots.remove(i);										
-			 	}
-			 	repaint();														// alle 5 ms werden die Schuss-Bewegungen gezeichnet
-		// TODO Auto-generated method stub
-		
+	 public void fire() {
+		 	if(position==1){
+		 		shots.add(new Shot(Jay.getX() + BLOCK, Jay.getY()));			// je in welche Richtung Diggy guckt
+		 	}																	// werden Schuesse hinzugefuegt
+		 	if(position==2){													// der Schuss soll nicht über Diggy gehen 
+		 		shots.add(new Shot(Jay.getX() - BLOCK, Jay.getY()));	
+		 	}
+		 	if(position==3){
+		 		shots.add(new Shot(Jay.getX(), Jay.getY() - BLOCK));	
+		 	}
+		 	if(position==4){
+		 		shots.add(new Shot(Jay.getX(), Jay.getY() + BLOCK));	
+		 	}
 	}
+	
+
+	 @Override
+	 public void actionPerformed(ActionEvent e) {							// zeichnet die Schuesse bis w = 950,dann remove
+		 ArrayList shots = getShots();										// mit Geschwindigkeit  (Shot classe)
+			
+		 	for (int i = 0; i < shots.size(); i++) {
+		 		Shot m = (Shot) shots.get(i);
+			
+		 		if (m.getVisible()){ 
+		 			
+		 			if(position==1) m.move_r();								// prüft in welche Richtung Diggy schaut
+		 			if(position==2) m.move_l();								// um in die richtige Richtung zu schiessen
+		 			if(position==3)	m.move_u();
+		 			if(position==4)	m.move_d();
+		 			
+		 		}else shots.remove(i);										
+		 	}
+		 	repaint();														// alle 5 ms werden die Schuss-Bewegungen gezeichnet
+	// TODO Auto-generated method stub
+	 }
 }
+
 
 
 /**public void Game_over(){
