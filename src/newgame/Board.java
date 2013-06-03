@@ -11,7 +11,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -29,7 +28,7 @@ public class Board extends JPanel implements ActionListener{
 	Image img;											//Bild fuer den Hintergrund (WEG)
 	private Character Jay;
 	private String raum="";
-	private String lr,w,h; 								//lr fuer der Name der raumdatei, w:wandbild , h:hintergrundsbild
+	private String lr; 								//lr fuer der Name der raumdatei, w:wandbild , h:hintergrundsbild
 	private ArrayList<Shot> shots;						//Array fuer die Zeichnung der Schuesse
 	private Timer timer;
 	private int BLOCK = 50;								// 50* 50 Pixel
@@ -286,7 +285,7 @@ public class Board extends JPanel implements ActionListener{
 			repaint();
 			
 
-			if (Jay.getY()==-BLOCK)  {										//Wenn der Spieler am Ausgang des 1. Raums ist dann 
+			if ((Jay.getY()==-BLOCK)||(Jay.getY()==0))  {										//Wenn der Spieler am Ausgang des 1. Raums ist dann 
 				if (lr.length()==4){
 				if (lr.charAt(3)=='1') lr=lr.substring(0,3)+"2";
 				else if (lr.charAt(3)=='2') lr=lr.substring(0,3)+'3';
