@@ -5,6 +5,7 @@ package newgame;
 
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -32,7 +33,7 @@ public class Board extends JPanel implements ActionListener{
 	private Timer timer;
 	private int BLOCK = 50;								// 50* 50 Pixel
 	private int position;
-
+	private int money=0;
 
 	ImageIcon r = new ImageIcon("src/Resources/r1.png");						// fuer versch. Positionen rechts, links, oben, unten
 	ImageIcon l = new ImageIcon("src/Resources/l1.png");
@@ -44,7 +45,7 @@ public class Board extends JPanel implements ActionListener{
 	java.util.List<Movement> keys = new java.util.ArrayList<Movement>();
 	java.util.List<Movement> wizards = new java.util.ArrayList<Movement>();
 	java.util.List<Movement> storyfields = new java.util.ArrayList<Movement>();
-	
+	java.util.List<Movement> coins = new java.util.ArrayList<Movement>();
 	
 	public Board() throws IOException{
 		lr="l1r1";
@@ -54,6 +55,57 @@ public class Board extends JPanel implements ActionListener{
 	    shots = new ArrayList<Shot>();
 		timer = new Timer(5, this);												//zeichnet alle  5ms den Board (Schuesse)
         timer.start();
+	}
+	
+	public void loeschen(){
+		coins.clear();
+		walls.clear();
+		enemys.clear();
+		keys.clear();
+		wizards.clear();
+		storyfields.clear();
+	}
+	public void collision(int movx,int movy){
+		int xx = ((Jay.getX()+movx)/BLOCK);																	//xx und yy sind die imaginaere Koordinaten innerhalb des Strings Variable (level).
+		int yy=(Jay.getY()+movy)/BLOCK;																		//xx und yy werden dafuer gerechnet um zu erkennen, ob an der Stelle wohin sich die Spielfigur bewegen will, kein # im variable level bzw kein Stueck Mauer im Spielfeld gibt
+		System.out.println(xx);
+		System.out.println(yy);
+		if ((raum.charAt(yy*20+xx)!='#')&&(raum.charAt(yy*20+xx)!='~')||(xx*yy<0))					//yy wird mal 20 multipliziert da es in jeder linie des Spielfelds 20 Bloecke gibt(also in jeder linie des strings level gibt es 20 zeichen)
+		{																							//Wandkollision:
+			Jay.move(movx,movy);																		//erst wenn es kein Stueck Mauer, keinen NPC oder einen Ein-Ausgang gibt(entweder xx oder yy <0 ist) darf/kann sich die Spielfigur bewegen
+			if (raum.charAt(yy*20+xx)=='â‚¬'){
+				money=money+10;
+				System.out.println(money);
+				//raum=raum.substring(0, yy*20+xx-1) + '@'+ raum.substring(yy*20+xx-1);						
+				
+			}
+		}
+		else System.out.println(raum.charAt(yy*20+xx));
+		if (raum.charAt(yy*20+xx)=='*'){    														// Kollision mit dem Gegner, Neustart des Spiels
+			//Game_over();
+			try {
+				restartLevel();
+			} catch (IOException e1) {
+				
+				e1.printStackTrace();
+			}
+			
+		}
+		
+		if (raum.charAt(yy*20+xx)=='$')									//schluessel gefunden!
+		{	if (lr.charAt(1)=='1') lr="l2r1";
+			else if (lr.charAt(1)=='2')lr="l3r1"; 
+			else if (lr.charAt(1)=='3')lr="l4r1";
+			loeschen();
+			try {
+				initWorld();
+			} catch (IOException e1) {
+				
+				e1.printStackTrace();
+			}
+		}
+
+
 	}
 
 
@@ -80,6 +132,7 @@ public class Board extends JPanel implements ActionListener{
 		int x = 0;
 		int y = 0;
 		Wall wall;
+		Coin coin;
 		Enemy enemy;
 		Key key;
 		Wizard wizard;
@@ -114,6 +167,11 @@ public class Board extends JPanel implements ActionListener{
 				keys.add(key);
 				x = x + BLOCK;
 			}
+			else if (obj=='â‚¬'){
+				coin=new Coin(x,y);
+				coins.add(coin);
+				x=x+BLOCK;
+			}
 			else if(obj == '~'){												//stellt den NPC in den Levels als ein ~ dar
 				wizard = new Wizard(x,y);
 				wizards.add(wizard);
@@ -140,16 +198,17 @@ public class Board extends JPanel implements ActionListener{
 		world.addAll(keys);
 		world.addAll(wizards);
 		world.addAll(storyfields);
+		world.addAll(coins);
 
 
 		for(int i = 0; i < world.size(); i++){									// Array world durchgehen um objekte zu zeichnen.
 			Movement obj = (Movement) world.get(i);
 			g.drawImage(obj.getImage(), obj.getX(), obj.getY(), this);			// g.drawImage fuer die Grafische Zeichnung
-
+			
 		}
 
 	}
-
+	public Graphics g;
 	public void paint(Graphics g){
 		super.paint(g);
 		buildWorld(g);
@@ -160,7 +219,8 @@ public class Board extends JPanel implements ActionListener{
 	            g.drawImage(m.getImage(), m.getX(), m.getY(), this);
 	        }
 	}
-	
+
+
 	 public ArrayList getShots() {												// gibt die Schuesse der Positionen wieder
 	        return shots;
 	    }
@@ -178,172 +238,33 @@ public class Board extends JPanel implements ActionListener{
 				image = r.getImage();																		//Image vom Spieler der nach rechts laeuft
 				Jay.setImage(image);
 				position = 1;
-				xx = (Jay.getX()/BLOCK)+1;																	//xx und yy sind die imaginaere Koordinaten innerhalb des Strings Variable (level).
-				yy=Jay.getY()/BLOCK;																		//xx und yy werden dafuer gerechnet um zu erkennen, ob an der Stelle wohin sich die Spielfigur bewegen will, kein # im variable level bzw kein Stueck Mauer im Spielfeld gibt
-				if ((raum.charAt(yy*20+xx)!='#')&&(raum.charAt(yy*20+xx)!='~')||(xx*yy<0))					//yy wird mal 20 multipliziert da es in jeder linie des Spielfelds 20 Bloecke gibt(also in jeder linie des strings level gibt es 20 zeichen)
-				{																							//Wandkollision:
-					Jay.move(BLOCK,0);																		//erst wenn es kein Stueck Mauer, keinen NPC oder einen Ein-Ausgang gibt(entweder xx oder yy <0 ist) darf/kann sich die Spielfigur bewegen
-				}
-				if (raum.charAt(yy*20+xx)=='*'){    														// Kollision mit dem Gegner, Neustart des Spiels
-					//Game_over();
-					try {
-						restartLevel();
-					} catch (IOException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-					
-				}
-				
-				if (raum.charAt(yy*20+xx)=='$')									//schluessel gefunden!
-				{	if (lr.charAt(1)=='1') lr="l2r1";
-					else if (lr.charAt(1)=='2')lr="l3r1"; 
-					else if (lr.charAt(1)=='3')lr="l4r1";
-					walls.clear();
-					enemys.clear();
-					keys.clear();
-					wizards.clear();
-					storyfields.clear();
-					try {
-						initWorld();
-					} catch (IOException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-				}
-
-
+				collision(BLOCK,0);
 			}
 
 			else if(key == KeyEvent.VK_LEFT){
 				image = l.getImage();
 				Jay.setImage(image);
 				position = 2;
-				xx = (Jay.getX()/BLOCK)-1;
-				yy=Jay.getY()/BLOCK;
-				if ((raum.charAt(yy*20+xx)!='#')&&(raum.charAt(yy*20+xx)!='~')||(xx*yy<0))
-				{
-				Jay.move(-BLOCK,0);
-				}
-				if (raum.charAt(yy*20+xx)=='*')
-				{
-					//Game_over();
-					try {
-						restartLevel();
-					} catch (IOException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-				}
-				if (raum.charAt(yy*20+xx)=='$')
-				{
-					if (lr.charAt(1)=='1') lr="l2r1";
-					else if (lr.charAt(1)=='2')lr="l3r1";
-					else if (lr.charAt(1)=='3')lr="l4r1";
-					walls.clear();
-					enemys.clear();
-					keys.clear();
-					wizards.clear();
-					storyfields.clear();
-					try {
-						initWorld();
-					} catch (IOException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-				}
-
+				collision(-BLOCK,0);
 			}
 
 
 			else if(key == KeyEvent.VK_UP){
-
-
 				image = t.getImage();
 				Jay.setImage(image);
 				position = 3;
-				xx = (Jay.getX()/BLOCK);
-				yy=Jay.getY()/BLOCK -1;
-
-				if ((raum.charAt(yy*20+xx)!='#')&&(raum.charAt(yy*20+xx)!='~'))
-				{
-				Jay.move(0, -BLOCK);
-				}
-				if (Jay.getY()==0){
-					Jay.move(0, -BLOCK);
-				}
-				if (raum.charAt(yy*20+xx)=='*')
-				{
-					//Game_over();
-					try {
-						restartLevel();
-					} catch (IOException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-				}
-				if (raum.charAt(yy*20+xx)=='$')
-				{
-					if (lr.charAt(1)=='1') lr="l2r1";
-					else if (lr.charAt(1)=='2')lr="l3r1";
-					else if (lr.charAt(1)=='3')lr="l4r1";
-					walls.clear();
-					enemys.clear();
-					keys.clear();
-					wizards.clear();
-					storyfields.clear();
-					try {
-						initWorld();
-					} catch (IOException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-				}
-
+				collision(0,-BLOCK);
 			}
-			else if (key == KeyEvent.VK_SPACE) {							// Taste -Space ruft die Funktion fire auf
-	            fire();
-	        }
-
+			
 			else if(key == KeyEvent.VK_DOWN){
 				image = b.getImage();
 				Jay.setImage(image);
 				position = 4;
-				xx = (Jay.getX()/BLOCK);
-				yy=Jay.getY()/BLOCK + 1;
-				if ((raum.charAt(yy*20+xx)!='#')&&(raum.charAt(yy*20+xx)!='~')||(xx*yy<0))
-				{
-				Jay.move(0, BLOCK);
-				}
-				if (raum.charAt(yy*20+xx)=='*')
-				{
-					//Game_over();
-					try {
-						restartLevel();
-					} catch (IOException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-				}
-				if (raum.charAt(yy*20+xx)=='$')
-				{
-					if (lr.charAt(1)=='1') lr="l2r1";
-					else if (lr.charAt(1)=='2')lr="l3r1";
-					else if (lr.charAt(1)=='3')lr="l3r4";
-					walls.clear();
-					enemys.clear();
-					keys.clear();
-					wizards.clear();
-					storyfields.clear();
-					try {
-						initWorld();
-					} catch (IOException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-				}
-
+				collision(0,BLOCK);
 			}
+			else if (key == KeyEvent.VK_SPACE) {							// Taste -Space ruft die Funktion fire auf
+	            fire();
+	        }
 
 
 			repaint();
@@ -355,15 +276,10 @@ public class Board extends JPanel implements ActionListener{
 				else if (lr.charAt(3)=='2') lr=lr.substring(0,3)+'3';
 				}
 				else lr=lr.substring(0,4);
-				walls.clear();												//alle Waende, Keys und Gegners des vorherigen level loeschen (arrays wieder initialisieren)
-				enemys.clear();
-				keys.clear();
-				wizards.clear();
-				storyfields.clear();
+				loeschen();
 				try {
 					initWorld();
 				} catch (IOException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}															//world initialisieren 
 
@@ -374,29 +290,19 @@ public class Board extends JPanel implements ActionListener{
 					else if (lr.charAt(3)=='2') lr=lr.substring(0,3)+'3';
 				}
 				else lr=lr.substring(0,4);
-				walls.clear();
-				enemys.clear();
-				keys.clear();
-				wizards.clear();
-				storyfields.clear();
+				loeschen();
 				try {
 					initWorld();
 				} catch (IOException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 			}
 			if (Jay.getX() == -BLOCK){												//wenn x=-BLOCK ist, befindet sich der Spieler am eingang von Raum 2 oder 3														//und wenn er dadurch geht dann kehrt er zu einem vorherigen Raum (Raum3-->Raum2 oder Raum2-->Raum1) zurï¿½ck
 				if (lr.charAt(3)!='1') lr=lr+'a';	
-				walls.clear();														//Den Raum wieder initialisieren (alle Objekte loeschen)
-				enemys.clear();
-				keys.clear();
-				wizards.clear();
-				storyfields.clear();
+				loeschen();
 				try {
 					initWorld();
 				} catch (IOException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 			}
@@ -405,26 +311,31 @@ public class Board extends JPanel implements ActionListener{
 
 			
 
-		private void restartLevel() throws IOException {			
+		/*public void restartLevel() throws IOException {			
 			if (lr.length()==5){
 				if (lr.charAt(3)=='2') lr=lr.substring(0, 3)+'1';
 				else if (lr.charAt(3)=='3') lr=lr.substring(0, 3)+'2';
 			}
-			walls.clear();
-			enemys.clear();
-			keys.clear();
-			wizards.clear();
-			storyfields.clear();
+			loeschen();
 			initWorld();
 			
+		}*/
+	}
+	public void restartLevel() throws IOException {			
+		if (lr.length()==5){
+			if (lr.charAt(3)=='2') lr=lr.substring(0, 3)+'1';
+			else if (lr.charAt(3)=='3') lr=lr.substring(0, 3)+'2';
 		}
+		loeschen();
+		initWorld();
+		
 	}
 																					
 	 public void fire() {
 		 	if(position==1){
 		 		shots.add(new Shot(Jay.getX() + BLOCK, Jay.getY()));			// je in welche Richtung Diggy guckt
 		 	}																	// werden Schuesse hinzugefuegt
-		 	if(position==2){													// der Schuss soll nicht über Diggy gehen 
+		 	if(position==2){													// der Schuss soll nicht ï¿½ber Diggy gehen 
 		 		shots.add(new Shot(Jay.getX() - BLOCK, Jay.getY()));	
 		 	}
 		 	if(position==3){
@@ -445,7 +356,7 @@ public class Board extends JPanel implements ActionListener{
 			
 		 		if (m.getVisible()){ 
 		 			
-		 			if(position==1) m.move_r();								// prüft in welche Richtung Diggy schaut
+		 			if(position==1) m.move_r();								// prï¿½ft in welche Richtung Diggy schaut
 		 			if(position==2) m.move_l();								// um in die richtige Richtung zu schiessen
 		 			if(position==3)	m.move_u();
 		 			if(position==4)	m.move_d();
@@ -453,8 +364,12 @@ public class Board extends JPanel implements ActionListener{
 		 		}else shots.remove(i);										
 		 	}
 		 	repaint();														// alle 5 ms werden die Schuss-Bewegungen gezeichnet
-	// TODO Auto-generated method stub
 	 }
+	 
+	 
+		public Rectangle getBounds(){
+			return new Rectangle(Jay.getX(),Jay.getY(),50,50);
+		}
 }
 
 

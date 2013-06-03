@@ -37,7 +37,7 @@ weiter = new JButton("Weiter");
 weiter.setBounds(170,95,150,80);
 weiter.addActionListener(this);
 
-schliessen = new JButton("Schließen");
+schliessen = new JButton("Schlieï¿½en");
 schliessen.setBounds(170,265,150,80);
 schliessen.addActionListener(this);
 
