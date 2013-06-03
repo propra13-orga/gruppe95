@@ -74,15 +74,13 @@ public class Board extends JPanel implements ActionListener{
 		if ((raum.charAt(yy*20+xx)!='#')&&(raum.charAt(yy*20+xx)!='~')||(xx*yy<0))					//yy wird mal 20 multipliziert da es in jeder linie des Spielfelds 20 Bloecke gibt(also in jeder linie des strings level gibt es 20 zeichen)
 		{																							//Wandkollision:
 			Jay.move(movx,movy);																		//erst wenn es kein Stueck Mauer, keinen NPC oder einen Ein-Ausgang gibt(entweder xx oder yy <0 ist) darf/kann sich die Spielfigur bewegen
-			if (raum.charAt(yy*20+xx)=='€'){
+			if (raum.charAt(yy*20+xx)=='a'){
 				money=money+10;
 				System.out.println(money);
 				if (raum.contains("@") )
-				{	int c =raum.lastIndexOf("@");
-					//raum=raum.substring(0, yy*20+xx) + '@'+ raum.substring(yy*20+xx+1,c)+' '+ raum.substring(c+1);						
+				{	int c =raum.lastIndexOf("@");						
 					raum=raum.substring(0,c)+' '+raum.substring(c+1);
 					raum=raum.substring(0,yy*20+xx)+'@'+raum.substring(yy*20+xx+1);
-					System.out.println(raum);
 					try {
 						restartLevel(false);
 					} catch (IOException e1) {
@@ -182,7 +180,7 @@ public class Board extends JPanel implements ActionListener{
 				keys.add(key);
 				x = x + BLOCK;
 			}
-			else if (obj=='€'){
+			else if (obj=='a'){
 				coin=new Coin(x,y);
 				coins.add(coin);
 				x=x+BLOCK;
@@ -245,8 +243,6 @@ public class Board extends JPanel implements ActionListener{
 		public  void keyPressed(KeyEvent e){
 
 			int key = e.getKeyCode();
-			int xx;
-			int yy;
 
 			if(key == KeyEvent.VK_RIGHT){		
 
