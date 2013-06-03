@@ -11,6 +11,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -27,13 +28,14 @@ public class Board extends JPanel implements ActionListener{
 	Image image;
 	Image img;											//Bild fuer den Hintergrund (WEG)
 	private Character Jay;
-	private String raum;
+	private String raum="";
 	private String lr,w,h; 								//lr fuer der Name der raumdatei, w:wandbild , h:hintergrundsbild
 	private ArrayList<Shot> shots;						//Array fuer die Zeichnung der Schuesse
 	private Timer timer;
 	private int BLOCK = 50;								// 50* 50 Pixel
 	private int position;
 	private int money=0;
+	private boolean test=true;
 
 	ImageIcon r = new ImageIcon("src/Resources/r1.png");						// fuer versch. Positionen rechts, links, oben, unten
 	ImageIcon l = new ImageIcon("src/Resources/l1.png");
@@ -57,34 +59,45 @@ public class Board extends JPanel implements ActionListener{
         timer.start();
 	}
 	
-	public void loeschen(){
+	public void loeschen(boolean b){
 		coins.clear();
 		walls.clear();
 		enemys.clear();
 		keys.clear();
 		wizards.clear();
 		storyfields.clear();
+		if (b) raum="";
 	}
+	
 	public void collision(int movx,int movy){
 		int xx = ((Jay.getX()+movx)/BLOCK);																	//xx und yy sind die imaginaere Koordinaten innerhalb des Strings Variable (level).
 		int yy=(Jay.getY()+movy)/BLOCK;																		//xx und yy werden dafuer gerechnet um zu erkennen, ob an der Stelle wohin sich die Spielfigur bewegen will, kein # im variable level bzw kein Stueck Mauer im Spielfeld gibt
-		System.out.println(xx);
-		System.out.println(yy);
 		if ((raum.charAt(yy*20+xx)!='#')&&(raum.charAt(yy*20+xx)!='~')||(xx*yy<0))					//yy wird mal 20 multipliziert da es in jeder linie des Spielfelds 20 Bloecke gibt(also in jeder linie des strings level gibt es 20 zeichen)
 		{																							//Wandkollision:
 			Jay.move(movx,movy);																		//erst wenn es kein Stueck Mauer, keinen NPC oder einen Ein-Ausgang gibt(entweder xx oder yy <0 ist) darf/kann sich die Spielfigur bewegen
 			if (raum.charAt(yy*20+xx)=='€'){
 				money=money+10;
 				System.out.println(money);
-				//raum=raum.substring(0, yy*20+xx-1) + '@'+ raum.substring(yy*20+xx-1);						
+				if (raum.contains("@") )
+				{	int c =raum.lastIndexOf("@");
+					//raum=raum.substring(0, yy*20+xx) + '@'+ raum.substring(yy*20+xx+1,c)+' '+ raum.substring(c+1);						
+					raum=raum.substring(0,c)+' '+raum.substring(c+1);
+					raum=raum.substring(0,yy*20+xx)+'@'+raum.substring(yy*20+xx+1);
+					System.out.println(raum);
+					try {
+						restartLevel(false);
+					} catch (IOException e1) {
+						
+						e1.printStackTrace();
+					}
+				}
 				
 			}
 		}
-		else System.out.println(raum.charAt(yy*20+xx));
 		if (raum.charAt(yy*20+xx)=='*'){    														// Kollision mit dem Gegner, Neustart des Spiels
 			//Game_over();
 			try {
-				restartLevel();
+				restartLevel(true);
 			} catch (IOException e1) {
 				
 				e1.printStackTrace();
@@ -96,7 +109,7 @@ public class Board extends JPanel implements ActionListener{
 		{	if (lr.charAt(1)=='1') lr="l2r1";
 			else if (lr.charAt(1)=='2')lr="l3r1"; 
 			else if (lr.charAt(1)=='3')lr="l4r1";
-			loeschen();
+			loeschen(true);
 			try {
 				initWorld();
 			} catch (IOException e1) {
@@ -113,22 +126,25 @@ public class Board extends JPanel implements ActionListener{
 		return image;
 
 	}
-
-	public final void initWorld() throws IOException{											// zeichnet das Level mit Walls, Character, dem Schluessel und Gegner.
-		ImageIcon ii= new ImageIcon ("src/Resources/back"+lr.charAt(1)+".png");					// Den Pfad fuers Hintergrundbild angeben.
-		img=ii.getImage();		//Image importieren.		
-		
-		raum="";
-		 FileReader fr = new FileReader("src/Resources/"+lr+".txt");
+	
+	public String raumeinlesen() throws IOException{
+		String room="";
+		FileReader fr = new FileReader("src/Resources/"+lr+".txt");
 		    BufferedReader br = new BufferedReader(fr);
 		    String zeile = br.readLine();
 		    while (zeile != null)
 		    {
-		      raum=raum+zeile+'\n';
+		      room=room+zeile+'\n';
 		      zeile = br.readLine();
 		    }
-		  br.close();
+		br.close();
+		return room;
+	}
 
+	public final void initWorld() throws IOException{											// zeichnet das Level mit Walls, Character, dem Schluessel und Gegner.
+		ImageIcon ii= new ImageIcon ("src/Resources/back"+lr.charAt(1)+".png");					// Den Pfad fuers Hintergrundbild angeben.
+		img=ii.getImage();		//Image importieren.		
+		if (raum=="") raum=raumeinlesen();
 		int x = 0;
 		int y = 0;
 		Wall wall;
@@ -276,7 +292,7 @@ public class Board extends JPanel implements ActionListener{
 				else if (lr.charAt(3)=='2') lr=lr.substring(0,3)+'3';
 				}
 				else lr=lr.substring(0,4);
-				loeschen();
+				loeschen(true);
 				try {
 					initWorld();
 				} catch (IOException e1) {
@@ -290,7 +306,7 @@ public class Board extends JPanel implements ActionListener{
 					else if (lr.charAt(3)=='2') lr=lr.substring(0,3)+'3';
 				}
 				else lr=lr.substring(0,4);
-				loeschen();
+				loeschen(true);
 				try {
 					initWorld();
 				} catch (IOException e1) {
@@ -299,7 +315,7 @@ public class Board extends JPanel implements ActionListener{
 			}
 			if (Jay.getX() == -BLOCK){												//wenn x=-BLOCK ist, befindet sich der Spieler am eingang von Raum 2 oder 3														//und wenn er dadurch geht dann kehrt er zu einem vorherigen Raum (Raum3-->Raum2 oder Raum2-->Raum1) zur�ck
 				if (lr.charAt(3)!='1') lr=lr+'a';	
-				loeschen();
+				loeschen(true);
 				try {
 					initWorld();
 				} catch (IOException e1) {
@@ -310,23 +326,13 @@ public class Board extends JPanel implements ActionListener{
 		}
 
 			
-
-		/*public void restartLevel() throws IOException {			
-			if (lr.length()==5){
-				if (lr.charAt(3)=='2') lr=lr.substring(0, 3)+'1';
-				else if (lr.charAt(3)=='3') lr=lr.substring(0, 3)+'2';
-			}
-			loeschen();
-			initWorld();
-			
-		}*/
 	}
-	public void restartLevel() throws IOException {			
+	public void restartLevel(boolean test) throws IOException {			
 		if (lr.length()==5){
 			if (lr.charAt(3)=='2') lr=lr.substring(0, 3)+'1';
 			else if (lr.charAt(3)=='3') lr=lr.substring(0, 3)+'2';
 		}
-		loeschen();
+		loeschen(test);
 		initWorld();
 		
 	}
