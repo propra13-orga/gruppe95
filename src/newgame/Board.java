@@ -34,6 +34,7 @@ public class Board extends JPanel implements ActionListener{
 	private int BLOCK = 50;								// 50* 50 Pixel
 	private int position;
 	private int money=0;
+	private int k;
 	private boolean test=true;
 
 	ImageIcon r = new ImageIcon("src/Resources/r1.png");						// fuer versch. Positionen rechts, links, oben, unten
@@ -334,39 +335,48 @@ public class Board extends JPanel implements ActionListener{
 																					
 	 public void fire() {
 		 	if(position==1){
-		 		shots.add(new Shot(Jay.getX() + BLOCK, Jay.getY()));			// je in welche Richtung Diggy guckt
-		 	}																	// werden Schuesse hinzugefuegt
-		 	if(position==2){													// der Schuss soll nicht ï¿½ber Diggy gehen 
-		 		shots.add(new Shot(Jay.getX() - BLOCK, Jay.getY()));	
+		 		shots.add(new Shot(Jay.getX() + BLOCK, Jay.getY()));			// Posistion der Schussrichtung,je in welche Richtung Diggy guckt
+		 		k = 00;
 		 	}
+		 	if(position==2){													// der Schuss soll nicht ueber Diggy gehen 
+		 		shots.add(new Shot(Jay.getX() - BLOCK, Jay.getY()));			// k als Flag
+		 		k = 01;
+		 	}
+		
 		 	if(position==3){
-		 		shots.add(new Shot(Jay.getX(), Jay.getY() - BLOCK));	
+		 		shots.add(new Shot(Jay.getX(), Jay.getY() - BLOCK));
+		 		k = 10;
 		 	}
+		
 		 	if(position==4){
 		 		shots.add(new Shot(Jay.getX(), Jay.getY() + BLOCK));	
+		 	    k = 11;
 		 	}
+		 	
 	}
 	
 
 	 @Override
-	 public void actionPerformed(ActionEvent e) {							// zeichnet die Schuesse bis w = 950,dann remove
-		 ArrayList shots = getShots();										// mit Geschwindigkeit  (Shot classe)
+	 public void actionPerformed(ActionEvent e) {							// zeichnet die Schuesse 
+		 ArrayList shots = getShots();										
 			
 		 	for (int i = 0; i < shots.size(); i++) {
 		 		Shot m = (Shot) shots.get(i);
-			
-		 		if (m.getVisible()){ 
-		 			
-		 			if(position==1) m.move_r();								// prï¿½ft in welche Richtung Diggy schaut
-		 			if(position==2) m.move_l();								// um in die richtige Richtung zu schiessen
-		 			if(position==3)	m.move_u();
-		 			if(position==4)	m.move_d();
-		 			
-		 		}else shots.remove(i);										
-		 	}
+		 
+		 	
+		 		
+		 		if(m.getVisible()){	 										// falss limit des Boards nicht überschritten
+		 																	// wird je nach Blickrichtung in die richtgige
+		 																	// Richtung geschossen
+		 		if(k==00) m.move_r();
+		 		if(k==01) m.move_l();
+		 		if(k==10) m.move_u();
+		 		if(k==11) m.move_d();
+		 			 
+		 			}else shots.remove(i);
 		 	repaint();														// alle 5 ms werden die Schuss-Bewegungen gezeichnet
+		 	}
 	 }
-	 
 	 
 		public Rectangle getBounds(){
 			return new Rectangle(Jay.getX(),Jay.getY(),50,50);
