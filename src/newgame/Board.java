@@ -53,7 +53,7 @@ public class Board extends JPanel implements ActionListener{
 		lr="l1r1";
 		addKeyListener(new Ap());
 		setFocusable(true);		
-		initWorld();
+		initWorld('v');
 	    shots = new ArrayList<Shot>();
 		timer = new Timer(5, this);												//zeichnet alle  5ms den Board (Schuesse)
         timer.start();
@@ -69,7 +69,7 @@ public class Board extends JPanel implements ActionListener{
 		if (b) raum="";
 	}
 	
-	public void collision(int movx,int movy){
+	public void collision(int movx,int movy,char pos){
 		int xx = ((Jay.getX()+movx)/BLOCK);																	//xx und yy sind die imaginaere Koordinaten innerhalb des Strings Variable (level).
 		int yy=(Jay.getY()+movy)/BLOCK;																		//xx und yy werden dafuer gerechnet um zu erkennen, ob an der Stelle wohin sich die Spielfigur bewegen will, kein # im variable level bzw kein Stueck Mauer im Spielfeld gibt
 		if ((raum.charAt(yy*20+xx)!='#')&&(raum.charAt(yy*20+xx)!='~')||(xx*yy<0))					//yy wird mal 20 multipliziert da es in jeder linie des Spielfelds 20 Bloecke gibt(also in jeder linie des strings level gibt es 20 zeichen)
@@ -83,7 +83,7 @@ public class Board extends JPanel implements ActionListener{
 					raum=raum.substring(0,c)+' '+raum.substring(c+1);
 					raum=raum.substring(0,yy*20+xx)+'@'+raum.substring(yy*20+xx+1);
 					try {
-						restartLevel(false);
+						restartLevel(false,pos);
 					} catch (IOException e1) {
 						
 						e1.printStackTrace();
@@ -95,7 +95,7 @@ public class Board extends JPanel implements ActionListener{
 		if (raum.charAt(yy*20+xx)=='*'){    														// Kollision mit dem Gegner, Neustart des Spiels
 			//Game_over();
 			try {
-				restartLevel(true);
+				restartLevel(true,'v');
 			} catch (IOException e1) {
 				
 				e1.printStackTrace();
@@ -109,7 +109,7 @@ public class Board extends JPanel implements ActionListener{
 			else if (lr.charAt(1)=='3')lr="l4r1";
 			loeschen(true);
 			try {
-				initWorld();
+				initWorld('t');
 			} catch (IOException e1) {
 				
 				e1.printStackTrace();
@@ -139,7 +139,7 @@ public class Board extends JPanel implements ActionListener{
 		return room;
 	}
 
-	public final void initWorld() throws IOException{											// zeichnet das Level mit Walls, Character, dem Schluessel und Gegner.
+	public final void initWorld(char pos) throws IOException{											// zeichnet das Level mit Walls, Character, dem Schluessel und Gegner.
 		ImageIcon ii= new ImageIcon ("src/Resources/back"+lr.charAt(1)+".png");					// Den Pfad fuers Hintergrundbild angeben.
 		img=ii.getImage();		//Image importieren.		
 		if (raum=="") raum=raumeinlesen();
@@ -166,6 +166,19 @@ public class Board extends JPanel implements ActionListener{
 			}else if(obj == '@'){												// Legt die Position des Charakters beim Levelstart fest
 				if (lr!="l3r4"){
 				Jay = new Character(x,y);
+				if (pos=='r'){
+					image =	r.getImage();																		//Image vom Spieler der nach rechts laeuft
+					Jay.setImage(image);}
+				if (pos=='l'){
+					image =	l.getImage();																		//Image vom Spieler der nach rechts laeuft
+					Jay.setImage(image);}
+				if (pos=='t'){
+					image =	t.getImage();																		//Image vom Spieler der nach rechts laeuft
+					Jay.setImage(image);}
+				if (pos=='b'){
+					image =	b.getImage();																		//Image vom Spieler der nach rechts laeuft
+					Jay.setImage(image);}
+				
 				x = x + BLOCK;}
 			}
 			else if(obj == ' '){												//x erhoeht sich um einen Block(' ':Bereich wo sich der Spieler bewegen kann)
@@ -250,14 +263,14 @@ public class Board extends JPanel implements ActionListener{
 				image = r.getImage();																		//Image vom Spieler der nach rechts laeuft
 				Jay.setImage(image);
 				position = 1;
-				collision(BLOCK,0);
+				collision(BLOCK,0,'r');
 			}
 
 			else if(key == KeyEvent.VK_LEFT){
 				image = l.getImage();
 				Jay.setImage(image);
 				position = 2;
-				collision(-BLOCK,0);
+				collision(-BLOCK,0,'l');
 			}
 
 
@@ -265,14 +278,14 @@ public class Board extends JPanel implements ActionListener{
 				image = t.getImage();
 				Jay.setImage(image);
 				position = 3;
-				collision(0,-BLOCK);
+				collision(0,-BLOCK,'t');
 			}
 			
 			else if(key == KeyEvent.VK_DOWN){
 				image = b.getImage();
 				Jay.setImage(image);
 				position = 4;
-				collision(0,BLOCK);
+				collision(0,BLOCK,'b');
 			}
 			else if (key == KeyEvent.VK_SPACE) {							// Taste -Space ruft die Funktion fire auf
 	            fire();
@@ -290,7 +303,7 @@ public class Board extends JPanel implements ActionListener{
 				else lr=lr.substring(0,4);
 				loeschen(true);
 				try {
-					initWorld();
+					initWorld('t');
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}															//world initialisieren 
@@ -304,7 +317,7 @@ public class Board extends JPanel implements ActionListener{
 				else lr=lr.substring(0,4);
 				loeschen(true);
 				try {
-					initWorld();
+					initWorld('t');
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
@@ -313,7 +326,7 @@ public class Board extends JPanel implements ActionListener{
 				if (lr.charAt(3)!='1') lr=lr+'a';	
 				loeschen(true);
 				try {
-					initWorld();
+					initWorld('t');
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
@@ -323,13 +336,13 @@ public class Board extends JPanel implements ActionListener{
 
 			
 	}
-	public void restartLevel(boolean test) throws IOException {			
+	public void restartLevel(boolean test,char k) throws IOException {			
 		if (lr.length()==5){
 			if (lr.charAt(3)=='2') lr=lr.substring(0, 3)+'1';
 			else if (lr.charAt(3)=='3') lr=lr.substring(0, 3)+'2';
 		}
 		loeschen(test);
-		initWorld();
+		initWorld(k);
 		
 	}
 																					
@@ -365,7 +378,7 @@ public class Board extends JPanel implements ActionListener{
 		 
 		 	
 		 		
-		 		if(m.getVisible()){	 										// falss limit des Boards nicht überschritten
+		 		if(m.getVisible()){	 										// falss limit des Boards nicht ï¿½berschritten
 		 																	// wird je nach Blickrichtung in die richtgige
 		 																	// Richtung geschossen
 		 		if(k==00) m.move_r();
