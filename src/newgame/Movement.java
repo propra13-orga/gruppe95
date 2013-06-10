@@ -1,21 +1,26 @@
 package newgame;
 
 import java.awt.Image;
+import java.awt.Rectangle;
 
 public class Movement {
-	
 
-private final int BLOCK = 50;									// fuer die Aktualisierung der Bewegung
-
-	
-	
-	private int x;
-	private int y;
 	private Image image;
+	protected boolean visible;
+	private int width;
+	private int height;
+	private int x,y;
 	
 	public Movement(int x, int y){
 		this.x = x;
 		this.y = y;
+	}
+	public void setVisible(boolean visible) {
+	        this.visible = visible;
+	}
+
+	public boolean isVisible() {
+	        return visible;
 	}
 	
 	public Image getImage(){
@@ -41,5 +46,9 @@ private final int BLOCK = 50;									// fuer die Aktualisierung der Bewegung
 	public void setY(int y){
 		this.y = y;
 	}
+	
+	public Rectangle getBounds() {
+			return new Rectangle(x, y, width, height);
+	    }
 	
 }

@@ -3,6 +3,7 @@ package newgame;
 
 
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
@@ -16,6 +17,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
@@ -24,18 +26,22 @@ import javax.swing.Timer;
 
 public class Board extends JPanel implements ActionListener{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	Image image;
 	Image img;											//Bild fuer den Hintergrund (WEG)
 	private Character Jay;
 	private String raum="";
-	private String lr; 								//lr fuer der Name der raumdatei, w:wandbild , h:hintergrundsbild
+	private String lr; 									//lr fuer der Name der raumdatei, w:wandbild , h:hintergrundsbild
 	private ArrayList<Shot> shots;						//Array fuer die Zeichnung der Schuesse
 	private Timer timer;
 	private int BLOCK = 50;								// 50* 50 Pixel
 	private int position;
 	private int money=0;
 	private int k;
-	private boolean test=true;
+	boolean ingame;
 
 	ImageIcon r = new ImageIcon("src/Resources/r1.png");						// fuer versch. Positionen rechts, links, oben, unten
 	ImageIcon l = new ImageIcon("src/Resources/l1.png");
@@ -54,11 +60,14 @@ public class Board extends JPanel implements ActionListener{
 		addKeyListener(new Ap());
 		setFocusable(true);		
 		initWorld('v');
+		ingame =true;
 	    shots = new ArrayList<Shot>();
 		timer = new Timer(5, this);												//zeichnet alle  5ms den Board (Schuesse)
         timer.start();
+       
+
 	}
-	
+
 	public void loeschen(boolean b){
 		coins.clear();
 		walls.clear();
@@ -70,10 +79,13 @@ public class Board extends JPanel implements ActionListener{
 	}
 	
 	public void collision(int movx,int movy,char pos){
+		
 		int xx = ((Jay.getX()+movx)/BLOCK);																	//xx und yy sind die imaginaere Koordinaten innerhalb des Strings Variable (level).
 		int yy=(Jay.getY()+movy)/BLOCK;																		//xx und yy werden dafuer gerechnet um zu erkennen, ob an der Stelle wohin sich die Spielfigur bewegen will, kein # im variable level bzw kein Stueck Mauer im Spielfeld gibt
+		
 		if ((raum.charAt(yy*20+xx)!='#')&&(raum.charAt(yy*20+xx)!='~')||(xx*yy<0))					//yy wird mal 20 multipliziert da es in jeder linie des Spielfelds 20 Bloecke gibt(also in jeder linie des strings level gibt es 20 zeichen)
 		{																							//Wandkollision:
+		
 			Jay.move(movx,movy);																		//erst wenn es kein Stueck Mauer, keinen NPC oder einen Ein-Ausgang gibt(entweder xx oder yy <0 ist) darf/kann sich die Spielfigur bewegen
 			if (raum.charAt(yy*20+xx)=='a'){
 				money=money+10;
@@ -140,8 +152,9 @@ public class Board extends JPanel implements ActionListener{
 	}
 
 	public final void initWorld(char pos) throws IOException{											// zeichnet das Level mit Walls, Character, dem Schluessel und Gegner.
-		ImageIcon ii= new ImageIcon ("src/Resources/back"+lr.charAt(1)+".png");					// Den Pfad fuers Hintergrundbild angeben.
-		img=ii.getImage();		//Image importieren.		
+		//ImageIcon ii= new ImageIcon ("src/Resources/back"+lr.charAt(1)+".png");					// Den Pfad fuers Hintergrundbild angeben.
+		//img=ii.getImage();		//Image importieren.	
+		setBackground(Color.BLACK);											// dunkler Hintergrund für den Kontrast der Schüsse
 		if (raum=="") raum=raumeinlesen();
 		int x = 0;
 		int y = 0;
@@ -227,28 +240,38 @@ public class Board extends JPanel implements ActionListener{
 		world.addAll(storyfields);
 		world.addAll(coins);
 
+	
 
 		for(int i = 0; i < world.size(); i++){									// Array world durchgehen um objekte zu zeichnen.
 			Movement obj = (Movement) world.get(i);
 			g.drawImage(obj.getImage(), obj.getX(), obj.getY(), this);			// g.drawImage fuer die Grafische Zeichnung
-			
 		}
+		
+	       ArrayList<Shot> shots = getShots();
 
+           for (int j = 0; j < shots.size(); j++) {
+               Shot m = (Shot) shots.get(j);
+               g.drawImage(m.getImage(), m.getX(), m.getY(), this);
+     
+           }
+           if(ingame == false){
+               
+        	   																	// mögliche Fehlermeldung beim Schuss
+         Game_over();
+
+       }
 	}
-	public Graphics g;
+
+           
+	//public Graphics g;
+	
 	public void paint(Graphics g){
 		super.paint(g);
+	
 		buildWorld(g);
-		  ArrayList shots = getShots();											// fuer die grafische Zeichnung der Schuesse
-
-	        for (int i = 0; i < shots.size(); i++ ) {
-	            Shot m = (Shot) shots.get(i);
-	            g.drawImage(m.getImage(), m.getX(), m.getY(), this);
-	        }
 	}
 
-
-	 public ArrayList getShots() {												// gibt die Schuesse der Positionen wieder
+	public ArrayList<Shot> getShots() {												// gibt die Schuesse der Positionen wieder
 	        return shots;
 	    }
 
@@ -289,6 +312,7 @@ public class Board extends JPanel implements ActionListener{
 			}
 			else if (key == KeyEvent.VK_SPACE) {							// Taste -Space ruft die Funktion fire auf
 	            fire();
+	            
 	        }
 
 
@@ -371,39 +395,98 @@ public class Board extends JPanel implements ActionListener{
 
 	 @Override
 	 public void actionPerformed(ActionEvent e) {							// zeichnet die Schuesse 
-		 ArrayList shots = getShots();										
+	       
+	     ArrayList<Shot> shots = getShots();										
 			
 		 	for (int i = 0; i < shots.size(); i++) {
 		 		Shot m = (Shot) shots.get(i);
-		 
-		 	
 		 		
-		 		if(m.getVisible()){	 										// falss limit des Boards nicht ï¿½berschritten
+				if(m.isVisible()){	 										// falss limit des Boards nicht ï¿½berschritten
 		 																	// wird je nach Blickrichtung in die richtgige
 		 																	// Richtung geschossen
 		 		if(k==00) m.move_r();
 		 		if(k==01) m.move_l();
 		 		if(k==10) m.move_u();
 		 		if(k==11) m.move_d();
-		 			 
+		 		 
 		 			}else shots.remove(i);
+		 		
+		 		checkCollisions();
+		 		checkCollisions2();
+		 		//checkCollisions3();
 		 	repaint();														// alle 5 ms werden die Schuss-Bewegungen gezeichnet
-		 	}
+		 }
 	 }
 	 
 		public Rectangle getBounds(){
 			return new Rectangle(Jay.getX(),Jay.getY(),50,50);
 		}
-}
+
+		public void checkCollisions() {
+
+			ArrayList<Shot> shots = getShots();
+
+			    for (int i = 0; i < shots.size(); i++) {
+			        Shot m = (Shot) shots.get(i);
+			        
+			        Rectangle r1 = m.getBounds();
+
+			        for (int j = 0; j<enemys.size(); j++) {
+			            Enemy e = (Enemy) enemys.get(j);
+			            Rectangle r2 = e.getBounds();
+
+			            if (r1.intersects(r2)) {
+			                m.setVisible(false);
+			                e.setVisible(false);
+			             }
+			        }
+			    }
+			}
+		public void checkCollisions2() {
+
+			ArrayList<Shot> shots = getShots();
+
+			    for (int i = 0; i < shots.size(); i++) {
+			        Shot m = (Shot) shots.get(i);
+			        
+			        Rectangle r1 = m.getBounds();
+			        
+			        for (int j = 0; j < coins.size(); j++) {
+				        Coin c = (Coin) coins.get(j);
+				        Rectangle r2 = c.getBounds();
+
+			            if (r1.intersects(r2)) {
+			                m.setVisible(false);
+			                c.setVisible(false);
+			             }
+			        }
+			    }
+			}
+		/*public void checkCollisions3() {
 
 
+		    ArrayList<Shot> shots = getShots();
 
-/**public void Game_over(){
+		    for (int i = 0; i < shots.size(); i++) {
+		        Shot m = (Shot) shots.get(i);
+		        
+		        Rectangle r1 = m.getBounds();
+		        
+		        for (int j = 0; j < walls.size(); j++) {
+			        Wall w = (Wall) walls.get(j);
+			        Rectangle r2 = w.getBounds();
+
+		            if (r1.intersects(r2)) {
+		                m.setVisible(false);
+		                w.setVisible(false);
+		             }
+		        }
+		    }
+		}*/
+	
+public void Game_over(){
 	 
-
-		
-	 JFrame Game_over = new JFrame();
-	 
+	JFrame Game_over = new JFrame();
 	 
 	 Game_over.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	 Game_over.setSize(500,500);
@@ -411,8 +494,5 @@ public class Board extends JPanel implements ActionListener{
 	 Game_over.setFocusable(true);
 	 Game_over.setLocationRelativeTo(null);   // Fenster in der MItte 
 	 Game_over.add(new Game_over());
-	
-
-			
-		}
-*/
+	}
+}
