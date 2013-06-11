@@ -72,7 +72,7 @@ public class Board extends JPanel implements ActionListener{
 	public void collision(int movx,int movy,char pos){
 		int xx = ((Jay.getX()+movx)/BLOCK);																	//xx und yy sind die imaginaere Koordinaten innerhalb des Strings Variable (level).
 		int yy=(Jay.getY()+movy)/BLOCK;																		//xx und yy werden dafuer gerechnet um zu erkennen, ob an der Stelle wohin sich die Spielfigur bewegen will, kein # im variable level bzw kein Stueck Mauer im Spielfeld gibt
-		if ((raum.charAt(yy*20+xx)!='#')&&(raum.charAt(yy*20+xx)!='~')||(xx*yy<0))					//yy wird mal 20 multipliziert da es in jeder linie des Spielfelds 20 Bloecke gibt(also in jeder linie des strings level gibt es 20 zeichen)
+		if ((raum.charAt(yy*20+xx)!='#')&&(raum.charAt(yy*20+xx)!='~')&&(xx>=0)||(Jay.getY()<0))					//yy wird mal 20 multipliziert da es in jeder linie des Spielfelds 20 Bloecke gibt(also in jeder linie des strings level gibt es 20 zeichen)
 		{																							//Wandkollision:
 			Jay.move(movx,movy);																		//erst wenn es kein Stueck Mauer, keinen NPC oder einen Ein-Ausgang gibt(entweder xx oder yy <0 ist) darf/kann sich die Spielfigur bewegen
 			if (raum.charAt(yy*20+xx)=='a'){
@@ -296,11 +296,12 @@ public class Board extends JPanel implements ActionListener{
 			
 
 			if ((Jay.getY()==-BLOCK)||(Jay.getY()==0))  {										//Wenn der Spieler am Ausgang des 1. Raums ist dann 
-				if (lr.length()==4){
-				if (lr.charAt(3)=='1') lr=lr.substring(0,3)+"2";
-				else if (lr.charAt(3)=='2') lr=lr.substring(0,3)+'3';
+				if (lr.length()==4)
+				{
+					if (lr.charAt(3)=='1') lr=lr.substring(0,3)+"2";
+					else if (lr.charAt(3)=='2') lr=lr.substring(0,3)+'3';
 				}
-				else lr=lr.substring(0,4);
+				//else lr=lr.substring(0,4);
 				loeschen(true);
 				try {
 					initWorld('t');
@@ -314,7 +315,7 @@ public class Board extends JPanel implements ActionListener{
 					if (lr.charAt(3)=='1') lr=lr.substring(0,3)+"2";
 					else if (lr.charAt(3)=='2') lr=lr.substring(0,3)+'3';
 				}
-				else lr=lr.substring(0,4);
+				//else lr=lr.substring(0,4);
 				loeschen(true);
 				try {
 					initWorld('t');
@@ -322,7 +323,7 @@ public class Board extends JPanel implements ActionListener{
 					e1.printStackTrace();
 				}
 			}
-			if (Jay.getX() == -BLOCK){												//wenn x=-BLOCK ist, befindet sich der Spieler am eingang von Raum 2 oder 3														//und wenn er dadurch geht dann kehrt er zu einem vorherigen Raum (Raum3-->Raum2 oder Raum2-->Raum1) zur�ck
+			/*if (Jay.getX() == -BLOCK){												//wenn x=-BLOCK ist, befindet sich der Spieler am eingang von Raum 2 oder 3														//und wenn er dadurch geht dann kehrt er zu einem vorherigen Raum (Raum3-->Raum2 oder Raum2-->Raum1) zur�ck
 				if (lr.charAt(3)!='1') lr=lr+'a';	
 				loeschen(true);
 				try {
@@ -330,7 +331,7 @@ public class Board extends JPanel implements ActionListener{
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
-			}
+			}*/
 
 		}
 
