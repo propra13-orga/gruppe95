@@ -31,17 +31,18 @@ public class Board extends JPanel implements ActionListener{
 	 */
 	private static final long serialVersionUID = 1L;
 	Image image;
-	Image img;											//Bild fuer den Hintergrund (WEG)
+	Image img;  										//Bild fuer den Hintergrund (WEG)
 	private Character Jay;
 	private String raum="";
-	private String lr; 									//lr fuer der Name der raumdatei, w:wandbild , h:hintergrundsbild
+	private String lr,rooms,lrs; 									//lr fuer der Name der raumdatei, w:wandbild , h:hintergrundsbild
 	private ArrayList<Shot> shots;						//Array fuer die Zeichnung der Schuesse
 	private Timer timer;
 	private int BLOCK = 50;								// 50* 50 Pixel
 	private int position;
-	private int money=0;
-	private int k;
-	boolean ingame;
+	private int ruban=0; private int xruban;
+	private int k,posX,posY;
+	boolean ingame,failed;
+	private checkpoint check;
 
 	ImageIcon r = new ImageIcon("src/Resources/r1.png");						// fuer versch. Positionen rechts, links, oben, unten
 	ImageIcon l = new ImageIcon("src/Resources/l1.png");
@@ -76,24 +77,26 @@ public class Board extends JPanel implements ActionListener{
 		wizards.clear();
 		storyfields.clear();
 		if (b) raum="";
+		if (failed) {
+			if (lr==lrs){
+				raum=rooms;
+			}
+			ruban=0;
+		}
+		
 	}
 	
 	public void collision(int movx,int movy,char pos){
 		
 		int xx = ((Jay.getX()+movx)/BLOCK);																	//xx und yy sind die imaginaere Koordinaten innerhalb des Strings Variable (level).
 		int yy=(Jay.getY()+movy)/BLOCK;																		//xx und yy werden dafuer gerechnet um zu erkennen, ob an der Stelle wohin sich die Spielfigur bewegen will, kein # im variable level bzw kein Stueck Mauer im Spielfeld gibt
-<<<<<<< HEAD
 		if ((raum.charAt(yy*20+xx)!='#')&&(raum.charAt(yy*20+xx)!='~')&&(xx>=0)||(Jay.getY()<0))					//yy wird mal 20 multipliziert da es in jeder linie des Spielfelds 20 Bloecke gibt(also in jeder linie des strings level gibt es 20 zeichen)
-=======
-		
-		if ((raum.charAt(yy*20+xx)!='#')&&(raum.charAt(yy*20+xx)!='~')||(xx*yy<0))					//yy wird mal 20 multipliziert da es in jeder linie des Spielfelds 20 Bloecke gibt(also in jeder linie des strings level gibt es 20 zeichen)
->>>>>>> 98674d83cee0f19d3a7281c1c9cd64b510d53e5f
-		{																							//Wandkollision:
-		
+		{																							//Wandkollision
 			Jay.move(movx,movy);																		//erst wenn es kein Stueck Mauer, keinen NPC oder einen Ein-Ausgang gibt(entweder xx oder yy <0 ist) darf/kann sich die Spielfigur bewegen
 			if (raum.charAt(yy*20+xx)=='a'){
-				money=money+10;
-				System.out.println(money);
+				ruban= ruban+1;
+				System.out.print("ruban = ");
+				System.out.println(ruban);
 				if (raum.contains("@") )
 				{	int c =raum.lastIndexOf("@");						
 					raum=raum.substring(0,c)+' '+raum.substring(c+1);
@@ -110,6 +113,7 @@ public class Board extends JPanel implements ActionListener{
 		}
 		if (raum.charAt(yy*20+xx)=='*'){    														// Kollision mit dem Gegner, Neustart des Spiels
 			//Game_over();
+			failed=true;
 			try {
 				restartLevel(true,'v');
 			} catch (IOException e1) {
@@ -119,7 +123,7 @@ public class Board extends JPanel implements ActionListener{
 			
 		}
 		
-		if (raum.charAt(yy*20+xx)=='$')									//schluessel gefunden!
+		else if (raum.charAt(yy*20+xx)=='$')									//schluessel gefunden!
 		{	if (lr.charAt(1)=='1') lr="l2r1";
 			else if (lr.charAt(1)=='2')lr="l3r1"; 
 			else if (lr.charAt(1)=='3')lr="l4r1";
@@ -130,6 +134,19 @@ public class Board extends JPanel implements ActionListener{
 				
 				e1.printStackTrace();
 			}
+		}
+		
+		else if (raum.charAt(yy*20+xx)=='b'){
+			xruban=xruban+ruban;
+			System.out.print("xruban = ");
+			System.out.println(xruban);
+			ruban=0;
+			System.out.print("ruban = ");
+			System.out.println(ruban);
+			posX=Jay.getX();
+			posY=Jay.getY();
+			rooms=raum;
+			lrs=lr;
 		}
 
 
@@ -156,9 +173,9 @@ public class Board extends JPanel implements ActionListener{
 	}
 
 	public final void initWorld(char pos) throws IOException{											// zeichnet das Level mit Walls, Character, dem Schluessel und Gegner.
-		//ImageIcon ii= new ImageIcon ("src/Resources/back"+lr.charAt(1)+".png");					// Den Pfad fuers Hintergrundbild angeben.
-		//img=ii.getImage();		//Image importieren.	
-		setBackground(Color.BLACK);											// dunkler Hintergrund für den Kontrast der Schüsse
+		ImageIcon ii= new ImageIcon ("src/Resources/back"+lr.charAt(1)+".png");					// Den Pfad fuers Hintergrundbild angeben.
+		img=ii.getImage();		//Image importieren.	
+		setBackground(Color.BLACK);											// dunkler Hintergrund fï¿½r den Kontrast der Schï¿½sse
 		if (raum=="") raum=raumeinlesen();
 		int x = 0;
 		int y = 0;
@@ -182,21 +199,26 @@ public class Board extends JPanel implements ActionListener{
 				x = x + BLOCK;
 			}else if(obj == '@'){												// Legt die Position des Charakters beim Levelstart fest
 				if (lr!="l3r4"){
-				Jay = new Character(x,y);
-				if (pos=='r'){
-					image =	r.getImage();																		//Image vom Spieler der nach rechts laeuft
-					Jay.setImage(image);}
-				if (pos=='l'){
-					image =	l.getImage();																		//Image vom Spieler der nach rechts laeuft
-					Jay.setImage(image);}
-				if (pos=='t'){
-					image =	t.getImage();																		//Image vom Spieler der nach rechts laeuft
-					Jay.setImage(image);}
-				if (pos=='b'){
-					image =	b.getImage();																		//Image vom Spieler der nach rechts laeuft
-					Jay.setImage(image);}
+					if (failed==false)Jay = new Character(x,y);
+					else if (failed){
+						if (lr==lrs) Jay=new Character(posX,posY);
+						else Jay = new Character(x,y);
+						failed=false;
+					}
+					if (pos=='r'){
+						image =	r.getImage();																		//Image vom Spieler der nach rechts laeuft
+						Jay.setImage(image);}
+					if (pos=='l'){
+						image =	l.getImage();																		//Image vom Spieler der nach rechts laeuft
+						Jay.setImage(image);}
+					if (pos=='t'){
+						image =	t.getImage();																		//Image vom Spieler der nach rechts laeuft
+						Jay.setImage(image);}
+					if (pos=='b'){
+						image =	b.getImage();																		//Image vom Spieler der nach rechts laeuft
+						Jay.setImage(image);}
 				
-				x = x + BLOCK;}
+					x = x + BLOCK;}
 			}
 			else if(obj == ' '){												//x erhoeht sich um einen Block(' ':Bereich wo sich der Spieler bewegen kann)
 				x = x + BLOCK;
@@ -224,8 +246,11 @@ public class Board extends JPanel implements ActionListener{
 			else if(obj == '+'){
 				storyfield = new Storyfield(x,y);
 				storyfields.add(storyfield);
-				x = x + BLOCK;
-				
+				x = x + BLOCK;	
+			}
+			else if(obj == 'b'){												// Legt die Position des Charakters beim Levelstart fest
+				check = new checkpoint(x,y);
+				x=x+BLOCK;
 			}
 		}
 	}
@@ -237,12 +262,14 @@ public class Board extends JPanel implements ActionListener{
 		ArrayList<Movement> world = new ArrayList<Movement>();
 
 		world.addAll(walls);													//Alle Objekte in einem Array world speichern				//im levelend soll es kein Spielfigur geben
+		world.add(check);
 		world.add(Jay);
 		world.addAll(enemys);
 		world.addAll(keys);
 		world.addAll(wizards);
 		world.addAll(storyfields);
 		world.addAll(coins);
+		
 
 	
 
@@ -260,7 +287,7 @@ public class Board extends JPanel implements ActionListener{
            }
            if(ingame == false){
                
-        	   																	// mögliche Fehlermeldung beim Schuss
+        	   																	// mï¿½gliche Fehlermeldung beim Schuss
          Game_over();
 
        }
@@ -324,12 +351,14 @@ public class Board extends JPanel implements ActionListener{
 			
 
 			if ((Jay.getY()==-BLOCK)||(Jay.getY()==0))  {										//Wenn der Spieler am Ausgang des 1. Raums ist dann 
-				if (lr.length()==4)
-				{
-					if (lr.charAt(3)=='1') lr=lr.substring(0,3)+"2";
-					else if (lr.charAt(3)=='2') lr=lr.substring(0,3)+'3';
-				}
-				//else lr=lr.substring(0,4);
+				if (lr.charAt(3)=='1') lr=lr.substring(0,3)+"2";
+				else if (lr.charAt(3)=='2') lr=lr.substring(0,3)+'3';
+				xruban=xruban+ruban;
+				System.out.print("xruban = ");
+				System.out.println(xruban);
+				ruban=0;
+				System.out.print("ruban = ");
+				System.out.println(ruban);
 				loeschen(true);
 				try {
 					initWorld('t');
@@ -339,11 +368,16 @@ public class Board extends JPanel implements ActionListener{
 
 			}
 			if (Jay.getX() ==950 ){											//Bedingung erfuellt nur am Ausgang des 2. Raums
-				if (lr.length()==4){
-					if (lr.charAt(3)=='1') lr=lr.substring(0,3)+"2";
-					else if (lr.charAt(3)=='2') lr=lr.substring(0,3)+'3';
-				}
-				//else lr=lr.substring(0,4);
+				if (lr.charAt(3)=='1') lr=lr.substring(0,3)+"2";
+				else if (lr.charAt(3)=='2') lr=lr.substring(0,3)+'3';
+				xruban=xruban+ruban;
+				System.out.print("xruban = ");
+				System.out.println(xruban);
+				System.out.print("ruban = ");
+				System.out.println(ruban);
+				ruban=0;
+				System.out.print("ruban = ");
+				System.out.println(ruban);
 				loeschen(true);
 				try {
 					initWorld('t');
@@ -351,16 +385,6 @@ public class Board extends JPanel implements ActionListener{
 					e1.printStackTrace();
 				}
 			}
-			/*if (Jay.getX() == -BLOCK){												//wenn x=-BLOCK ist, befindet sich der Spieler am eingang von Raum 2 oder 3														//und wenn er dadurch geht dann kehrt er zu einem vorherigen Raum (Raum3-->Raum2 oder Raum2-->Raum1) zurï¿½ck
-				if (lr.charAt(3)!='1') lr=lr+'a';	
-				loeschen(true);
-				try {
-					initWorld('t');
-				} catch (IOException e1) {
-					e1.printStackTrace();
-				}
-			}*/
-
 		}
 
 			
@@ -418,7 +442,7 @@ public class Board extends JPanel implements ActionListener{
 		 		
 		 		checkCollisions();
 		 		checkCollisions2();
-		 		//checkCollisions3();
+		 		checkCollisions3();
 		 	repaint();														// alle 5 ms werden die Schuss-Bewegungen gezeichnet
 		 }
 	 }
@@ -467,7 +491,7 @@ public class Board extends JPanel implements ActionListener{
 			        }
 			    }
 			}
-		/*public void checkCollisions3() {
+		public void checkCollisions3() {
 
 
 		    ArrayList<Shot> shots = getShots();
@@ -487,7 +511,7 @@ public class Board extends JPanel implements ActionListener{
 		             }
 		        }
 		    }
-		}*/
+		}
 	
 public void Game_over(){
 	 
