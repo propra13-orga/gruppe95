@@ -265,14 +265,14 @@ public class Board extends JPanel implements ActionListener{
 		g.drawImage(img, 0, 0, null);									//Background Image zeichnen
 		ArrayList<Movement> world = new ArrayList<Movement>();
 
-		world.addAll(walls);													//Alle Objekte in einem Array world speichern				//im levelend soll es kein Spielfigur geben
+		//world.addAll(walls);													//Alle Objekte in einem Array world speichern				//im levelend soll es kein Spielfigur geben
 		world.add(check);
 		world.add(Jay);
 		//world.addAll(enemys);													// nur zeichnen wenn Enemy nicht schon tot ist 
 		world.addAll(keys);
 		world.addAll(wizards);
 		world.addAll(storyfields);
-		world.addAll(coins);
+		//world.addAll(coins);
 
 		for(int i = 0; i < world.size(); i++){									// Array world durchgehen um objekte zu zeichnen.
 			
@@ -293,12 +293,18 @@ public class Board extends JPanel implements ActionListener{
 	       				if (e.isVisible())
 	       				g.drawImage(e.getImage(), e.getX(), e.getY(), this);
 	       			}
-	      	/*		for (int i = 0; i < walls.size(); i++) {					//  NICHT LÖSCHEN FÜR DAS TESTEN DER WÄNDE 
+	       			for (int i = 0; i < walls.size(); i++) {					//  NICHT LÖSCHEN FÜR DAS TESTEN DER WÄNDE 
 	       				
 	       				Wall w = (Wall) walls.get(i);
 	       				if (w.isVisible())
 	       				g.drawImage(w.getImage(), w.getX(), w.getY(), this);
-	       			}*/
+	       			}
+	       			for (int i = 0; i < coins.size(); i++) {					// Enemy soll nur gezeichnet werden, wenne es noch nicht tot ist 
+	       				
+	       				Coin c = (Coin) coins.get(i);
+	       				if (c.isVisible())
+	       				g.drawImage(c.getImage(), c.getX(), c.getY(), this);
+	       			}
 }
     
         public void paint(Graphics g){
@@ -306,7 +312,7 @@ public class Board extends JPanel implements ActionListener{
 	
 		if(ingame){																// falls Spiel nicht verloren
 			buildWorld(g);														// zeichnet Welt mit Punktestand..
-	        String msg = "Lebenspunkte: ***";
+	        String msg = "Money: "+ruban;
             Font small = new Font("Helvetica", Font.BOLD, 14);
             FontMetrics metr = this.getFontMetrics(small);
             g.setColor(Color.white);
@@ -480,7 +486,7 @@ public class Board extends JPanel implements ActionListener{
 
 			            if (r1.intersects(r2)) {
 			                m.setVisible(false);
-			                c.setVisible(false);
+			                c.setVisible(true);
 			            }
 			        }
 			    }
@@ -501,7 +507,7 @@ public class Board extends JPanel implements ActionListener{
 
 		            if (r1.intersects(r2)) {
 		                m.setVisible(false);
-		                w.setVisible(false);
+		                w.setVisible(true);
 		             }
 		        }
 		    }
