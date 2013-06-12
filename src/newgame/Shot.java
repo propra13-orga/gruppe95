@@ -5,7 +5,7 @@ import java.awt.Rectangle;
 
 import javax.swing.ImageIcon;
 
-public class Shot  {
+public class Shot{
 	private int x,y;
 	Image img;
 	boolean visible;
@@ -86,7 +86,6 @@ public class Shot  {
 	public void shot_limit_y2(){
 		 if (y<=0)
 	         visible = false;						
-	
 	}
 }
 

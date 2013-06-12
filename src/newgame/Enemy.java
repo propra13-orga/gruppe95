@@ -32,10 +32,5 @@ private int x, y;
 	        public Rectangle getBounds() {										// Kollision Detection
 	            return new Rectangle(x, y, width, height);
 	        }
-	    
-
-		   
-
-
-	}
+ }
 

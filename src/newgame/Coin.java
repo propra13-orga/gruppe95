@@ -23,12 +23,11 @@ private int x, y;
 	        this.y = y;
 	}
     
-    public Image getImage() {
+	public Image getImage() {
         return image;
     }
 
     public Rectangle getBounds() {												// Kollision mit Schuss 
         return new Rectangle(x, y, width, height);
     }
-
-}
+ }

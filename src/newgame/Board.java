@@ -4,9 +4,13 @@ package newgame;
 
 
 import java.awt.Color;
+import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Rectangle;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -15,6 +19,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -31,13 +36,13 @@ public class Board extends JPanel implements ActionListener{
 	 */
 	private static final long serialVersionUID = 1L;
 	Image image;
-	Image img;  										//Bild fuer den Hintergrund (WEG)
+	Image img;  													//Bild fuer den Hintergrund (WEG)
 	private Character Jay;
 	private String raum="";
 	private String lr,rooms,lrs; 									//lr fuer der Name der raumdatei, w:wandbild , h:hintergrundsbild
-	private ArrayList<Shot> shots;						//Array fuer die Zeichnung der Schuesse
+	private ArrayList<Shot> shots;									//Array fuer die Zeichnung der Schuesse
 	private Timer timer;
-	private int BLOCK = 50;								// 50* 50 Pixel
+	private int BLOCK = 50;											// 50* 50 Pixel
 	private int position;
 	private int ruban=0; private int xruban;
 	private int k,posX,posY;
@@ -61,7 +66,7 @@ public class Board extends JPanel implements ActionListener{
 		addKeyListener(new Ap());
 		setFocusable(true);		
 		initWorld('v');
-		ingame =true;
+		ingame = true;
 	    shots = new ArrayList<Shot>();
 		timer = new Timer(5, this);												//zeichnet alle  5ms den Board (Schuesse)
         timer.start();
@@ -257,52 +262,62 @@ public class Board extends JPanel implements ActionListener{
 
 	public void buildWorld(Graphics g){
 
-		g.drawImage(img, 0, 0, null);											//Background Image zeichnen
-
+		g.drawImage(img, 0, 0, null);									//Background Image zeichnen
 		ArrayList<Movement> world = new ArrayList<Movement>();
 
 		world.addAll(walls);													//Alle Objekte in einem Array world speichern				//im levelend soll es kein Spielfigur geben
 		world.add(check);
 		world.add(Jay);
-		world.addAll(enemys);
+		//world.addAll(enemys);													// nur zeichnen wenn Enemy nicht schon tot ist 
 		world.addAll(keys);
 		world.addAll(wizards);
 		world.addAll(storyfields);
 		world.addAll(coins);
-		
-
-	
 
 		for(int i = 0; i < world.size(); i++){									// Array world durchgehen um objekte zu zeichnen.
+			
 			Movement obj = (Movement) world.get(i);
 			g.drawImage(obj.getImage(), obj.getX(), obj.getY(), this);			// g.drawImage fuer die Grafische Zeichnung
 		}
 		
 	       ArrayList<Shot> shots = getShots();
-
-           for (int j = 0; j < shots.size(); j++) {
-               Shot m = (Shot) shots.get(j);
-               g.drawImage(m.getImage(), m.getX(), m.getY(), this);
-     
-           }
-           if(ingame == false){
-               
-        	   																	// mï¿½gliche Fehlermeldung beim Schuss
-         Game_over();
-
-       }
-	}
-
-           
-	//public Graphics g;
-	
-	public void paint(Graphics g){
+	       		for (int j = 0; j < shots.size(); j++) {
+                
+	       			Shot m = (Shot) shots.get(j);
+	       			g.drawImage(m.getImage(), m.getX(), m.getY(), this);
+                }
+	       		
+	       			for (int i = 0; i < enemys.size(); i++) {					// Enemy soll nur gezeichnet werden, wenne es noch nicht tot ist 
+	       				
+	       				Enemy e = (Enemy) enemys.get(i);
+	       				if (e.isVisible())
+	       				g.drawImage(e.getImage(), e.getX(), e.getY(), this);
+	       			}
+	      	/*		for (int i = 0; i < walls.size(); i++) {					//  NICHT LÖSCHEN FÜR DAS TESTEN DER WÄNDE 
+	       				
+	       				Wall w = (Wall) walls.get(i);
+	       				if (w.isVisible())
+	       				g.drawImage(w.getImage(), w.getX(), w.getY(), this);
+	       			}*/
+}
+    
+        public void paint(Graphics g){
 		super.paint(g);
 	
-		buildWorld(g);
-	}
-
-	public ArrayList<Shot> getShots() {												// gibt die Schuesse der Positionen wieder
+		if(ingame){																// falls Spiel nicht verloren
+			buildWorld(g);														// zeichnet Welt mit Punktestand..
+	        String msg = "Lebenspunkte: ***";
+            Font small = new Font("Helvetica", Font.BOLD, 14);
+            FontMetrics metr = this.getFontMetrics(small);
+            g.setColor(Color.white);
+            g.setFont(small);
+            g.drawString(msg, (200 - metr.stringWidth(msg)) / 2,
+                     50 / 2);
+            }else{																// was bei Niederlage passieren soll..
+            	 }
+        }
+	
+	public ArrayList<Shot> getShots() {											// gibt die Schuesse der Positionen wieder
 	        return shots;
 	    }
 
@@ -418,19 +433,17 @@ public class Board extends JPanel implements ActionListener{
 		 		shots.add(new Shot(Jay.getX(), Jay.getY() + BLOCK));	
 		 	    k = 11;
 		 	}
-		 	
 	}
 	
-
 	 @Override
 	 public void actionPerformed(ActionEvent e) {							// zeichnet die Schuesse 
 	       
-	     ArrayList<Shot> shots = getShots();										
+		 ArrayList<Shot> shots = getShots();										
 			
 		 	for (int i = 0; i < shots.size(); i++) {
 		 		Shot m = (Shot) shots.get(i);
-		 		
-				if(m.isVisible()){	 										// falss limit des Boards nicht ï¿½berschritten
+		 	
+		 		if(m.isVisible()){	 										// falss limit des Boards nicht ï¿½berschritten
 		 																	// wird je nach Blickrichtung in die richtgige
 		 																	// Richtung geschossen
 		 		if(k==00) m.move_r();
@@ -440,38 +453,19 @@ public class Board extends JPanel implements ActionListener{
 		 		 
 		 			}else shots.remove(i);
 		 		
-		 		checkCollisions();
-		 		checkCollisions2();
-		 		checkCollisions3();
+		 		check_coll_wall();											// Kollisionabfrage mit Schuss
+		 		check_coll_enemy();
+		 		check_coll_coin();
+		 		
 		 	repaint();														// alle 5 ms werden die Schuss-Bewegungen gezeichnet
 		 }
 	 }
 	 
 		public Rectangle getBounds(){
-			return new Rectangle(Jay.getX(),Jay.getY(),50,50);
+			return new Rectangle(Jay.getX(),Jay.getY(),50,50);				
 		}
 
-		public void checkCollisions() {
-
-			ArrayList<Shot> shots = getShots();
-
-			    for (int i = 0; i < shots.size(); i++) {
-			        Shot m = (Shot) shots.get(i);
-			        
-			        Rectangle r1 = m.getBounds();
-
-			        for (int j = 0; j<enemys.size(); j++) {
-			            Enemy e = (Enemy) enemys.get(j);
-			            Rectangle r2 = e.getBounds();
-
-			            if (r1.intersects(r2)) {
-			                m.setVisible(false);
-			                e.setVisible(false);
-			             }
-			        }
-			    }
-			}
-		public void checkCollisions2() {
+		public void check_coll_coin() {										// schiesst nicht durch Coins
 
 			ArrayList<Shot> shots = getShots();
 
@@ -487,14 +481,14 @@ public class Board extends JPanel implements ActionListener{
 			            if (r1.intersects(r2)) {
 			                m.setVisible(false);
 			                c.setVisible(false);
-			             }
+			            }
 			        }
 			    }
 			}
-		public void checkCollisions3() {
+	
+		public void check_coll_wall() {											// Wandkollision
 
-
-		    ArrayList<Shot> shots = getShots();
+			ArrayList<Shot> shots = getShots();
 
 		    for (int i = 0; i < shots.size(); i++) {
 		        Shot m = (Shot) shots.get(i);
@@ -512,6 +506,27 @@ public class Board extends JPanel implements ActionListener{
 		        }
 		    }
 		}
+		public void check_coll_enemy() {								
+
+			ArrayList<Shot> shots = getShots();
+
+		    for (int i = 0; i < shots.size(); i++) {
+		        Shot m = (Shot) shots.get(i);
+		        
+		        Rectangle r1 = m.getBounds();
+		        
+		        for (int j = 0; j<enemys.size(); j++) {
+		            Enemy e = (Enemy) enemys.get(j);
+		            Rectangle r2 = e.getBounds();
+			     
+
+		            if (r1.intersects(r2)) {
+		                m.setVisible(false);									
+		                e.setVisible(false);										// visible = false gesetzt, Enemy wird nicht gezeichnet
+		             }
+		        }
+		    }
+		}
 	
 public void Game_over(){
 	 
@@ -521,7 +536,8 @@ public void Game_over(){
 	 Game_over.setSize(500,500);
 	 Game_over.setVisible(true);
 	 Game_over.setFocusable(true);
-	 Game_over.setLocationRelativeTo(null);   // Fenster in der MItte 
+	 Game_over.setLocationRelativeTo(null);   										// Fenster in der MItte 
 	 Game_over.add(new Game_over());
 	}
 }
+ 
