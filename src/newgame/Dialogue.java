@@ -13,47 +13,45 @@ public class Dialogue extends JFrame implements ActionListener{
 private JButton weiter;
 private JButton schliessen;
 private JLabel text;
+private JButton weiter2;
+
+public Dialogue(String Title){
+	super(Title);
 	
-public static void main(String[] args){ 
+	text = new JLabel("                 Lass mich dir eine Geschichte erzaehlen...");
+	text.setFont(new Font("Serif", Font.PLAIN, 14));
+	getContentPane().add(text);
 
-frame Dialogue = new frame ("Weiser Zauberer");
-}
+	weiter = new JButton("Weiter");
+	weiter.setBounds(30,100,90,30);
+	weiter.addActionListener(this);
+	
+	weiter2 = new JButton("Weiter");
+	weiter2.setBounds(30,100,90,30);
+	weiter2.addActionListener(this);
 
-public Dialogue(String title){
-super(title);
+	schliessen = new JButton("Schliessen");
+	schliessen.setBounds(250,100,100,30);
+	schliessen.addActionListener(this);
 
-setSize(250,250);
-setLocationRelativeTo(null);
-setDefaultCloseOperation(EXIT_ON_CLOSE);
-setVisible(true);
-setLayout(new BorderLayout());
-setLayout(null);
-
-text = new JLabel("Test");
-text.setFont(new Font("Serif", Font.PLAIN, 36));
-getContentPane().add(text);
-
-weiter = new JButton("Weiter");
-weiter.setBounds(170,95,150,80);
-weiter.addActionListener(this);
-
-schliessen = new JButton("Schlieï¿½en");
-schliessen.setBounds(170,265,150,80);
-schliessen.addActionListener(this);
-
-add(weiter);
-add(schliessen);
-
+	add(weiter);
+	add(schliessen);
+	add(text);
 }
 
 @Override
 public void actionPerformed(ActionEvent e) {
 // TODO Auto-generated method stub
 
-if (e.getSource()==weiter)
-	System.exit(0);
-
 if (e.getSource()==schliessen)																// schliesst Menue
-System.exit(0);
+	setVisible(false);
+
+if (e.getSource()==weiter)
+	text.setText("    Vor langer Zeit beherrschte ein böser Zauberer das Koenigreich.");
+	remove(weiter);
+	add(weiter2);
+	
+if (e.getSource()==weiter2)
+		text.setText("    Er stahl die Jungfrauen des Reiches um sie zu opfern!");
 }
 }
