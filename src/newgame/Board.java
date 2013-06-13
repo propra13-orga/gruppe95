@@ -63,6 +63,7 @@ public class Board extends JPanel implements ActionListener{
 	java.util.List<Movement> keys = new java.util.ArrayList<Movement>();
 	java.util.List<Movement> wizards = new java.util.ArrayList<Movement>();
 	java.util.List<Movement> coins = new java.util.ArrayList<Movement>();
+	java.util.List<Movement> shopkeepers = new java.util.ArrayList<Movement>();
 	
 	public Board() throws IOException{
 		lr="l1r1";
@@ -83,6 +84,7 @@ public class Board extends JPanel implements ActionListener{
 		enemys.clear();
 		keys.clear();
 		wizards.clear();
+		shopkeepers.clear();
 		if (b) raum="";
 		if (failed) {
 			if (lr==lrs){
@@ -97,7 +99,7 @@ public class Board extends JPanel implements ActionListener{
 		
 		int xx = ((Jay.getX()+movx)/BLOCK);																	 //xx und yy sind die imaginaere Koordinaten innerhalb des Strings Variable (level).
 		int yy=(Jay.getY()+movy)/BLOCK;																		//xx und yy werden dafuer gerechnet um zu erkennen, ob an der Stelle wohin sich die Spielfigur bewegen will, kein # im variable level bzw kein Stueck Mauer im Spielfeld gibt
-		if ((raum.charAt(yy*20+xx)!='#')&&(raum.charAt(yy*20+xx)!='~')&&(xx>=0)||(Jay.getY()<0))		    //yy wird mal 20 multipliziert da es in jeder linie des Spielfelds 20 Bloecke gibt(also in jeder linie des strings level gibt es 20 zeichen)
+		if ((raum.charAt(yy*20+xx)!='#')&&(raum.charAt(yy*20+xx)!='~')&&(raum.charAt(yy*20+xx)!='s')&&(xx>=0)||(Jay.getY()<0))		    //yy wird mal 20 multipliziert da es in jeder linie des Spielfelds 20 Bloecke gibt(also in jeder linie des strings level gibt es 20 zeichen)
 		{																							        //Wandkollision
 			Jay.move(movx,movy);																		    //erst wenn es kein Stueck Mauer, keinen NPC oder einen Ein-Ausgang gibt(entweder xx oder yy <0 ist) darf/kann sich die Spielfigur bewegen
 			if (raum.charAt(yy*20+xx)=='a'){
@@ -134,7 +136,10 @@ public class Board extends JPanel implements ActionListener{
 		if (raum.charAt(yy*20+xx)=='~'){    														
 			Dialogue();
 		}
-				
+		
+		if (raum.charAt(yy*20+xx)=='s'){    														
+			DialogueShop();
+		}
 
 		else if (raum.charAt(yy*20+xx)=='$'){	
 			if (lr.charAt(1)=='1') lr="l2r1";
@@ -197,6 +202,7 @@ public class Board extends JPanel implements ActionListener{
 		Enemy enemy;
 		Key key;
 		Wizard wizard;
+		Shopkeeper shopkeeper;
 
 		for(int i = 0; i < raum.length(); i++){									// level variable Buchstabe fuer Buchstabe durchgehen.
 
@@ -255,7 +261,11 @@ public class Board extends JPanel implements ActionListener{
 				wizards.add(wizard);
 				x = x + BLOCK;
 			}
-
+			else if(obj == 's'){												//stellt den Ladenbesitzer in den Levels als ein s dar
+				shopkeeper = new Shopkeeper(x,y);
+				shopkeepers.add(shopkeeper);
+				x = x + BLOCK;
+			}
 			else if(obj == 'b'){												// Legt die Position des Charakters beim Levelstart fest
 				check = new checkpoint(x,y);
 				x=x+BLOCK;
@@ -275,6 +285,7 @@ public class Board extends JPanel implements ActionListener{
 		world.addAll(keys);
 		world.addAll(wizards);
 		world.addAll(coins);
+		world.addAll(shopkeepers);
 
 
 
@@ -380,6 +391,8 @@ public class Board extends JPanel implements ActionListener{
 			if ((Jay.getY()==-BLOCK)||(Jay.getY()==0))  {										//Wenn der Spieler am Ausgang des 1. Raums ist dann 
 				if (lr.charAt(3)=='1') lr=lr.substring(0,3)+"2";
 				else if (lr.charAt(3)=='2') lr=lr.substring(0,3)+'3';
+				else if (lr.charAt(3)=='3') lr=lr.substring(0,3)+'4';
+				else if (lr.charAt(3)=='4') lr=lr.substring(0,3)+'5';
 				xruban=xruban+ruban;
 				System.out.print("xruban = ");
 				System.out.println(xruban);
@@ -397,6 +410,8 @@ public class Board extends JPanel implements ActionListener{
 			if (Jay.getX() ==950 ){											//Bedingung erfuellt nur am Ausgang des 2. Raums
 				if (lr.charAt(3)=='1') lr=lr.substring(0,3)+"2";
 				else if (lr.charAt(3)=='2') lr=lr.substring(0,3)+'3';
+				else if (lr.charAt(3)=='3') lr=lr.substring(0,3)+'4';
+				else if (lr.charAt(3)=='4') lr=lr.substring(0,3)+'5';
 				xruban=xruban+ruban;
 				System.out.print("xruban = ");
 				System.out.println(xruban);
@@ -412,6 +427,7 @@ public class Board extends JPanel implements ActionListener{
 					e1.printStackTrace();
 				}
 			}
+			
 		}
 
 			
@@ -491,6 +507,20 @@ public class Board extends JPanel implements ActionListener{
 			Dialogue.setLayout(new BorderLayout());
 			Dialogue.setLayout(null);
 			Dialogue.add(new Dialogue("Weiser Zauberer"));
+		}
+		
+		public void DialogueShop(){
+			
+			JFrame DialogueShop = new DialogueShop("Ladenbesitzer");
+			
+			DialogueShop.setSize(600,300);
+			DialogueShop.setLocationRelativeTo(null);
+			DialogueShop.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+			DialogueShop.setVisible(true);
+			DialogueShop.setFocusable(true);
+			DialogueShop.setLayout(new BorderLayout());
+			DialogueShop.setLayout(null);
+			DialogueShop.add(new Dialogue("Ladenbesitzer"));
 		}
 
 
