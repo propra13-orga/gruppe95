@@ -3,6 +3,9 @@ package newgame;
 
 
 
+
+import java.awt.BorderLayout;
+import java.awt.Font;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
@@ -22,6 +25,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.Timer;
@@ -31,9 +37,7 @@ import javax.swing.Timer;
 
 public class Board extends JPanel implements ActionListener{
 
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1L;
 	Image image;
 	Image img;  													//Bild fuer den Hintergrund (WEG)
@@ -58,7 +62,6 @@ public class Board extends JPanel implements ActionListener{
 	java.util.List<Movement> walls = new java.util.ArrayList<Movement>();		// Array fuer die Waende..
 	java.util.List<Movement> keys = new java.util.ArrayList<Movement>();
 	java.util.List<Movement> wizards = new java.util.ArrayList<Movement>();
-	java.util.List<Movement> storyfields = new java.util.ArrayList<Movement>();
 	java.util.List<Movement> coins = new java.util.ArrayList<Movement>();
 	
 	public Board() throws IOException{
@@ -80,7 +83,6 @@ public class Board extends JPanel implements ActionListener{
 		enemys.clear();
 		keys.clear();
 		wizards.clear();
-		storyfields.clear();
 		if (b) raum="";
 		if (failed) {
 			if (lr==lrs){
@@ -128,8 +130,14 @@ public class Board extends JPanel implements ActionListener{
 			
 		}
 		
-		else if (raum.charAt(yy*20+xx)=='$')									//schluessel gefunden!
-		{	if (lr.charAt(1)=='1') lr="l2r1";
+
+		if (raum.charAt(yy*20+xx)=='~'){    														
+			Dialogue();
+		}
+				
+
+		else if (raum.charAt(yy*20+xx)=='$'){	
+			if (lr.charAt(1)=='1') lr="l2r1";
 			else if (lr.charAt(1)=='2')lr="l3r1"; 
 			else if (lr.charAt(1)=='3')lr="l4r1";
 			loeschen(true);
@@ -189,7 +197,6 @@ public class Board extends JPanel implements ActionListener{
 		Enemy enemy;
 		Key key;
 		Wizard wizard;
-		Storyfield storyfield;
 
 		for(int i = 0; i < raum.length(); i++){									// level variable Buchstabe fuer Buchstabe durchgehen.
 
@@ -248,11 +255,7 @@ public class Board extends JPanel implements ActionListener{
 				wizards.add(wizard);
 				x = x + BLOCK;
 			}
-			else if(obj == '+'){
-				storyfield = new Storyfield(x,y);
-				storyfields.add(storyfield);
-				x = x + BLOCK;	
-			}
+
 			else if(obj == 'b'){												// Legt die Position des Charakters beim Levelstart fest
 				check = new checkpoint(x,y);
 				x=x+BLOCK;
@@ -271,7 +274,10 @@ public class Board extends JPanel implements ActionListener{
 		//world.addAll(enemys);													// nur zeichnen wenn Enemy nicht schon tot ist 
 		world.addAll(keys);
 		world.addAll(wizards);
-		world.addAll(storyfields);
+		world.addAll(coins);
+
+
+
 		//world.addAll(coins);
 
 		for(int i = 0; i < world.size(); i++){									// Array world durchgehen um objekte zu zeichnen.
@@ -470,6 +476,25 @@ public class Board extends JPanel implements ActionListener{
 		public Rectangle getBounds(){
 			return new Rectangle(Jay.getX(),Jay.getY(),50,50);				
 		}
+
+		
+		
+		public void Dialogue(){
+			
+			JFrame Dialogue = new Dialogue("Weiser Zauberer");
+			
+			Dialogue.setSize(400,200);
+			Dialogue.setLocationRelativeTo(null);
+			Dialogue.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+			Dialogue.setVisible(true);
+			Dialogue.setFocusable(true);
+			Dialogue.setLayout(new BorderLayout());
+			Dialogue.setLayout(null);
+			Dialogue.add(new Dialogue("Weiser Zauberer"));
+		}
+
+
+
 
 		public void check_coll_coin() {										// schiesst nicht durch Coins
 
