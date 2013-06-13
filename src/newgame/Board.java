@@ -521,9 +521,7 @@ public class Board extends JPanel implements ActionListener{
 		        
 		        Rectangle r1 = m.getBounds();
 		        
-		        for (int j = 0; j<enemys.size(); j++) {
-		            Enemy e = (Enemy) enemys.get(j);
-		            Rectangle r2 = e.getBounds();
+		        
 		            int xx = (int) ((r1.getX())/BLOCK);																	//xx und yy sind die imaginaere Koordinaten innerhalb des Strings Variable (level).
 	        		int yy=(int)(r1.getY())/BLOCK;
 
@@ -544,8 +542,8 @@ public class Board extends JPanel implements ActionListener{
 		    					}
 		    			
 		        		
-		            }
-		        }
+		           
+		         }
 		    }
 		}
 	
