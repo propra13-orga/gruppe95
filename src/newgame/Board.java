@@ -93,11 +93,11 @@ public class Board extends JPanel implements ActionListener{
 	
 	public void collision(int movx,int movy,char pos){
 		
-		int xx = ((Jay.getX()+movx)/BLOCK);																	//xx und yy sind die imaginaere Koordinaten innerhalb des Strings Variable (level).
+		int xx = ((Jay.getX()+movx)/BLOCK);																	 //xx und yy sind die imaginaere Koordinaten innerhalb des Strings Variable (level).
 		int yy=(Jay.getY()+movy)/BLOCK;																		//xx und yy werden dafuer gerechnet um zu erkennen, ob an der Stelle wohin sich die Spielfigur bewegen will, kein # im variable level bzw kein Stueck Mauer im Spielfeld gibt
-		if ((raum.charAt(yy*20+xx)!='#')&&(raum.charAt(yy*20+xx)!='~')&&(xx>=0)||(Jay.getY()<0))					//yy wird mal 20 multipliziert da es in jeder linie des Spielfelds 20 Bloecke gibt(also in jeder linie des strings level gibt es 20 zeichen)
-		{																							//Wandkollision
-			Jay.move(movx,movy);																		//erst wenn es kein Stueck Mauer, keinen NPC oder einen Ein-Ausgang gibt(entweder xx oder yy <0 ist) darf/kann sich die Spielfigur bewegen
+		if ((raum.charAt(yy*20+xx)!='#')&&(raum.charAt(yy*20+xx)!='~')&&(xx>=0)||(Jay.getY()<0))		    //yy wird mal 20 multipliziert da es in jeder linie des Spielfelds 20 Bloecke gibt(also in jeder linie des strings level gibt es 20 zeichen)
+		{																							        //Wandkollision
+			Jay.move(movx,movy);																		    //erst wenn es kein Stueck Mauer, keinen NPC oder einen Ein-Ausgang gibt(entweder xx oder yy <0 ist) darf/kann sich die Spielfigur bewegen
 			if (raum.charAt(yy*20+xx)=='a'){
 				ruban= ruban+1;
 				System.out.print("ruban = ");
@@ -312,7 +312,7 @@ public class Board extends JPanel implements ActionListener{
 	
 		if(ingame){																// falls Spiel nicht verloren
 			buildWorld(g);														// zeichnet Welt mit Punktestand..
-	        String msg = "Money: "+ruban;
+	        String msg = "Money: "+ (ruban+xruban);
             Font small = new Font("Helvetica", Font.BOLD, 14);
             FontMetrics metr = this.getFontMetrics(small);
             g.setColor(Color.white);

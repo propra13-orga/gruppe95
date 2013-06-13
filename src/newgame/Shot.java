@@ -10,7 +10,7 @@ public class Shot{
 	Image img;
 	boolean visible;
 	private int width, height;
-	private int shot_speed = 30;
+	private int shot_speed = 50;
 	
 	public Shot(int x, int y){
 	
