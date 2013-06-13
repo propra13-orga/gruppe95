@@ -293,7 +293,7 @@ public class Board extends JPanel implements ActionListener{
 	       				if (e.isVisible())
 	       				g.drawImage(e.getImage(), e.getX(), e.getY(), this);
 	       			}
-	       			for (int i = 0; i < walls.size(); i++) {					//  NICHT LÖSCHEN FÜR DAS TESTEN DER WÄNDE 
+	       			for (int i = 0; i < walls.size(); i++) {					//  NICHT Lï¿½SCHEN Fï¿½R DAS TESTEN DER Wï¿½NDE 
 	       				
 	       				Wall w = (Wall) walls.get(i);
 	       				if (w.isVisible())
@@ -524,12 +524,27 @@ public class Board extends JPanel implements ActionListener{
 		        for (int j = 0; j<enemys.size(); j++) {
 		            Enemy e = (Enemy) enemys.get(j);
 		            Rectangle r2 = e.getBounds();
-			     
+		            int xx = (int) ((r1.getX())/BLOCK);																	//xx und yy sind die imaginaere Koordinaten innerhalb des Strings Variable (level).
+	        		int yy=(int)(r1.getY())/BLOCK;
 
-		            if (r1.intersects(r2)) {
-		                m.setVisible(false);									
-		                e.setVisible(false);										// visible = false gesetzt, Enemy wird nicht gezeichnet
-		             }
+		            if (raum.charAt(yy*20+xx)=='*') {
+		                m.setVisible(false);						
+		                //e.setVisible(false);		// visible = false gesetzt, Enemy wird nicht gezeichnet
+		        		int xxx = ((Jay.getX())/BLOCK);																	//xx und yy sind die imaginaere Koordinaten innerhalb des Strings Variable (level).
+		        		int yyy=(Jay.getY())/BLOCK;	
+		        		raum=raum.substring(0,yy*20+xx)+' '+raum.substring(yy*20+xx+1);	
+		        				int c =raum.lastIndexOf("@");						
+		    					raum=raum.substring(0,c)+' '+raum.substring(c+1);
+		    					raum=raum.substring(0,yyy*20+xxx)+'@'+raum.substring(yyy*20+xxx+1);
+		    					try {
+		    						restartLevel(false,'v');
+		    					} catch (IOException e1) {
+		    						
+		    						e1.printStackTrace();
+		    					}
+		    			
+		        		
+		            }
 		        }
 		    }
 		}
