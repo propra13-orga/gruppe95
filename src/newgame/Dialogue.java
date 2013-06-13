@@ -18,20 +18,20 @@ private JButton weiter2;
 public Dialogue(String Title){
 	super(Title);
 	
-	text = new JLabel("                 Lass mich dir eine Geschichte erzaehlen...");
+	text = new JLabel("                       Der boese Zauberer verbreitet in unserem Reich Angst und Schrecken.");
 	text.setFont(new Font("Serif", Font.PLAIN, 14));
 	getContentPane().add(text);
 
 	weiter = new JButton("Weiter");
-	weiter.setBounds(30,100,90,30);
+	weiter.setBounds(80,200,90,30);
 	weiter.addActionListener(this);
 	
-	weiter2 = new JButton("Weiter");
-	weiter2.setBounds(30,100,90,30);
+	weiter2 = new JButton("Weiter2");
+	weiter2.setBounds(80,200,90,30);
 	weiter2.addActionListener(this);
 
 	schliessen = new JButton("Schliessen");
-	schliessen.setBounds(250,100,100,30);
+	schliessen.setBounds(400,200,100,30);
 	schliessen.addActionListener(this);
 
 	add(weiter);
@@ -43,15 +43,16 @@ public Dialogue(String Title){
 public void actionPerformed(ActionEvent e) {
 // TODO Auto-generated method stub
 
-if (e.getSource()==schliessen)																// schliesst Menue
+if (e.getSource()==schliessen)																
 	setVisible(false);
 
 if (e.getSource()==weiter)
-	text.setText("    Vor langer Zeit beherrschte ein böser Zauberer das Koenigreich.");
+	text.setText("                                   Zieh los und besiege den boesen Zauberer! Rette uns!");
 	remove(weiter);
 	add(weiter2);
 	
 if (e.getSource()==weiter2)
-		text.setText("    Er stahl die Jungfrauen des Reiches um sie zu opfern!");
+	text.setText("");
+	remove(weiter2);
 }
 }

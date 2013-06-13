@@ -483,7 +483,7 @@ public class Board extends JPanel implements ActionListener{
 			
 			JFrame Dialogue = new Dialogue("Weiser Zauberer");
 			
-			Dialogue.setSize(400,200);
+			Dialogue.setSize(600,300);
 			Dialogue.setLocationRelativeTo(null);
 			Dialogue.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 			Dialogue.setVisible(true);
