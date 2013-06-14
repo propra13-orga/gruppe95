@@ -3,9 +3,6 @@ package newgame;
 
 
 
-
-import java.awt.BorderLayout;
-import java.awt.Font;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
@@ -25,9 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.Timer;
@@ -37,7 +31,9 @@ import javax.swing.Timer;
 
 public class Board extends JPanel implements ActionListener{
 
-
+	/**
+	 * 
+	 */
 	private static final long serialVersionUID = 1L;
 	Image image;
 	Image img;  													//Bild fuer den Hintergrund (WEG)
@@ -62,13 +58,19 @@ public class Board extends JPanel implements ActionListener{
 	java.util.List<Movement> walls = new java.util.ArrayList<Movement>();		// Array fuer die Waende..
 	java.util.List<Movement> keys = new java.util.ArrayList<Movement>();
 	java.util.List<Movement> wizards = new java.util.ArrayList<Movement>();
+	java.util.List<Movement> storyfields = new java.util.ArrayList<Movement>();
 	java.util.List<Movement> coins = new java.util.ArrayList<Movement>();
+	
+	Image image1 = image = r.getImage();										// für das aktualisieren nach Kollision
+	Image image2 = image = l.getImage();										// mit Jay.getImage() Abfrage
+	Image image3 = image = t.getImage();	
+	Image image4 = image = b.getImage();	
 	
 	public Board() throws IOException{
 		lr="l1r1";
 		addKeyListener(new Ap());
 		setFocusable(true);		
-		initWorld('v');
+		initWorld(image4);
 		ingame = true;
 	    shots = new ArrayList<Shot>();
 		timer = new Timer(5, this);												//zeichnet alle  5ms den Board (Schuesse)
@@ -83,6 +85,7 @@ public class Board extends JPanel implements ActionListener{
 		enemys.clear();
 		keys.clear();
 		wizards.clear();
+		storyfields.clear();
 		if (b) raum="";
 		if (failed) {
 			if (lr==lrs){
@@ -93,7 +96,7 @@ public class Board extends JPanel implements ActionListener{
 		
 	}
 	
-	public void collision(int movx,int movy,char pos){
+	public void collision(int movx,int movy,Image image){											// char pos mit image geändet um statt mit  t,v Bild festzulegen man abfragt wo er guckt 
 		
 		int xx = ((Jay.getX()+movx)/BLOCK);																	 //xx und yy sind die imaginaere Koordinaten innerhalb des Strings Variable (level).
 		int yy=(Jay.getY()+movy)/BLOCK;																		//xx und yy werden dafuer gerechnet um zu erkennen, ob an der Stelle wohin sich die Spielfigur bewegen will, kein # im variable level bzw kein Stueck Mauer im Spielfeld gibt
@@ -109,7 +112,7 @@ public class Board extends JPanel implements ActionListener{
 					raum=raum.substring(0,c)+' '+raum.substring(c+1);
 					raum=raum.substring(0,yy*20+xx)+'@'+raum.substring(yy*20+xx+1);
 					try {
-						restartLevel(false,pos);
+						restartLevel(false,Jay.getImage());
 					} catch (IOException e1) {
 						
 						e1.printStackTrace();
@@ -122,7 +125,7 @@ public class Board extends JPanel implements ActionListener{
 			//Game_over();
 			failed=true;
 			try {
-				restartLevel(true,'v');
+				restartLevel(true,Jay.getImage());
 			} catch (IOException e1) {
 				
 				e1.printStackTrace();
@@ -130,19 +133,13 @@ public class Board extends JPanel implements ActionListener{
 			
 		}
 		
-
-		if (raum.charAt(yy*20+xx)=='~'){    														
-			Dialogue();
-		}
-				
-
-		else if (raum.charAt(yy*20+xx)=='$'){	
-			if (lr.charAt(1)=='1') lr="l2r1";
+		else if (raum.charAt(yy*20+xx)=='$')									//schluessel gefunden!
+		{	if (lr.charAt(1)=='1') lr="l2r1";
 			else if (lr.charAt(1)=='2')lr="l3r1"; 
 			else if (lr.charAt(1)=='3')lr="l4r1";
 			loeschen(true);
 			try {
-				initWorld('t');
+				initWorld(Jay.getImage());
 			} catch (IOException e1) {
 				
 				e1.printStackTrace();
@@ -185,7 +182,7 @@ public class Board extends JPanel implements ActionListener{
 		return room;
 	}
 
-	public final void initWorld(char pos) throws IOException{											// zeichnet das Level mit Walls, Character, dem Schluessel und Gegner.
+	public final void initWorld(Image image) throws IOException{											// zeichnet das Level mit Walls, Character, dem Schluessel und Gegner.
 		ImageIcon ii= new ImageIcon ("src/Resources/back"+lr.charAt(1)+".png");					// Den Pfad fuers Hintergrundbild angeben.
 		img=ii.getImage();		//Image importieren.	
 		setBackground(Color.BLACK);											// dunkler Hintergrund fï¿½r den Kontrast der Schï¿½sse
@@ -197,6 +194,7 @@ public class Board extends JPanel implements ActionListener{
 		Enemy enemy;
 		Key key;
 		Wizard wizard;
+		Storyfield storyfield;
 
 		for(int i = 0; i < raum.length(); i++){									// level variable Buchstabe fuer Buchstabe durchgehen.
 
@@ -217,16 +215,16 @@ public class Board extends JPanel implements ActionListener{
 						else Jay = new Character(x,y);
 						failed=false;
 					}
-					if (pos=='r'){
+					if (image==image1){
 						image =	r.getImage();																		//Image vom Spieler der nach rechts laeuft
 						Jay.setImage(image);}
-					if (pos=='l'){
+					if (image==image2){
 						image =	l.getImage();																		//Image vom Spieler der nach rechts laeuft
 						Jay.setImage(image);}
-					if (pos=='t'){
+					if (image==image3){
 						image =	t.getImage();																		//Image vom Spieler der nach rechts laeuft
 						Jay.setImage(image);}
-					if (pos=='b'){
+					if (image==image4){
 						image =	b.getImage();																		//Image vom Spieler der nach rechts laeuft
 						Jay.setImage(image);}
 				
@@ -255,7 +253,11 @@ public class Board extends JPanel implements ActionListener{
 				wizards.add(wizard);
 				x = x + BLOCK;
 			}
-
+			else if(obj == '+'){
+				storyfield = new Storyfield(x,y);
+				storyfields.add(storyfield);
+				x = x + BLOCK;	
+			}
 			else if(obj == 'b'){												// Legt die Position des Charakters beim Levelstart fest
 				check = new checkpoint(x,y);
 				x=x+BLOCK;
@@ -274,10 +276,7 @@ public class Board extends JPanel implements ActionListener{
 		//world.addAll(enemys);													// nur zeichnen wenn Enemy nicht schon tot ist 
 		world.addAll(keys);
 		world.addAll(wizards);
-		world.addAll(coins);
-
-
-
+		world.addAll(storyfields);
 		//world.addAll(coins);
 
 		for(int i = 0; i < world.size(); i++){									// Array world durchgehen um objekte zu zeichnen.
@@ -299,7 +298,7 @@ public class Board extends JPanel implements ActionListener{
 	       				if (e.isVisible())
 	       				g.drawImage(e.getImage(), e.getX(), e.getY(), this);
 	       			}
-	       			for (int i = 0; i < walls.size(); i++) {					//  NICHT Lï¿½SCHEN Fï¿½R DAS TESTEN DER Wï¿½NDE 
+	       			for (int i = 0; i < walls.size(); i++) {					//  NICHT LÖSCHEN FÜR DAS TESTEN DER WÄNDE 
 	       				
 	       				Wall w = (Wall) walls.get(i);
 	       				if (w.isVisible())
@@ -341,32 +340,32 @@ public class Board extends JPanel implements ActionListener{
 
 			if(key == KeyEvent.VK_RIGHT){		
 
-				image = r.getImage();																		//Image vom Spieler der nach rechts laeuft
+				Image image1 = image = r.getImage();																		//Image vom Spieler der nach rechts laeuft
 				Jay.setImage(image);
 				position = 1;
-				collision(BLOCK,0,'r');
+				collision(BLOCK,0, image1);
 			}
 
 			else if(key == KeyEvent.VK_LEFT){
-				image = l.getImage();
+				Image image2 = image = l.getImage();
 				Jay.setImage(image);
 				position = 2;
-				collision(-BLOCK,0,'l');
+				collision(-BLOCK,0, image2);
 			}
 
 
 			else if(key == KeyEvent.VK_UP){
-				image = t.getImage();
+				Image image3= image = t.getImage() ;
 				Jay.setImage(image);
 				position = 3;
-				collision(0,-BLOCK,'t');
+				collision(0,-BLOCK,image3);
 			}
 			
 			else if(key == KeyEvent.VK_DOWN){
-				image = b.getImage();
+				Image image4 = image = b.getImage();
 				Jay.setImage(image);
 				position = 4;
-				collision(0,BLOCK,'b');
+				collision(0,BLOCK, image4);
 			}
 			else if (key == KeyEvent.VK_SPACE) {							// Taste -Space ruft die Funktion fire auf
 	            fire();
@@ -388,7 +387,7 @@ public class Board extends JPanel implements ActionListener{
 				System.out.println(ruban);
 				loeschen(true);
 				try {
-					initWorld('t');
+					initWorld(Jay.getImage());
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}															//world initialisieren 
@@ -407,7 +406,7 @@ public class Board extends JPanel implements ActionListener{
 				System.out.println(ruban);
 				loeschen(true);
 				try {
-					initWorld('t');
+					initWorld(Jay.getImage());
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
@@ -416,13 +415,13 @@ public class Board extends JPanel implements ActionListener{
 
 			
 	}
-	public void restartLevel(boolean test,char k) throws IOException {			
+	public void restartLevel(boolean test,Image image2) throws IOException {			
 		if (lr.length()==5){
 			if (lr.charAt(3)=='2') lr=lr.substring(0, 3)+'1';
 			else if (lr.charAt(3)=='3') lr=lr.substring(0, 3)+'2';
 		}
 		loeschen(test);
-		initWorld(k);
+		initWorld(Jay.getImage());
 		
 	}
 																					
@@ -477,25 +476,6 @@ public class Board extends JPanel implements ActionListener{
 			return new Rectangle(Jay.getX(),Jay.getY(),50,50);				
 		}
 
-		
-		
-		public void Dialogue(){
-			
-			JFrame Dialogue = new Dialogue("Weiser Zauberer");
-			
-			Dialogue.setSize(400,200);
-			Dialogue.setLocationRelativeTo(null);
-			Dialogue.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-			Dialogue.setVisible(true);
-			Dialogue.setFocusable(true);
-			Dialogue.setLayout(new BorderLayout());
-			Dialogue.setLayout(null);
-			Dialogue.add(new Dialogue("Weiser Zauberer"));
-		}
-
-
-
-
 		public void check_coll_coin() {										// schiesst nicht durch Coins
 
 			ArrayList<Shot> shots = getShots();
@@ -533,28 +513,33 @@ public class Board extends JPanel implements ActionListener{
 		            if (r1.intersects(r2)) {
 		                m.setVisible(false);
 		                w.setVisible(true);
+		       
 		             }
 		        }
 		    }
 		}
 		public void check_coll_enemy() {								
 
+
 			ArrayList<Shot> shots = getShots();
+
 
 		    for (int i = 0; i < shots.size(); i++) {
 		        Shot m = (Shot) shots.get(i);
-		        
+
+
 		        Rectangle r1 = m.getBounds();
-		        
+
+
 		        for (int j = 0; j<enemys.size(); j++) {
 		            Enemy e = (Enemy) enemys.get(j);
 		            Rectangle r2 = e.getBounds();
 		            int xx = (int) ((r1.getX())/BLOCK);																	//xx und yy sind die imaginaere Koordinaten innerhalb des Strings Variable (level).
 	        		int yy=(int)(r1.getY())/BLOCK;
 
+
 		            if (raum.charAt(yy*20+xx)=='*') {
 		                m.setVisible(false);						
-		                //e.setVisible(false);		// visible = false gesetzt, Enemy wird nicht gezeichnet
 		        		int xxx = ((Jay.getX())/BLOCK);																	//xx und yy sind die imaginaere Koordinaten innerhalb des Strings Variable (level).
 		        		int yyy=(Jay.getY())/BLOCK;	
 		        		raum=raum.substring(0,yy*20+xx)+' '+raum.substring(yy*20+xx+1);	
@@ -562,17 +547,17 @@ public class Board extends JPanel implements ActionListener{
 		    					raum=raum.substring(0,c)+' '+raum.substring(c+1);
 		    					raum=raum.substring(0,yyy*20+xxx)+'@'+raum.substring(yyy*20+xxx+1);
 		    					try {
-		    						restartLevel(false,'v');
+		    						restartLevel(false, (Jay.getImage()));
 		    					} catch (IOException e1) {
-		    						
+
+
 		    						e1.printStackTrace();
-		    					}
-		    			
-		        		
+		    				}
 		            }
 		        }
 		    }
 		}
+
 	
 public void Game_over(){
 	 
