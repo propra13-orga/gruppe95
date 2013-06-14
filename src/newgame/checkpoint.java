@@ -8,7 +8,7 @@ public class checkpoint extends Movement {
 
 	Image image;
 
-	ImageIcon u = new ImageIcon("src/Resources/checkpoint.png");			// holt sich die noetigen Grafiken fuer den Charakter
+	ImageIcon u = new ImageIcon("src/Resources/checkpoint.png");			// holt sich die noetigen Grafiken fuer den Checkpoint
 	
 	public checkpoint(int x, int y){
 		super(x,y);

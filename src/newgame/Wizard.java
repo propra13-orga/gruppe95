@@ -12,7 +12,7 @@ private Image image;
 		
 		super(x,y);
 
-		ImageIcon i = new ImageIcon("src/Resources/key.png");					// holt sich die Grafiken fuer den NPC, wird im Board aufgerufen
+		ImageIcon i = new ImageIcon("src/Resources/shopkeeper.png");					// holt sich die Grafiken fuer den NPC, wird im Board aufgerufen
 		image = i.getImage();
 		this.setImage(image);
 
