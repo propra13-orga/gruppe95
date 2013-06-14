@@ -15,7 +15,7 @@ private JLabel l1;
 
 public static void main(String[] args){ 
 
-frame frame = new frame ("DUNGEON CRAWLER * Menue*");									// Menuetitel
+frame frame = new frame ("DUNGEON CRAWLER");									// Menuetitel
 }
 
 public frame(String title){
@@ -67,7 +67,7 @@ System.exit(0);
 public static void game() throws IOException{																// Fenster fuer's Spiel
 	JFrame game = new JFrame("PLAY DUNGEON CRAWLER");
 	game.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);	
-	game.setSize(950,720);
+	game.setSize(1200,720);
 	game.setVisible(true);
 	//game.getContentPane().setBackground(Color.LIGHT_GRAY);
 	game.setLocationRelativeTo(null);
