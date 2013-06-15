@@ -133,7 +133,7 @@ public class Board extends JPanel implements ActionListener{
 			Dialogue();
 		}
 		if (raum.charAt(yy*20+xx)=='s'){    														//startet bei Kollision den Dialog des Ladenbesitzers
-			Dialogue();
+			DialogueShop();
 		}
 		if (raum.charAt(yy*20+xx)=='m'){    														//startet bei Kollision den Dialog des Ladenbesitzers
 				mana = true;
@@ -497,6 +497,18 @@ public class Board extends JPanel implements ActionListener{
 			Dialogue.setLayout(null);
 			Dialogue.add(new Dialogue("Weiser Zauberer"));
 		}
+			
+		public void DialogueShop(){                                  //definiert die Methode DialogueShop genauer, mit Close-Operation, Name, Layout und Position      
+			
+		JFrame DialogueShop = new DialogueShop("Ladenbesitzer");
+		DialogueShop.setSize(600,300);
+		DialogueShop.setLocationRelativeTo(null);
+		DialogueShop.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+		DialogueShop.setVisible(true);
+		DialogueShop.setFocusable(true);
+		DialogueShop.setLayout(new BorderLayout());     DialogueShop.setLayout(null);
+	    DialogueShop.add(new Dialogue("Ladenbesitzer"));
+	    }
 
 		public void check_coll_coin() {																// schiesst nicht durch Coins
 
