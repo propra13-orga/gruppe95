@@ -82,8 +82,10 @@ public class Board extends JPanel implements ActionListener{
 	Image herz1 = image = h1.getImage();
 	Image schatz = image = s.getImage();
 	Image image5 = image = dr.getImage();
-	Image image6 = image = du.getImage();
-	Image image7 = image = db.getImage();
+	Image image6 = image = dl.getImage();
+	Image image7 = image = du.getImage();
+	Image image8 = image = db.getImage();
+	
 
 	public Board() throws IOException{
 		lr="l1r1";
@@ -235,7 +237,7 @@ public class Board extends JPanel implements ActionListener{
 				y = y + BLOCK;
 				x = 0;
 			}else if(obj == '#'){																	// # bezeichnet ein Stueck Mauer. eine Mauer im array walls an seine Position speichern.
-				wall = new Wall(x,y, "wandn"+ lr.charAt(1));
+				wall = new Wall(x,y, "wand"+ lr.charAt(1));
 				walls.add(wall);
 				x = x + BLOCK;
 			}else if(obj == '@'){																	// Legt die Position des Charakters beim Levelstart fest
@@ -262,9 +264,12 @@ public class Board extends JPanel implements ActionListener{
 						image =	dr.getImage();
 						Jay.setImage(image);}	
 					if (image==image6){
-						image =	du.getImage();
+						image =	dl.getImage();
 						Jay.setImage(image);}
 					if (image==image7){
+						image =	du.getImage();
+						Jay.setImage(image);}
+					if (image==image8){
 						image =	db.getImage();
 						Jay.setImage(image);}
 
