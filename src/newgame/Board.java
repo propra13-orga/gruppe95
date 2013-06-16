@@ -45,6 +45,7 @@ public class Board extends JPanel implements ActionListener{
 	private int k,z,posX,posY;
 	boolean ingame,mana,failed;
 	private checkpoint check;
+	private Boss Monster;
 	Font smallfont = new Font("Helvetica", Font.BOLD, 17);
 
 
@@ -60,6 +61,7 @@ public class Board extends JPanel implements ActionListener{
 	ImageIcon dl = new ImageIcon("src/Resources/digleft.png");
 	ImageIcon du = new ImageIcon("src/Resources/digup.png");
 	ImageIcon db = new ImageIcon("src/Resources/digb.png");
+	//ImageIcon bossv = new ImageIcon("src/Resources/bossv.png");
 	
 	
 	
@@ -73,6 +75,7 @@ public class Board extends JPanel implements ActionListener{
 	java.util.List<Movement> shopkeepers = new java.util.ArrayList<Movement>();
 	java.util.List<Movement> manas = new java.util.ArrayList<Movement>();
 	java.util.List<Movement> Jays = new java.util.ArrayList<Movement>();
+	java.util.List<Movement> Monsters = new java.util.ArrayList<Movement>();
 
 	Image image1 = image = r.getImage();										// fuer das aktualisieren nach Kollision
 	Image image2 = image = l.getImage();										// mit Jay.getImage() Abfrage
@@ -84,7 +87,7 @@ public class Board extends JPanel implements ActionListener{
 	Image image5 = image = dr.getImage();
 
 	public Board() throws IOException{
-		lr="l1r1";
+		lr="l3r3";
 		addKeyListener(new Ap());
 		setFocusable(true);		
 		initWorld(image4);
@@ -191,6 +194,22 @@ public class Board extends JPanel implements ActionListener{
 		}
 }
 
+	public void movemonster() {
+		if (Jay.getY()<Monster.getY()){
+			Monster.move(0,-1);
+		}
+		else if (Jay.getY()>Monster.getY()){
+			Monster.move(0,1);
+		}
+		if (Jay.getX()>Monster.getX()){
+			Monster.move(1,0);
+		}
+		else if (Jay.getX()<Monster.getX()){
+			Monster.move(-1,0);
+		}
+		Monster.schiess();
+	}
+
 	public Image getImage(){																		//laedt Images
 		return image;
 	}
@@ -224,6 +243,7 @@ public class Board extends JPanel implements ActionListener{
 		Wizard wizard;
 		Shopkeeper shopkeeper;
 		Mana mana;
+		
 
 		for(int i = 0; i < raum.length(); i++){														// level variable Buchstabe fuer Buchstabe durchgehen.
 
@@ -236,7 +256,8 @@ public class Board extends JPanel implements ActionListener{
 				wall = new Wall(x,y, "wand"+ lr.charAt(1));
 				walls.add(wall);
 				x = x + BLOCK;
-			}else if(obj == '@'){																	// Legt die Position des Charakters beim Levelstart fest
+			}
+			else if(obj == '@'){																	// Legt die Position des Charakters beim Levelstart fest
 				if (lr!="l3r4"){
 					if (failed==false)Jay = new Character(x,y);
 					else if (failed){
@@ -262,43 +283,47 @@ public class Board extends JPanel implements ActionListener{
 
 				x = x + BLOCK;}
 			}
-				else if(obj == ' '){																	//x erhoeht sich um einen Block(' ':Bereich wo sich der Spieler bewegen kann)
+			else if(obj == ' '){																	//x erhoeht sich um einen Block(' ':Bereich wo sich der Spieler bewegen kann)
 					x = x + BLOCK;
-				}
-				else if(obj == '*'){                													// stellt den Enemy in den Levels als * dar
+			}
+			else if(obj == '*'){                													// stellt den Enemy in den Levels als * dar
 					enemy = new Enemy(x,y);
 					enemys.add(enemy);
 					x = x + BLOCK;
-					}
-				else if(obj == '$'){                													// stellt den Schluessel in den Levels als $ dar
+			}
+			else if(obj == '$'){                													// stellt den Schluessel in den Levels als $ dar
 					key = new Key(x,y);	
 					keys.add(key);
 					x = x + BLOCK;
-				}
-				else if (obj=='a'){
+			}
+			else if (obj=='a'){
 					coin=new Coin(x,y);
 					coins.add(coin);
 					x=x+BLOCK;
-				}
-				else if(obj == '~'){																	//stellt den NPC in den Levels als ein ~ dar
+			}
+			else if(obj == '~'){																	//stellt den NPC in den Levels als ein ~ dar
 					wizard = new Wizard(x,y);
 					wizards.add(wizard);
 					x = x + BLOCK;
-				}
-				else if(obj == 's'){																	//stellt den Ladenbesitzer in den Levels als ein s dar
+			}
+			else if(obj == 's'){																	//stellt den Ladenbesitzer in den Levels als ein s dar
 					shopkeeper = new Shopkeeper(x,y);
 					shopkeepers.add(shopkeeper);
 					x = x + BLOCK;
-				}
-				else if(obj == 'b'){																	// Legt die Position des Charakters beim Tod fest
+			}
+			else if(obj == 'b'){																	// Legt die Position des Charakters beim Tod fest
 					check = new checkpoint(x,y);
 					x=x+BLOCK;
-				}
-				else if(obj == 'm'){																	// Legt die Position des Charakters beim Tod fest
+			}
+			else if(obj == 'k'){																	// Legt die Position des Charakters beim Tod fest
+				Monster = new Boss(x,y);
+				x=x+BLOCK;
+			}
+			else if(obj == 'm'){																	// Legt die Position des Charakters beim Tod fest
 					mana = new Mana(x,y);
 					manas.add(mana);
 					x=x+BLOCK;
-				}
+			}
 		}
 	}
 
@@ -309,6 +334,7 @@ public class Board extends JPanel implements ActionListener{
 
 		world.add(check);																			//im levelend soll es kein Spielfigur geben
 		world.add(Jay);
+		if (raum.contains("k")) world.add(Monster);
 		world.addAll(keys);
 		world.addAll(wizards);
 		world.addAll(coins);
@@ -323,19 +349,16 @@ public class Board extends JPanel implements ActionListener{
 
 	       ArrayList<Shot> shots = getShots();
 	       		for (int j = 0; j < shots.size(); j++){
-                
 	       			Shot m = (Shot) shots.get(j);
 	       			g.drawImage(m.getImage(), m.getX(), m.getY(), this);
                 }
 	      ArrayList<Sword> swords = getSwords();
 	       		for (int i = 0; i < swords.size(); i++){
-               
 	       			Sword s = (Sword) swords.get(i);
 	       			g.drawImage(s.getImage(), s.getX(), s.getY(), this);
                }
 
 	       			for (int i = 0; i < enemys.size(); i++){										// Enemy soll nur gezeichnet werden, wenne es noch nicht tot ist 
-
 	       				Enemy e = (Enemy) enemys.get(i);
 	       				if (e.isVisible())
 	       				g.drawImage(e.getImage(), e.getX(), e.getY(), this);
@@ -361,6 +384,9 @@ public class Board extends JPanel implements ActionListener{
 
 		if(ingame){																					// falls Spiel nicht verloren
 			buildWorld(g);																			// zeichnet Welt mit Punktestand..
+			if (raum.contains("k")){
+				movemonster();
+			}
 			int countsmoney= ruban + xruban;
 		        String s,w,l;
 
