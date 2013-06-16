@@ -82,6 +82,8 @@ public class Board extends JPanel implements ActionListener{
 	Image herz1 = image = h1.getImage();
 	Image schatz = image = s.getImage();
 	Image image5 = image = dr.getImage();
+	Image image6 = image = du.getImage();
+	Image image7 = image = db.getImage();
 
 	public Board() throws IOException{
 		lr="l1r1";
@@ -258,7 +260,13 @@ public class Board extends JPanel implements ActionListener{
 						Jay.setImage(image);}	
 					if (image==image5){
 						image =	dr.getImage();
-						Jay.setImage(image);}																								
+						Jay.setImage(image);}	
+					if (image==image6){
+						image =	du.getImage();
+						Jay.setImage(image);}
+					if (image==image7){
+						image =	db.getImage();
+						Jay.setImage(image);}
 
 				x = x + BLOCK;}
 			}
