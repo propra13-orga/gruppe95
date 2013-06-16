@@ -6,15 +6,16 @@ import java.awt.Rectangle;
 import javax.swing.ImageIcon;
 
 public class Shot{
+
 	private int x,y;
 	Image img;
+	Image image;
 	boolean visible;
 	private int width, height;
 	private int shot_speed = 50;
 	
 	public Shot(int x, int y){
-	
-		ImageIcon newShoot = new ImageIcon("src/Resources/missile1.png");
+		ImageIcon newShoot = new ImageIcon("src/Resources/ball.png");
 		img = newShoot.getImage();
 		visible = true;
 		this.x = x;
@@ -48,7 +49,7 @@ public class Shot{
 	}
 	
 	public void move_r(){
-		x += shot_speed;						// Schuss nach rechts mit Geschwindigkeit						
+		x += shot_speed;						// Schuss nach rechts mit Geschwindigkeit
 		shot_limit_x1();					
 	}											// dabei wird mit den Funktionen shot_limit_x(bzw.y) darauf
 												// geachtet dass es ueber das Board nicht sichtbar ist

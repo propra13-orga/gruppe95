@@ -6,7 +6,6 @@ package newgame;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
@@ -38,8 +37,10 @@ public class Board extends JPanel implements ActionListener{
 	private Timer timer;
 	private int BLOCK = 50;											// 50* 50 Pixel
 	private int position;
-	private int ruban=0; private int xruban;
-	private int life=3; private int xlife;
+	private int need_life;
+	private int ruban=0,xruban;
+	private int life=3, xlife;
+	private int magic=0;
 	private int k,posX,posY;
 	boolean ingame,mana,failed;
 	private checkpoint check;
@@ -51,6 +52,10 @@ public class Board extends JPanel implements ActionListener{
 	ImageIcon l = new ImageIcon("src/Resources/l1.png");
 	ImageIcon t = new ImageIcon("src/Resources/Character top.png");
 	ImageIcon b = new ImageIcon("src/Resources/Character.png");
+	ImageIcon tr = new ImageIcon("src/Resources/trankk.png");
+	ImageIcon h1 = new ImageIcon("src/Resources/herz.png");
+	ImageIcon s = new ImageIcon("src/Resources/schatz.png");
+	
 
 	java.util.List<Movement> enemys = new java.util.ArrayList<Movement>();
 	java.util.List<Movement> walls = new java.util.ArrayList<Movement>();		// Array fuer Waende, Gegner, Schluessel, NPC, Muenzen und Ladenbesitzer
@@ -64,7 +69,10 @@ public class Board extends JPanel implements ActionListener{
 	Image image1 = image = r.getImage();										// für das aktualisieren nach Kollision
 	Image image2 = image = l.getImage();										// mit Jay.getImage() Abfrage
 	Image image3 = image = t.getImage();	
-	Image image4 = image = b.getImage();	
+	Image image4 = image = b.getImage();
+	Image trank = image = tr.getImage();
+	Image herz1 = image = h1.getImage();
+	Image schatz = image = s.getImage();
 
 	public Board() throws IOException{
 		lr="l1r1";
@@ -141,6 +149,7 @@ public class Board extends JPanel implements ActionListener{
 			DialogueShop();
 		}
 		if (raum.charAt(yy*20+xx)=='m'){    														//startet bei Kollision den Dialog des Ladenbesitzers
+				magic = magic  + 1;
 				mana = true;
 				spend_mana();
 
@@ -157,7 +166,7 @@ public class Board extends JPanel implements ActionListener{
 				e1.printStackTrace();
 			}
 		}else if (raum.charAt(yy*20+xx)=='b'){														//speichert Status des Raumes mit Muenzen, Gegner und Position
-			xruban=xruban+ruban;
+			xruban=xruban+ruban;															
 			xlife=xlife+life;
 			System.out.print("xruban = ");
 			System.out.println(xruban);
@@ -213,7 +222,7 @@ public class Board extends JPanel implements ActionListener{
 				y = y + BLOCK;
 				x = 0;
 			}else if(obj == '#'){																	// # bezeichnet ein Stueck Mauer. eine Mauer im array walls an seine Position speichern.
-				wall = new Wall(x,y, "wand"+ lr.charAt(1));
+				wall = new Wall(x,y, "wandn"+ lr.charAt(1));
 				walls.add(wall);
 				x = x + BLOCK;
 			}else if(obj == '@'){																	// Legt die Position des Charakters beim Levelstart fest
@@ -332,33 +341,69 @@ public class Board extends JPanel implements ActionListener{
 		if(ingame){																					// falls Spiel nicht verloren
 			buildWorld(g);																			// zeichnet Welt mit Punktestand..
 			int countsmoney= ruban + xruban;
-		        String s;
+		        String s,w,l;
 
-		        g.setFont(smallfont);																// Lebensanzeige
+		        g.setFont(smallfont);																// Geldanzeige
 		        g.setColor(new Color(98,150,255));
 		        s = "Money: " + (countsmoney);
-		        g.drawString(s,970,700/10);
-		        g.drawImage(image2,  970, 80, this);
-		        if(ingame){																					// falls Spiel nicht verloren
-					buildWorld(g);																			// zeichnet Welt mit Punktestand..
-					int lifebar= life;
-				        String t;
-
-				        g.setFont(smallfont);																// Lebensanzeige
-				        g.setColor(new Color(98,150,255));
-				        t = "Leben: " + (lifebar);
-				        g.drawString(t,970,500/10);
-				        g.drawImage(image2,  970, 80, this);
-
-		        	if(mana==true){																// bekommt Zauber
-		        		   g.drawImage(image2, 970, 150, this);
-		        	}
+		        g.drawString(s,970,160);
+		    	g.drawImage(schatz,970,180,this);													// zeichnet Welt mit Punktestand..
+			
+		    	int lifebar= life;
+				String t;
+																									// Lebensanzeige
+				t = "Leben: " + (lifebar);
+				g.drawString(t,970,40);
+				
+				if(life==3){																		// zeichnet 3 Herzchen fuer 3 Leben
+				g.drawImage(herz1,970,60,this);
+				g.drawImage(herz1,1020, 60, this);
+				g.drawImage(herz1,1070, 60, this);
+				}
+				if(life==2){						
+					g.drawImage(herz1,970,60,this);
+					g.drawImage(herz1,1020, 60, this);
+				}
+				need_life = 1;																		// need_life flag fuer das 2 Mana gibt volles Leben und zeichnet Herzchen
+				if(life==1){
+					g.drawImage(herz1,970,60,this);
+				}
+				need_life = 1;
+			
+				   String mes;
+	   		        g.setFont(smallfont);																// Manaanzeige
+	   		        g.setColor(new Color(98,150,255));
+	   		        mes = "Mana: " + (magic)+ " von 3 verbraucht";
+	   		        g.drawString(mes,970,280);
+	   		 
+		        	if(mana==true){
+		        		
+		        		if(magic==1){																	// wenn der erste mana eingesammelt wird kriegt diggy +100 Money
+		        			g.drawImage(trank, 970, 300, this);
+							xruban = + 100;
+						    w = " Du hast + 100 $ ! ";
+					        g.drawString(w,970,380);
+		        		}
+		        			if(magic==2){																// beim 2 mana kriegt diggy volles Leben falls er Leben verloren hat 
+		        				g.drawImage(trank,970,300,this);
+		        				g.drawImage(trank,1020,300, this);
+		        			    l = " Du hast volles Leben ! ";
+    					        g.drawString(l,970,30);
+		        					if(need_life==1){
+		        						life = 3;
+		        					}
+		        			}
+		        	 if(magic==3){																	// beim 3 mana soll er eine Waffe kriegen ??
+		        			g.drawImage(trank,970,300,this);
+		        			g.drawImage(trank,1020, 300, this);
+		        			g.drawImage(trank,1070, 300, this);
+		        	 }
+		       }
 		}else{																					 // was bei Niederlage passieren soll..
-            }
-		}
-        }
-        
-	public ArrayList<Shot> getShots() {																// gibt die Schuesse der Positionen wieder
+		}    
+}
+
+    public ArrayList<Shot> getShots() {																// gibt die Schuesse der Positionen wieder
 	        return shots;
 	    }
 
