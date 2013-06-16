@@ -13,7 +13,10 @@ public class Character extends Movement {
     private int x,y;
 
 	ImageIcon u = new ImageIcon("src/Resources/Character.png");			// holt sich die noetigen Grafiken fuer den Charakter
-	
+	ImageIcon dr = new ImageIcon("src/Resources/digright.png");
+	ImageIcon dl = new ImageIcon("src/Resources/digleft.png");
+	ImageIcon du = new ImageIcon("src/Resources/digup.png");
+	ImageIcon db = new ImageIcon("src/Resources/digb.png");
 	public Character(int x, int y){
 		super(x,y);
 		image = u.getImage();
