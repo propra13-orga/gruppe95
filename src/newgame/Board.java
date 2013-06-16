@@ -318,7 +318,7 @@ public class Board extends JPanel implements ActionListener{
 	
 		if(ingame){																// falls Spiel nicht verloren
 			buildWorld(g);														// zeichnet Welt mit Punktestand..
-	        String msg = "Money: "+ruban;
+	        String msg = "Money: "+(xruban+ruban);
             Font small = new Font("Helvetica", Font.BOLD, 14);
             FontMetrics metr = this.getFontMetrics(small);
             g.setColor(Color.white);
