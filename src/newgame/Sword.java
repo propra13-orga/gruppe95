@@ -49,7 +49,7 @@ public class Sword{
 	}
 	
 	public void move_r_sword(){
-		x += sword_die;						// Schuss nach rechts mit Geschwindigkeit
+		x += sword_die;							// Schuss nach rechts mit Geschwindigkeit
 		shot_limit_x1();					
 	}											// dabei wird mit den Funktionen shot_limit_x(bzw.y) darauf
 												// geachtet dass es ueber das Board nicht sichtbar ist
@@ -69,23 +69,23 @@ public class Sword{
 	}
 	
 	public void shot_limit_x1(){
-		if (x >= 920)
+		if (x >= 100)								// mit entfernung von 20 kann diggy mit s
 	         visible = false;						// Wenn der Schuss ausserhalb des Boards ist -> nicht mehr sichtbar
 	}
 	
 	public void shot_limit_y1(){
-		 if (y>= 720)
+		 if (y>=100)
 	         visible = false;						
 	
 	}
 	
 	public void shot_limit_x2(){
-		 if (x <=0)
+		 if (x >=100)
 	         visible = false;						
 	}
 	
 	public void shot_limit_y2(){
-		 if (y<=0)
+		 if (y<=100)
 	         visible = false;						
 	}
 }
