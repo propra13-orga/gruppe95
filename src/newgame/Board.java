@@ -388,7 +388,7 @@ public class Board extends JPanel implements ActionListener{
 		        				g.drawImage(trank,970,300,this);
 		        				g.drawImage(trank,1020,300, this);
 		        			    l = " Du hast volles Leben ! ";
-    					        g.drawString(l,970,30);
+    					        g.drawString(l,970,380);
 		        					if(need_life==1){
 		        						life = 3;
 		        					}
