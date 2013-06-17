@@ -102,6 +102,7 @@ public class Board extends JPanel implements ActionListener{
 		swords = new ArrayList<Sword>();
 	    timer = new Timer(5, this);												//zeichnet alle  5ms den Board (Schuesse)
         timer.start();
+        
     }
 
 	public void loeschen(boolean b){											//loescht alle Inhalte 
@@ -125,7 +126,7 @@ public class Board extends JPanel implements ActionListener{
 	}
 
 	public void collision(int movx,int movy,Image image){											// char pos mit image geaendert um statt mit  t,v Bild festzulegen man abfragt wo er guckt 
-
+		
 		int xx = ((Jay.getX()+movx)/BLOCK);																	 							//xx und yy sind die imaginaere Koordinaten innerhalb des Strings Variable (level).
 		int yy=(Jay.getY()+movy)/BLOCK;																									//xx und yy werden dafuer gerechnet um zu erkennen, ob an der Stelle wohin sich die Spielfigur bewegen will, kein # im variable level bzw kein Stueck Mauer im Spielfeld gibt
 		if ((raum.charAt(yy*20+xx)!='#')&&(raum.charAt(yy*20+xx)!='~')&&(raum.charAt(yy*20+xx)!='s')&&(xx>=0)||(Jay.getY()<0))		    //yy wird mal 20 multipliziert da es in jeder linie des Spielfelds 20 Bloecke gibt(also in jeder linie des strings level gibt es 20 zeichen)
@@ -202,43 +203,51 @@ public class Board extends JPanel implements ActionListener{
 	private boolean oben,rechts;
 	
 	public void movemonster() {
+		
 		if (Jay.getY()<Monster.getY()){
-			Monster.move(0,-1);
+			Monster.move(0,-2);
 			oben=true;
 		}
 		else if (Jay.getY()>Monster.getY()){
-			Monster.move(0,1);
+			Monster.move(0,2);
 			oben=false;
 		}
 		if (Jay.getX()>Monster.getX()){
-			Monster.move(1,0);
+			Monster.move(2,0);
 			rechts=true;
 		}
 		else if (Jay.getX()<Monster.getX()){
-			Monster.move(-1,0);
+			Monster.move(-2,0);
 			rechts=false;
 		}
 	}
 	
 	
 
-	private int mx,my;
+	private int mx,my,counter;
 
 	public void moveBall() {
+			counter+=1;
 			if (ball.getX()<mx){
-				ball.move(2, 0);
+				ball.move(4, 0);
 			}
 			else if (ball.getX()>mx){
-				ball.move(-2, 0);
+				ball.move(-4, 0);
 			}
 			if (ball.getY()<my){
-				ball.move(0, 2);
+				ball.move(0, 4);
 			}
 			else if (ball.getY()>my){
-				ball.move(0,-2);
+				ball.move(0,-4);
 			}
-		}
-		
+			
+			if (counter%150==0){
+				ball.setX(Monster.getX());
+				ball.setY(Monster.getY());
+				mx=0;my=0;
+			}
+	}
+	
 		/*if (oben) my=Monster.getY()-50;
 		else my=Monster.getY()+50;
 		if (rechts) mx=Monster.getX()+50;
@@ -369,6 +378,7 @@ public class Board extends JPanel implements ActionListener{
 			else if(obj == 'r'){																	// Legt die Position des Charakters beim Tod fest
 				 ball = new Ball(x,y);
 				x=x+BLOCK;
+				
 			}	
 			else if(obj == 'm'){																	// Legt die Position des Charakters beim Tod fest
 					mana = new Mana(x,y);
@@ -431,7 +441,7 @@ public class Board extends JPanel implements ActionListener{
 	       				if (c.isVisible())
 	       				g.drawImage(c.getImage(), c.getX(), c.getY(), this);
 	       			}
-	       			
+	       			 			
 	}
     
         public void paint(Graphics g){
@@ -443,8 +453,10 @@ public class Board extends JPanel implements ActionListener{
 				movemonster();
 			}
 			if (raum.contains("r")){
-				moveBall();
-			}
+   				if (mx==0)mx=Jay.getX();
+   				if (my==0)my=Jay.getY();
+   				moveBall();
+   			} 
 			int countsmoney= ruban + xruban;
 		        String s,w,l;
 
@@ -554,12 +566,12 @@ public class Board extends JPanel implements ActionListener{
 
 			}else if (key == KeyEvent.VK_SPACE) {													// Taste -Space ruft die Funktion fire auf
 				fire();
-		
 			}else if (key == KeyEvent.VK_V) {														// 2 te Waffe = Schwertkampf in versch Richtungen
 				sword_play();
 			}
 
 			repaint();
+			
 
 				if ((Jay.getY()==-BLOCK)||(Jay.getY()==0))  {	
 				if (lr.charAt(3)=='1') lr=lr.substring(0,3)+"2";									//Wenn der Spieler am Ausgang des 1. Raums ist dann ueberwechseln
@@ -614,6 +626,7 @@ public class Board extends JPanel implements ActionListener{
 		}
 		loeschen(test);
 		initWorld(Jay.getImage());
+		
 
 	}
 
@@ -660,7 +673,7 @@ public class Board extends JPanel implements ActionListener{
 	 public void actionPerformed(ActionEvent e) {													// zeichnet die Schuesse 
 
      ArrayList<Shot> shots = getShots();
-
+     
      for (int i = 0; i < shots.size(); i++) {
     	 Shot m = (Shot) shots.get(i);																// falss limit des Boards nicht ueberschritten
 		 																							// wird je nach Blickrichtung in die richtgige Richtungen angegriffen
