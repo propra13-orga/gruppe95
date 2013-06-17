@@ -10,22 +10,33 @@ import java.io.IOException;
 
 public class DialogueShop extends JFrame implements ActionListener{
 	
-private JButton schliessen;																										//definiert 1 JLabel und einen JButton
-private JLabel text;
+	private JButton weiter;																										//definiert 3 JButtons und 1 JLabel
+	private JButton schliessen;
+	private JLabel text;
+	private JButton weiter2;
 
 
 public DialogueShop(String Title){
 	super(Title);
 	
 	text = new JLabel("                       Guten Tag. Bitte schaue dich doch in unserem Laden ein wenig um!");				//legt den Text des Ladenbesitzers fest
-	text.setFont(new Font("Serif", Font.PLAIN, 14));																			//Font und Textart- + groesse
+	text.setFont(new Font("Serif", Font.PLAIN, 14));																		//Legt Schriftgroesse und Font fest
 	getContentPane().add(text);
 
-	schliessen = new JButton("Schliessen");																						//legt Name, Position und Groesse des Buttons fest
-	schliessen.setBounds(250,200,100,30);
+	weiter = new JButton("Weiter");																							//definiert Position und Größe für die Buttons
+	weiter.setBounds(80,200,90,30);
+	weiter.addActionListener(this);
+	
+	weiter2 = new JButton("Weiter2");																						//definiert Position und Größe für die Buttons
+	weiter2.setBounds(80,200,90,30);
+	weiter2.addActionListener(this);
+
+	schliessen = new JButton("Schliessen");																					//definiert Position und Größe für die Buttons
+	schliessen.setBounds(400,200,100,30);
 	schliessen.addActionListener(this);
 
-	add(schliessen);																											//fuegt Text und Button hinzu
+	add(weiter);
+	add(schliessen);																										//fuegt die Buttons und den Text im ersten Label zu
 	add(text);
 }
 
@@ -33,8 +44,16 @@ public DialogueShop(String Title){
 public void actionPerformed(ActionEvent e) {
 // TODO Auto-generated method stub
 
-if (e.getSource()==schliessen)																									//schliesst Fenster auf Druck
+if (e.getSource()==schliessen)																								//schliesst das Fenster auf Druck
 	setVisible(false);
 
+if (e.getSource()==weiter)
+	text.setText("                   Unsere Manatraenke kosten 20 Gold und unsere Heiltraenke kosten 30 Gold");				//aendert den Text auf Druck
+	remove(weiter);
+	add(weiter2);
+	
+if (e.getSource()==weiter2)
+	text.setText("");
+	remove(weiter2);
 }
 }
