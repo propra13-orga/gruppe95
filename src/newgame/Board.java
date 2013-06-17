@@ -76,6 +76,7 @@ public class Board extends JPanel implements ActionListener{
 	java.util.List<Movement> shopkeepers = new java.util.ArrayList<Movement>();
 	java.util.List<Movement> manas = new java.util.ArrayList<Movement>();
 	java.util.List<Movement> Jays = new java.util.ArrayList<Movement>();
+	java.util.List<Movement> herzen = new java.util.ArrayList<Movement>();
 	
 
 	Image image1 = image = r.getImage();										// fuer das aktualisieren nach Kollision
@@ -111,6 +112,7 @@ public class Board extends JPanel implements ActionListener{
 		keys.clear();
 		wizards.clear();
 		manas.clear();
+		herzen.clear();
 		storyfields.clear();
 		shopkeepers.clear();
 		if (b) raum="";
@@ -166,6 +168,18 @@ public class Board extends JPanel implements ActionListener{
 		}
 		if (raum.charAt(yy*20+xx)=='s'){    														//startet bei Kollision den Dialog des Ladenbesitzers
 			DialogueShop();
+		}
+		if (raum.charAt(yy*20+xx)=='h'){
+			life = life + 1;
+			ruban = ruban - 30;
+			mana = true;
+			spend_herzen();
+		}
+		if (raum.charAt(yy*20+xx)=='q'){
+			magic = magic + 1;
+			mana = true;
+			spend_mana();
+			ruban = ruban-20;
 		}
 		if (raum.charAt(yy*20+xx)=='m'){    														// wenn mana eingesammelt wird hat er mana und es ist dann verbraucht
 				magic = magic  + 1;
@@ -281,6 +295,8 @@ public class Board extends JPanel implements ActionListener{
 		Wizard wizard;
 		Shopkeeper shopkeeper;
 		Mana mana;
+		Mana shopmana;
+		Heiltrank heiltrank;
 		
 
 		for(int i = 0; i < raum.length(); i++){														// level variable Buchstabe fuer Buchstabe durchgehen.
@@ -362,18 +378,29 @@ public class Board extends JPanel implements ActionListener{
 					check = new checkpoint(x,y);
 					x=x+BLOCK;
 			}
+			else if(obj == 'h'){
+				heiltrank = new Heiltrank(x,y);
+				herzen.add(heiltrank);
+				x=x+BLOCK;
+			}
 			else if(obj == 'k'){																	// Legt die Position des Charakters beim Tod fest
 				Monster = new Boss(x,y);
 				x=x+BLOCK;
 			}
 			else if(obj == 'r'){																	// Legt die Position des Charakters beim Tod fest
 				 ball = new Ball(x,y);
-				x=x+BLOCK;
+				 x=x+BLOCK;
 			}	
 			else if(obj == 'm'){																	// Legt die Position des Charakters beim Tod fest
 					mana = new Mana(x,y);
 					manas.add(mana);
 					x=x+BLOCK;
+			}
+			else if(obj == 'q'){
+					shopmana = new Mana(x,y);
+					manas.add(shopmana);
+					x=x+BLOCK;
+					
 			}
 		}
 	}
@@ -700,7 +727,7 @@ public class Board extends JPanel implements ActionListener{
 			return new Rectangle(Jay.getX(),Jay.getY(),50,50);				
 		}
 
-			public void Dialogue(){																		//definiert die Methode Dialogue genauer, mit Close-Operation, Name, Layout und Position
+			public void Dialogue(){																	//definiert die Methode Dialogue genauer, mit Close-Operation, Name, Layout und Position
 
 			JFrame Dialogue = new Dialogue("Weiser Zauberer");
 
@@ -714,7 +741,7 @@ public class Board extends JPanel implements ActionListener{
 			Dialogue.add(new Dialogue("Weiser Zauberer"));
 		}
 
-		public void DialogueShop(){                                  //definiert die Methode DialogueShop genauer, mit Close-Operation, Name, Layout und Position      
+		public void DialogueShop(){                                  								//definiert die Methode DialogueShop genauer, mit Close-Operation, Name, Layout und Position      
 
 		JFrame DialogueShop = new DialogueShop("Ladenbesitzer");
 		DialogueShop.setSize(600,300);
@@ -722,11 +749,12 @@ public class Board extends JPanel implements ActionListener{
 		DialogueShop.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		DialogueShop.setVisible(true);
 		DialogueShop.setFocusable(true);
-		DialogueShop.setLayout(new BorderLayout());     DialogueShop.setLayout(null);
+		DialogueShop.setLayout(new BorderLayout());     
+		DialogueShop.setLayout(null);
 	    DialogueShop.add(new Dialogue("Ladenbesitzer"));
 	    }
 
-		public void check_shot_vs_coin() {																// schiesst nicht durch Coins
+		public void check_shot_vs_coin() {															// schiesst nicht durch Coins
 
 			ArrayList<Shot> shots = getShots();
 
@@ -869,7 +897,28 @@ public class Board extends JPanel implements ActionListener{
 			int xx = (int) ((Jay.getX())/BLOCK);																	//xx und yy sind die imaginaere Koordinaten innerhalb des Strings Variable (level).
 	        int yy=(int)(Jay.getY())/BLOCK;
 
-	        	if (raum.charAt(yy*20+xx)=='m') {											// wenn mana eingesammelt wird, wird mana ' ' ersetzt	Diggy bleibt dort wo er war															
+	        	if (raum.charAt(yy*20+xx)=='m'||(raum.charAt(yy*20+xx)=='q')) {										// wenn mana eingesammelt wird, wird mana ' ' ersetzt	Diggy bleibt dort wo er war															
+		        		int xxx = ((Jay.getX())/BLOCK);																
+		        		int yyy=(Jay.getY())/BLOCK;	
+
+		        		raum=raum.substring(0,yy*20+xx)+' '+raum.substring(yy*20+xx+1);	
+		        				int c =raum.lastIndexOf("@");						
+		    					raum=raum.substring(0,c)+' '+raum.substring(c+1);
+		    					raum=raum.substring(0,yyy*20+xxx)+'@'+raum.substring(yyy*20+xxx+1);
+		    					try {
+		    						restartLevel(false, (Jay.getImage()));
+		    					}catch (IOException e1) {
+		    						e1.printStackTrace();
+		    					}
+	        	}
+		}
+		
+		public void spend_herzen(){
+
+			int xx = (int) ((Jay.getX())/BLOCK);											//xx und yy sind die imaginaere Koordinaten innerhalb des Strings Variable (level).
+	        int yy=(int)(Jay.getY())/BLOCK;
+
+	        	if (raum.charAt(yy*20+xx)=='h') {											// wenn herzen eingesammelt werden, werden herzen durch ' ' ersetzt, Diggy bleibt dort wo er war															
 		        		int xxx = ((Jay.getX())/BLOCK);																
 		        		int yyy=(Jay.getY())/BLOCK;	
 

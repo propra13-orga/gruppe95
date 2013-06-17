@@ -12,7 +12,7 @@ private Image image;
 		
 		super(x,y);
 
-		ImageIcon i = new ImageIcon("src/Resources/trank5030.png");					// holt sich die Grafiken fuer den Shopkeeper, wird im Board aufgerufen
+		ImageIcon i = new ImageIcon("src/Resources/trank5030.png");					// holt sich die Grafiken fuer den Manatrank, wird im Board aufgerufen
 		image = i.getImage();
 		this.setImage(image);
 
