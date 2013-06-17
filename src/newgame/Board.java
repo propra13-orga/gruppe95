@@ -170,7 +170,7 @@ public class Board extends JPanel implements ActionListener{
 			DialogueShop();
 		}
 		if (raum.charAt(yy*20+xx)=='h'){
-			life = life + 1;
+			life = life+1;
 			ruban = ruban - 30;
 			mana = true;
 			spend_herzen();
@@ -488,6 +488,9 @@ public class Board extends JPanel implements ActionListener{
 				t = "Leben: " + (lifebar);
 				g.drawString(t,970,40);
 				
+				if(life > 3){
+					life = 3;
+				}
 				if(life==3){																		// zeichnet 3 Herzchen fuer 3 Leben
 				g.drawImage(herz1,970,60,this);
 				g.drawImage(herz1,1020, 60, this);
@@ -530,6 +533,9 @@ public class Board extends JPanel implements ActionListener{
 		        			g.drawImage(trank,970,300,this);
 		        			g.drawImage(trank,1020, 300, this);
 		        			g.drawImage(trank,1070, 300, this);
+		        	 }
+		        	 if (magic > 3){
+		        		 magic = 3;
 		        	 }
 		       }
 		}else{																					 // was bei Niederlage passieren soll..
