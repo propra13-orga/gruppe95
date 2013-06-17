@@ -46,6 +46,7 @@ public class Board extends JPanel implements ActionListener{
 	boolean ingame,mana,failed;
 	private checkpoint check;
 	private Boss Monster;
+	private Ball ball;
 	Font smallfont = new Font("Helvetica", Font.BOLD, 17);
 
 
@@ -61,7 +62,7 @@ public class Board extends JPanel implements ActionListener{
 	ImageIcon dl = new ImageIcon("src/Resources/digleft.png");
 	ImageIcon du = new ImageIcon("src/Resources/digup.png");
 	ImageIcon db = new ImageIcon("src/Resources/digb.png");
-	//ImageIcon bossv = new ImageIcon("src/Resources/bossv.png");
+	
 	
 	
 	
@@ -75,7 +76,7 @@ public class Board extends JPanel implements ActionListener{
 	java.util.List<Movement> shopkeepers = new java.util.ArrayList<Movement>();
 	java.util.List<Movement> manas = new java.util.ArrayList<Movement>();
 	java.util.List<Movement> Jays = new java.util.ArrayList<Movement>();
-	java.util.List<Movement> Monsters = new java.util.ArrayList<Movement>();
+	
 
 	Image image1 = image = r.getImage();										// fuer das aktualisieren nach Kollision
 	Image image2 = image = l.getImage();										// mit Jay.getImage() Abfrage
@@ -198,22 +199,55 @@ public class Board extends JPanel implements ActionListener{
 		}
 }
 
+	private boolean oben,rechts;
+	
 	public void movemonster() {
 		if (Jay.getY()<Monster.getY()){
 			Monster.move(0,-1);
+			oben=true;
 		}
 		else if (Jay.getY()>Monster.getY()){
 			Monster.move(0,1);
+			oben=false;
 		}
 		if (Jay.getX()>Monster.getX()){
 			Monster.move(1,0);
+			rechts=true;
 		}
 		else if (Jay.getX()<Monster.getX()){
 			Monster.move(-1,0);
+			rechts=false;
 		}
-		Monster.schiess();
 	}
+	
+	
 
+	private int mx,my;
+
+	public void moveBall() {
+			if (ball.getX()<mx){
+				ball.move(2, 0);
+			}
+			else if (ball.getX()>mx){
+				ball.move(-2, 0);
+			}
+			if (ball.getY()<my){
+				ball.move(0, 2);
+			}
+			else if (ball.getY()>my){
+				ball.move(0,-2);
+			}
+		}
+		
+		/*if (oben) my=Monster.getY()-50;
+		else my=Monster.getY()+50;
+		if (rechts) mx=Monster.getX()+50;
+		else mx=Monster.getX()-50;
+		ball.setX(mx);
+		ball.setY(my);*/
+		
+	
+	
 	public Image getImage(){																		//laedt Images
 		return image;
 	}
@@ -332,6 +366,10 @@ public class Board extends JPanel implements ActionListener{
 				Monster = new Boss(x,y);
 				x=x+BLOCK;
 			}
+			else if(obj == 'r'){																	// Legt die Position des Charakters beim Tod fest
+				 ball = new Ball(x,y);
+				x=x+BLOCK;
+			}	
 			else if(obj == 'm'){																	// Legt die Position des Charakters beim Tod fest
 					mana = new Mana(x,y);
 					manas.add(mana);
@@ -339,8 +377,8 @@ public class Board extends JPanel implements ActionListener{
 			}
 		}
 	}
-
-	public void buildWorld(Graphics g){
+	ArrayList<Movement> world = new ArrayList<Movement>();
+	public void buildWorld( Graphics g){
 
 		g.drawImage(img, 0, 0, null);																//Background Image zeichnen
 		ArrayList<Movement> world = new ArrayList<Movement>();
@@ -348,6 +386,7 @@ public class Board extends JPanel implements ActionListener{
 		world.add(check);																			//im levelend soll es kein Spielfigur geben
 		world.add(Jay);
 		if (raum.contains("k")) world.add(Monster);
+		if (raum.contains("r")) world.add(ball);
 		world.addAll(keys);
 		world.addAll(wizards);
 		world.addAll(coins);
@@ -359,12 +398,14 @@ public class Board extends JPanel implements ActionListener{
 			Movement obj = (Movement) world.get(i);
 			g.drawImage(obj.getImage(), obj.getX(), obj.getY(), this);								// g.drawImage fuer die Grafische Zeichnung
 		}
-
+		
 	       ArrayList<Shot> shots = getShots();
 	       		for (int j = 0; j < shots.size(); j++){
 	       			Shot m = (Shot) shots.get(j);
 	       			g.drawImage(m.getImage(), m.getX(), m.getY(), this);
                 }
+	       		
+	       
 	      ArrayList<Sword> swords = getSwords();
 	       		for (int i = 0; i < swords.size(); i++){
 	       			Sword s = (Sword) swords.get(i);
@@ -390,6 +431,7 @@ public class Board extends JPanel implements ActionListener{
 	       				if (c.isVisible())
 	       				g.drawImage(c.getImage(), c.getX(), c.getY(), this);
 	       			}
+	       			
 	}
     
         public void paint(Graphics g){
@@ -399,6 +441,9 @@ public class Board extends JPanel implements ActionListener{
 			buildWorld(g);																			// zeichnet Welt mit Punktestand..
 			if (raum.contains("k")){
 				movemonster();
+			}
+			if (raum.contains("r")){
+				moveBall();
 			}
 			int countsmoney= ruban + xruban;
 		        String s,w,l;
@@ -410,6 +455,7 @@ public class Board extends JPanel implements ActionListener{
 		    	g.drawImage(schatz,970,180,this);													// zeichnet Welt mit Punktestand..
 			
 		    	int lifebar= life;
+		    	
 				String t;
 																									// Lebensanzeige
 				t = "Leben: " + (lifebar);
@@ -466,6 +512,7 @@ public class Board extends JPanel implements ActionListener{
     public ArrayList<Shot> getShots() {																// gibt die Schuesse  wieder
 	        return shots;
 	    }
+   
 
     public ArrayList<Sword> getSwords() {																
 	        return swords;
