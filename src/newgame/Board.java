@@ -45,6 +45,7 @@ public class Board extends JPanel implements ActionListener{
 	private int k,z,posX,posY;
 	boolean ingame,mana,failed;
 	private checkpoint check;
+	private Ghost Geist;
 	private Boss Monster;
 	private Ball ball;
 	Font smallfont = new Font("Helvetica", Font.BOLD, 17);
@@ -237,8 +238,26 @@ public class Board extends JPanel implements ActionListener{
 			Monster.move(-Monster_speed,0);
 		}
 	}
+		
+		public void movegeist() {
+			
+		
+		if (Jay.getY()<Geist.getY()){
+			Geist.move(0,-Geist_speed);
+		}
+		else if (Jay.getY()>Geist.getY()){
+			Geist.move(0,Geist_speed);
+		}
+		if (Jay.getX()>Geist.getX()){
+			Geist.move(Geist_speed,0);
+		}
+		else if (Jay.getX()<Geist.getX()){
+			Geist.move(-Geist_speed,0);
+		}
+		
+	}
 	
-	private int mx,my,counter,Monster_speed,schuss_speed;
+	private int mx,my,counter,Monster_speed,Geist_speed,schuss_speed;
 
 	
 	public void moveBall() {
@@ -261,6 +280,11 @@ public class Board extends JPanel implements ActionListener{
 		if (counter % 150==0){
 			ball.setX(Monster.getX());
 			ball.setY(Monster.getY());
+			mx=0;my=0;
+		}
+		if (counter % 150==0){
+			ball.setX(Geist.getX());
+			ball.setY(Geist.getY());
 			mx=0;my=0;
 		}
 	}
@@ -407,6 +431,10 @@ public class Board extends JPanel implements ActionListener{
 				Monster = new Boss(x,y);
 				x=x+BLOCK;
 			}
+			else if(obj == 'w'){																	// Legt die Position des Bosses beim Tod fest
+				Geist = new Ghost(x,y);
+				x=x+BLOCK;
+			}
 			else if(obj == 'r'){																	
 				 ball = new Ball(x,y);
 				x=x+BLOCK;
@@ -436,6 +464,7 @@ public class Board extends JPanel implements ActionListener{
 		world.add(Jay);
 		if (raum.contains("k")) world.add(Monster);
 		if (raum.contains("r")) world.add(ball);
+		if (raum.contains("w")) world.add(Geist);
 		world.addAll(keys);
 		world.addAll(wizards);
 		world.addAll(coins);
@@ -493,6 +522,11 @@ public class Board extends JPanel implements ActionListener{
 				if (lr=="l3r4") Monster_speed=2;
 				else Monster_speed=1;
 				movemonster();
+			}
+			if (raum.contains("w")){
+				if (lr=="l1r1") Geist_speed=2;
+				else Geist_speed=1;
+				movegeist();
 			}
 			if (raum.contains("r")){
    				if (mx==0)mx=Jay.getX();
@@ -727,6 +761,7 @@ public class Board extends JPanel implements ActionListener{
 			if(k==01) m.move_l();
 			if(k==10) m.move_u();
 			if(k==11) m.move_d();
+			
 			
 		}else shots.remove(i);
     	 	check_shot_vs_wall();																	// Kollisionabfrage mit Schuss
