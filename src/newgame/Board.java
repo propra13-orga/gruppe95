@@ -168,17 +168,24 @@ public class Board extends JPanel implements ActionListener{
 			DialogueShop();
 		}
 		if (raum.charAt(yy*20+xx)=='h'){															//Nimmt bei Kollision das Herz/Heiltank auf und gibt 30 Gold aus
+				if((ruban>= 30)||(xruban>=30)){
 				life = life+1;
-				ruban = ruban - 30;
+				xruban = xruban - 30;
 				mana = true;
-				spend_herzen();
+				spend_herzen();}
+				else{
+				}
 			}
 		if (raum.charAt(yy*20+xx)=='q'){															//Nimmt bei Kollision den Manatrank auf und gibt 20 Gold aus
+			if((ruban >= 20)||(xruban >=20)){
 			magic = magic + 1;
 			mana = true;
 			spend_mana();
-			ruban = ruban-20;
+			xruban = xruban-20;
 		}
+			else{
+			}
+			}
 		if (raum.charAt(yy*20+xx)=='m'){    														// Bei Einsammeln des Manatranks verschwindet das Bild und er erhaelt auf der rechten Seite ein Mana
 				magic = magic  + 1;
 				mana = true;
@@ -548,14 +555,14 @@ public class Board extends JPanel implements ActionListener{
 		        		
 		        		if(magic==1){																	// Beim Aufnehmen des ersten Manatrankes erhaelt Diggy 100 Gold
 		        			g.drawImage(trank, 970, 300, this);
-							xruban = + 100;
-						    w = " Du hast + 100 $ ! ";
+							xruban = + 30;
+						    w = " Du hast + 30 $ ! ";
 					        g.drawString(w,970,380);
 		        		}
 		        			if(magic==2){																// Beim Aufnehmen des zweiten Manatrankes erhaelt Diggy volles Leben
 		        				g.drawImage(trank,970,300,this);
 		        				g.drawImage(trank,1020,300, this);
-		        			    l = " Du hast volles Leben ! ";
+		        			    l = " Du erhaeltst volles Leben ! ";
     					        g.drawString(l,970,380);
 		        					if(need_life==1){
 		        						life = 3;
