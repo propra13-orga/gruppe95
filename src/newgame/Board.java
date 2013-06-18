@@ -93,7 +93,7 @@ public class Board extends JPanel implements ActionListener{
 	
 
 	public Board() throws IOException{
-		lr="l3r3";
+		lr="l2r3";
 		addKeyListener(new Ap());
 		setFocusable(true);		
 		initWorld(image4);
@@ -127,7 +127,7 @@ public class Board extends JPanel implements ActionListener{
 	}
 
 	public void collision(int movx,int movy,Image image){											// char pos mit image geaendert um statt mit  t,v Bild festzulegen man abfragt wo er guckt 
-
+		
 		int xx = ((Jay.getX()+movx)/BLOCK);																	 							//xx und yy sind die imaginaere Koordinaten innerhalb des Strings Variable (level).
 		int yy=(Jay.getY()+movy)/BLOCK;																									//xx und yy werden dafuer gerechnet um zu erkennen, ob an der Stelle wohin sich die Spielfigur bewegen will, kein # im variable level bzw kein Stueck Mauer im Spielfeld gibt
 		if ((raum.charAt(yy*20+xx)!='#')&&(raum.charAt(yy*20+xx)!='~')&&(raum.charAt(yy*20+xx)!='s')&&(xx>=0)||(Jay.getY()<0))		    //yy wird mal 20 multipliziert da es in jeder linie des Spielfelds 20 Bloecke gibt(also in jeder linie des strings level gibt es 20 zeichen)
@@ -161,8 +161,8 @@ public class Board extends JPanel implements ActionListener{
 
 				e1.printStackTrace();
 			}
-			}
 		}
+	   }
 		if (raum.charAt(yy*20+xx)=='~'){    														//startet bei Kollision den Dialog des NPC
 			Dialogue();
 		}
@@ -190,10 +190,11 @@ public class Board extends JPanel implements ActionListener{
 				spend_mana();
 
 
-		}else if (raum.charAt(yy*20+xx)=='$'){														//startet die naechste Welt wenn ein Schluessel aufgenommen wurde
+		}
+		else if (raum.charAt(yy*20+xx)=='$'){														//startet die naechste Welt wenn ein Schluessel aufgenommen wurde
 			if (lr.charAt(1)=='1') lr="l2r1";
 			else if (lr.charAt(1)=='2')lr="l3r1"; 
-			else if (lr.charAt(1)=='3')lr="l4r1";
+			else if (lr.charAt(1)=='3')lr="l3r6";
 			loeschen(true);
 			try {
 				initWorld(Jay.getImage());
@@ -201,7 +202,8 @@ public class Board extends JPanel implements ActionListener{
 
 				e1.printStackTrace();
 			}
-		}else if (raum.charAt(yy*20+xx)=='b'){														//speichert Status des Raumes mit Muenzen, Gegner und Position
+		}
+		else if (raum.charAt(yy*20+xx)=='b'){														//speichert Status des Raumes mit Muenzen, Gegner und Position
 			xruban=xruban+ruban;															
 			xlife=xlife+life;
 			System.out.print("xruban = ");
@@ -214,57 +216,69 @@ public class Board extends JPanel implements ActionListener{
 			rooms=raum;
 			lrs=lr;
 		}
-}
+	}
 
-	private boolean oben,rechts;
+	
 	
 	public void movemonster() {
+		
 		if (Jay.getY()<Monster.getY()){
-			Monster.move(0,-1);
-			oben=true;
+			Monster.move(0,-Monster_speed);
 		}
 		else if (Jay.getY()>Monster.getY()){
-			Monster.move(0,1);
-			oben=false;
+			Monster.move(0,Monster_speed);
 		}
 		if (Jay.getX()>Monster.getX()){
-			Monster.move(1,0);
-			rechts=true;
+			Monster.move(Monster_speed,0);
 		}
 		else if (Jay.getX()<Monster.getX()){
-			Monster.move(-1,0);
-			rechts=false;
+			Monster.move(-Monster_speed,0);
 		}
 	}
 	
+	private int mx,my,counter,Monster_speed,schuss_speed;
+
 	
-
-	private int mx,my;
-
 	public void moveBall() {
-			if (ball.getX()<mx){
-				ball.move(2, 0);
-			}
-			else if (ball.getX()>mx){
-				ball.move(-2, 0);
-			}
-			if (ball.getY()<my){
-				ball.move(0, 2);
-			}
-			else if (ball.getY()>my){
-				ball.move(0,-2);
-			}
+			
+		if (ball.getX()<mx){
+			ball.move(4, 0);
+		}
+		else if (ball.getX()>mx){
+			ball.move(-4, 0);
+		}
+		if (ball.getY()<my){
+			ball.move(0, 4);
+		}
+		else if (ball.getY()>my){
+			ball.move(0,-schuss_speed);
 		}
 		
-		/*if (oben) my=Monster.getY()-50;
-		else my=Monster.getY()+50;
-		if (rechts) mx=Monster.getX()+50;
-		else mx=Monster.getX()-50;
-		ball.setX(mx);
-		ball.setY(my);*/
+		kollision_ball_spieler();
 		
+		if (counter % 150==0){
+			ball.setX(Monster.getX());
+			ball.setY(Monster.getY());
+			mx=0;my=0;
+		}
+	}
 	
-	
+			
+	private void kollision_ball_spieler() {
+		if ((Math.abs(Jay.getX()-ball.getX())<50)&&(Math.abs(Jay.getY()-ball.getY())<50)){
+			life=life-1;
+			if(life==0){
+				failed=true;
+				try {
+					restartLevel(true,Jay.getImage());
+				} catch (IOException e1) {
+
+					e1.printStackTrace();
+				}
+			}
+		}
+	}
+
 	public Image getImage(){																		//laedt Images
 		return image;
 	}
@@ -272,13 +286,13 @@ public class Board extends JPanel implements ActionListener{
 	public String raumeinlesen() throws IOException{
 		String room="";
 		FileReader fr = new FileReader("src/Resources/"+lr+".txt");
-		    BufferedReader br = new BufferedReader(fr);
-		    String zeile = br.readLine();
-		    while (zeile != null)
-		    {
-		      room=room+zeile+'\n';
-		      zeile = br.readLine();
-		    }
+		BufferedReader br = new BufferedReader(fr);
+		String zeile = br.readLine();
+		while (zeile != null)
+		{
+			room=room+zeile+'\n';
+		    zeile = br.readLine();
+		}
 		br.close();
 		return room;
 	}
@@ -393,7 +407,8 @@ public class Board extends JPanel implements ActionListener{
 			}
 			else if(obj == 'r'){																	// Legt die Position des Charakters beim Tod fest
 				 ball = new Ball(x,y);
-				 x=x+BLOCK;
+				x=x+BLOCK;
+
 			}	
 			else if(obj == 'm'){																	// Legt die Position des Charakters beim Tod fest
 					mana = new Mana(x,y);
@@ -464,7 +479,7 @@ public class Board extends JPanel implements ActionListener{
 	       				if (c.isVisible())
 	       				g.drawImage(c.getImage(), c.getX(), c.getY(), this);
 	       			}
-	       			
+	       			 			
 	}
     
         public void paint(Graphics g){
@@ -473,11 +488,27 @@ public class Board extends JPanel implements ActionListener{
 		if(ingame){																					// falls Spiel nicht verloren
 			buildWorld(g);																			// zeichnet Welt mit Punktestand..
 			if (raum.contains("k")){
+				if (lr=="l3r4") Monster_speed=2;
+				else Monster_speed=1;
 				movemonster();
 			}
 			if (raum.contains("r")){
-				moveBall();
-			}
+   				if (mx==0)mx=Jay.getX();
+   				if (my==0)my=Jay.getY();
+   				if (lr.charAt(1)=='3') {
+   					schuss_speed=4;
+   				}
+   				else if (lr.charAt(1)=='2'){
+   					schuss_speed=3;
+   					
+   				}
+   				else if (lr.charAt(1)=='1'){
+   					schuss_speed=2;
+   					
+   				}
+   				counter=+1;
+   				moveBall();
+   			} 
 			int countsmoney= ruban + xruban;
 		        String s,w,l;
 
@@ -554,8 +585,8 @@ public class Board extends JPanel implements ActionListener{
    
 
     public ArrayList<Sword> getSwords() {																
-	        return swords;
-	    }
+	     return swords;
+    }
 
 	private class Ap extends KeyAdapter{															// fuer rechts: holt das Bild mit Position rechts
 																									// durch die class Character bewegt sich Diggy in die entsprechende Richtung
@@ -593,32 +624,26 @@ public class Board extends JPanel implements ActionListener{
 
 			}else if (key == KeyEvent.VK_SPACE) {													// Taste -Space ruft die Funktion fire auf
 				fire();
-		
 			}else if (key == KeyEvent.VK_V) {														// 2 te Waffe = Schwertkampf in versch Richtungen
 				sword_play();
 			}
 
 			repaint();
 
-				if ((Jay.getY()==-BLOCK)||(Jay.getY()==0))  {	
+			if ((Jay.getY()==-BLOCK)||(Jay.getY()==0))  {	
 				if (lr.charAt(3)=='1') lr=lr.substring(0,3)+"2";									//Wenn der Spieler am Ausgang des 1. Raums ist dann ueberwechseln
 				else if (lr.charAt(3)=='2') lr=lr.substring(0,3)+'3';								//Wenn der Spieler am Ausgang des 2. Raums ist dann ueberwechseln
 				else if (lr.charAt(3)=='3') lr=lr.substring(0,3)+'4';								//Wenn der Spieler am Ausgang des 3. Raums ist dann ueberwechseln
 				else if (lr.charAt(3)=='4') lr=lr.substring(0,3)+'5';								//Wenn der Spieler am Ausgang des 4. Raums ist dann ueberwechseln
 				xruban=xruban+ruban;
 				xlife=xlife+life;
-				System.out.print("xruban = ");
-				System.out.println(xruban);
 				ruban=0;
-				System.out.print("ruban = ");
-				System.out.println(ruban);
 				loeschen(true);
 				try {
 					initWorld(Jay.getImage());
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}																					//world initialisieren 
-
 			}
 			if (Jay.getX() ==950 ){																	//Bedingung erfuellt nur am Ausgang des 2. Raums
 				if (lr.charAt(3)=='1') lr=lr.substring(0,3)+"2";									//Wenn der Spieler am Ausgang des 1. Raums ist dann ueberwechseln
@@ -627,13 +652,7 @@ public class Board extends JPanel implements ActionListener{
 				else if (lr.charAt(3)=='4') lr=lr.substring(0,3)+'5';								//Wenn der Spieler am Ausgang des 4. Raums ist dann ueberwechseln
 				xruban=xruban+ruban;
 				xlife=xlife+life;
-				System.out.print("xruban = ");
-				System.out.println(xruban);
-				System.out.print("ruban = ");
-				System.out.println(ruban);
 				ruban=0;
-				System.out.print("ruban = ");
-				System.out.println(ruban);
 				loeschen(true);
 				try {
 					initWorld(Jay.getImage());
@@ -641,19 +660,16 @@ public class Board extends JPanel implements ActionListener{
 					e1.printStackTrace();
 				}
 			}
-
 		}
-
-
 	}
+	
 	public void restartLevel(boolean test,Image image2) throws IOException {			
-		if (lr.length()==5){
+		/*if (lr.length()==5){
 			if (lr.charAt(3)=='2') lr=lr.substring(0, 3)+'1';
 			else if (lr.charAt(3)=='3') lr=lr.substring(0, 3)+'2';
-		}
+		}*/
 		loeschen(test);
 		initWorld(Jay.getImage());
-
 	}
 
 	 public void fire() {
@@ -669,8 +685,8 @@ public class Board extends JPanel implements ActionListener{
 		 	if(position==4){
 		 		shots.add(new Shot(Jay.getX(), Jay.getY() + BLOCK));	
 		 	    k = 11;}
-		 
-		}
+	}
+	 
 	 public void sword_play(){																		// Schwertkampf mit 4 Richtungen zum schiessen				
 	 
 	 	 	if(position==1){																		
@@ -699,7 +715,7 @@ public class Board extends JPanel implements ActionListener{
 	 public void actionPerformed(ActionEvent e) {													// zeichnet die Schuesse 
 
      ArrayList<Shot> shots = getShots();
-
+     
      for (int i = 0; i < shots.size(); i++) {
     	 Shot m = (Shot) shots.get(i);																// falss limit des Boards nicht ueberschritten
 		 																							// wird je nach Blickrichtung in die richtgige Richtungen angegriffen

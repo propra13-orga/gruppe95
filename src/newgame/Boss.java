@@ -10,7 +10,7 @@ public class Boss extends Movement  {
 	private int width;
 	private int height;
 	private int x, y;
-	ImageIcon u = new ImageIcon("src/Resources/Bossv.png");			// holt sich die noetigen Grafiken fuer den Checkpoint
+	ImageIcon u = new ImageIcon("src/Resources/bossv.png");			// holt sich die noetigen Grafiken fuer den Checkpoint
 	
 	public Boss(int x, int y){
 		super(x,y);
