@@ -170,16 +170,19 @@ public class Board extends JPanel implements ActionListener{
 			DialogueShop();
 		}
 		if (raum.charAt(yy*20+xx)=='h'){
-			life = life+1;
-			ruban = ruban - 30;
-			mana = true;
-			spend_herzen();
-		}
+			if(ruban >= 30){
+				life = life+1;
+				ruban = ruban - 30;
+				mana = true;
+				spend_herzen();
+			}
+			}
 		if (raum.charAt(yy*20+xx)=='q'){
+			if (ruban >= 20){
 			magic = magic + 1;
 			mana = true;
 			spend_mana();
-			ruban = ruban-20;
+			ruban = ruban-20;}
 		}
 		if (raum.charAt(yy*20+xx)=='m'){    														// wenn mana eingesammelt wird hat er mana und es ist dann verbraucht
 				magic = magic  + 1;
@@ -382,6 +385,7 @@ public class Board extends JPanel implements ActionListener{
 				heiltrank = new Heiltrank(x,y);
 				herzen.add(heiltrank);
 				x=x+BLOCK;
+				
 			}
 			else if(obj == 'k'){																	// Legt die Position des Charakters beim Tod fest
 				Monster = new Boss(x,y);
@@ -401,6 +405,7 @@ public class Board extends JPanel implements ActionListener{
 					manas.add(shopmana);
 					x=x+BLOCK;
 					
+					
 			}
 		}
 	}
@@ -419,6 +424,7 @@ public class Board extends JPanel implements ActionListener{
 		world.addAll(coins);
 		world.addAll(shopkeepers);
 		world.addAll(manas);
+		world.addAll(herzen);
 
 		for(int i = 0; i < world.size(); i++){														// Array world durchgehen um objekte zu zeichnen.
 
@@ -445,14 +451,14 @@ public class Board extends JPanel implements ActionListener{
 	       				g.drawImage(e.getImage(), e.getX(), e.getY(), this);
 	       			}
 
-	       			for (int i = 0; i < walls.size(); i++){										//  NICHT LOESCHEN FUER DAS TESTEN DER WAENDE 
+	       			for (int i = 0; i < walls.size(); i++){											//  NICHT LOESCHEN FUER DAS TESTEN DER WAENDE 
 
 	       				Wall w = (Wall) walls.get(i);
 	       				if (w.isVisible())
 	       				g.drawImage(w.getImage(), w.getX(), w.getY(), this);
 	       			}
 
-	       			for (int i = 0; i < coins.size(); i++){										// Muenzen sollen gezeichnet werden bei Tod
+	       			for (int i = 0; i < coins.size(); i++){											// Muenzen sollen gezeichnet werden bei Tod
 
 	       				Coin c = (Coin) coins.get(i);
 	       				if (c.isVisible())
