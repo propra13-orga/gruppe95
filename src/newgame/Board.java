@@ -93,7 +93,7 @@ public class Board extends JPanel implements ActionListener{
 	
 
 	public Board() throws IOException{
-		lr="l2r3";
+		lr="l1r1";
 		addKeyListener(new Ap());
 		setFocusable(true);		
 		initWorld(image4);
@@ -170,19 +170,16 @@ public class Board extends JPanel implements ActionListener{
 			DialogueShop();
 		}
 		if (raum.charAt(yy*20+xx)=='h'){
-			if(ruban >= 30){
 				life = life+1;
 				ruban = ruban - 30;
 				mana = true;
 				spend_herzen();
 			}
-			}
 		if (raum.charAt(yy*20+xx)=='q'){
-			if (ruban >= 20){
 			magic = magic + 1;
 			mana = true;
 			spend_mana();
-			ruban = ruban-20;}
+			ruban = ruban-20;
 		}
 		if (raum.charAt(yy*20+xx)=='m'){    														// wenn mana eingesammelt wird hat er mana und es ist dann verbraucht
 				magic = magic  + 1;
