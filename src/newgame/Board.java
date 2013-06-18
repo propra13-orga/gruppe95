@@ -590,16 +590,16 @@ public class Board extends JPanel implements ActionListener{
 		        		if(magic==1){																	// Beim Aufnehmen des ersten Manatrankes erhaelt Diggy 100 Gold
 		        			g.drawImage(trank, 970, 300, this);
 							xruban = + 30;
-						    w = " Du hast + 30 $ ! ";
+						    w = " Du erhältst einen Manatrank ! ";
 					        g.drawString(w,970,380);
 		        		}
 		        			if(magic==2){																// Beim Aufnehmen des zweiten Manatrankes erhaelt Diggy volles Leben
 		        				g.drawImage(trank,970,300,this);
 		        				g.drawImage(trank,1020,300, this);
-		        			    l = " Du erhaeltst volles Leben ! ";
+		        			    l = " Du erhaeltst einen weiteren Manatrank ";
     					        g.drawString(l,970,380);
-		        					if(need_life==1){
-		        						life = 3;
+		        					/*if(need_life==1){
+		        						life = 3;*/
 		        					}
 		        			}
 		        	 if(magic==3){																	// beim 3 mana soll er eine Waffe kriegen ??
@@ -610,9 +610,7 @@ public class Board extends JPanel implements ActionListener{
 		        	 if (magic > 3){
 		        		 magic = 3;
 		        	 }
-		       }
-		}else{																					 	// was bei Niederlage passieren soll..
-		}    
+		       }  
 }
 
     public ArrayList<Shot> getShots() {																// gibt die Schuesse  wieder
