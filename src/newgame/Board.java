@@ -43,7 +43,7 @@ public class Board extends JPanel implements ActionListener{
 	private int life=3, xlife;
 	private int magic=0;
 	private int k,z,posX,posY;
-	boolean ingame,mana,failed;
+	boolean ingame,mana,failed,get_sword;
 	private checkpoint check;
 	private Ghost Geist;
 	private Boss Monster;
@@ -63,6 +63,8 @@ public class Board extends JPanel implements ActionListener{
 	ImageIcon dl = new ImageIcon("src/Resources/digleft.png");
 	ImageIcon du = new ImageIcon("src/Resources/digup.png");
 	ImageIcon db = new ImageIcon("src/Resources/digb.png");
+	ImageIcon sw = new ImageIcon("src/Resources/sword.png");
+	ImageIcon co = new ImageIcon("src/Resources/Coin.png");
 	
 	
 	
@@ -90,6 +92,8 @@ public class Board extends JPanel implements ActionListener{
 	Image image6 = image = dl.getImage();
 	Image image7 = image = du.getImage();
 	Image image8 = image = db.getImage();
+	Image sword = image = sw.getImage();
+	Image coin = image = co.getImage();
 	
 
 	public Board() throws IOException{
@@ -513,104 +517,118 @@ public class Board extends JPanel implements ActionListener{
 	       			 			
 	}
     
-        public void paint(Graphics g){
-		super.paint(g);
 
-		if(ingame){																					// falls Spiel nicht verloren
-			buildWorld(g);																			// zeichnet Welt mit Punktestand..
-			if (raum.contains("k")){
-				if (lr=="l3r4") Monster_speed=2;
-				else Monster_speed=1;
-				movemonster();
-			}
-			if (raum.contains("w")){
-				if (lr=="l1r1") Geist_speed=2;
-				else Geist_speed=1;
-				movegeist();
-			}
-			if (raum.contains("r")){
-   				if (mx==0)mx=Jay.getX();
-   				if (my==0)my=Jay.getY();
-   				if (lr.charAt(1)=='3') {
-   					schuss_speed=4;
-   				}
-   				else if (lr.charAt(1)=='2'){
-   					schuss_speed=3;
-   					
-   				}
-   				else if (lr.charAt(1)=='1'){
-   					schuss_speed=2;
-   					
-   				}
-   				counter=+1;
-   				moveBall();
-   			} 
-			int countsmoney= ruban + xruban;
-		        String s,w,l;
 
-		        g.setFont(smallfont);																// Geldanzeige
-		        g.setColor(new Color(98,150,255));
-		        s = "Money: " + (countsmoney);
-		        g.drawString(s,970,160);
-		    	g.drawImage(schatz,970,180,this);													// zeichnet Welt mit Punktestand..
-			
-		    	int lifebar= life;
-		    	
-				String t;
-																									// Lebensanzeige
-				t = "Leben: " + (lifebar);
-				g.drawString(t,970,40);
-				
-				if(life > 3){
-					life = 3;
+    public void paint(Graphics g){
+	super.paint(g);
+
+	if(ingame){																					// falls Spiel nicht verloren
+		buildWorld(g);																			// zeichnet Welt mit Punktestand..
+		if (raum.contains("k")){
+			if (lr=="l3r4") Monster_speed=2;
+			else Monster_speed=1;
+			movemonster();
+		}
+		if (raum.contains("w")){
+			if (lr=="l1r1") Geist_speed=2;
+			else Geist_speed=1;
+			movegeist();
+		}
+		if (raum.contains("r")){
+				if (mx==0)mx=Jay.getX();
+				if (my==0)my=Jay.getY();
+				if (lr.charAt(1)=='3') {
+					schuss_speed=4;
 				}
-				if(life==3){																		// zeichnet 3 Herzchen fuer 3 Leben
+				else if (lr.charAt(1)=='2'){
+					schuss_speed=3;
+					
+				}
+				else if (lr.charAt(1)=='1'){
+					schuss_speed=2;
+					
+				}
+				counter=+1;
+				moveBall();
+			} 
+		int countsmoney= ruban + xruban;
+	        String s,w,l,k;
+
+	        g.setFont(smallfont);																// Geldanzeige
+	        g.setColor(new Color(98,150,255));
+	        s = "Money: " + (countsmoney);
+	        g.drawString(s,970,160);
+	    	g.drawImage(schatz,970,180,this);													// zeichnet Welt mit Punktestand..
+		
+	    	int lifebar= life;
+	    	
+			String t;
+																								// Lebensanzeige
+			t = "Leben: " + (lifebar);
+			g.drawString(t,970,40);
+			
+			if(life > 3){
+				life = 3;
+			}
+			if(life==3){																		// zeichnet 3 Herzchen fuer 3 Leben
+			g.drawImage(herz1,970,60,this);
+			g.drawImage(herz1,1020, 60, this);
+			g.drawImage(herz1,1070, 60, this);
+			}
+			if(life==2){						
 				g.drawImage(herz1,970,60,this);
 				g.drawImage(herz1,1020, 60, this);
-				g.drawImage(herz1,1070, 60, this);
-				}
-				if(life==2){						
-					g.drawImage(herz1,970,60,this);
-					g.drawImage(herz1,1020, 60, this);
-				}
-				need_life = 1;																		// need_life flag fuer das 2te Mana gibt volles Leben und zeichnet Herzchen
-				if(life==1){
-					g.drawImage(herz1,970,60,this);
-				}
-				need_life = 1;
-			
-				   String mes;
-	   		        g.setFont(smallfont);																// Manaanzeige
-	   		        g.setColor(new Color(98,150,255));
-	   		        mes = "Mana: " + (magic)+ " von 3 verbraucht";
-	   		        g.drawString(mes,970,280);
-	   		 
-		        	if(mana==true){
-		        		
-		        		if(magic==1){																	// Beim Aufnehmen des ersten Manatrankes erhaelt Diggy 100 Gold
-		        			g.drawImage(trank, 970, 300, this);
-							xruban = + 30;
-						    w = " Du erhältst einen Manatrank ! ";
-					        g.drawString(w,970,380);
-		        		}
-		        			if(magic==2){																// Beim Aufnehmen des zweiten Manatrankes erhaelt Diggy volles Leben
-		        				g.drawImage(trank,970,300,this);
-		        				g.drawImage(trank,1020,300, this);
-		        			    l = " Du erhaeltst einen weiteren Manatrank ";
-    					        g.drawString(l,970,380);
-		        					/*if(need_life==1){
-		        						life = 3;*/
-		        					}
-		        			}
-		        	 if(magic==3){																	// beim 3 mana soll er eine Waffe kriegen ??
-		        			g.drawImage(trank,970,300,this);
-		        			g.drawImage(trank,1020, 300, this);
-		        			g.drawImage(trank,1070, 300, this);
-		        	 }
-		        	 if (magic > 3){
-		        		 magic = 3;
-		        	 }
-		       }  
+			}
+			need_life = 1;																		// need_life flag fuer das 2te Mana gibt volles Leben und zeichnet Herzchen
+			if(life==1){
+				g.drawImage(herz1,970,60,this);
+			}
+			need_life = 1;
+		
+			   String mes;
+   		        g.setFont(smallfont);																// Manaanzeige
+   		        g.setColor(new Color(98,150,255));
+   		        mes = "Mana: " + (magic)+ " von 3 verbraucht";
+   		        g.drawString(mes,970,280);
+   		 
+	        	if(mana==true){
+	        		
+	        		if(magic==1){																	// Beim Aufnehmen des ersten Manatrankes erhaelt Diggy 100 Gold
+	        			g.drawImage(trank, 970, 300, this);
+	        			g.drawImage(coin,970,400,this);
+						xruban = + 30;
+					    w = " Du hast + 30 $ ! ";
+				        g.drawString(w,970,380);
+	        		}
+	        			if(magic==2){																// Beim Aufnehmen des zweiten Manatrankes erhaelt Diggy volles Leben
+	        				g.drawImage(trank,970,300,this);
+	        				g.drawImage(trank,1020,300, this);
+	        				g.drawImage(coin,970,400,this);
+	        				g.drawImage(herz1,1020,400, this);
+	        			    l = " Du erhaeltst volles Leben ! ";
+					        g.drawString(l,970,380);
+	        					if(need_life==1){
+	        						life = 3;
+	        					}
+	        			}
+	        	 if(magic==3){																	// beim 3 mana soll er eine Waffe kriegen ??
+	        			g.drawImage(trank,970,300,this);
+	        			g.drawImage(trank,1020, 300, this);
+	        			g.drawImage(trank,1070, 300, this);
+	        			g.drawImage(coin,970,400,this);
+	        			g.drawImage(herz1,1020,400, this);
+	        			g.drawImage(sword,1070, 400, this);
+	        			  k = " Du hast ein Schwert!";
+					        g.drawString(k,970,380);
+					        get_sword = true;
+	        			
+	        	 }
+	        	 if (magic > 3){			
+	        		 magic = 3;
+	        	 }
+	       }
+	}else{																					 	// was bei Niederlage passieren soll..
+	}    
 }
 
     public ArrayList<Shot> getShots() {																// gibt die Schuesse  wieder
@@ -658,7 +676,7 @@ public class Board extends JPanel implements ActionListener{
 
 			}else if (key == KeyEvent.VK_SPACE) {													// Taste -Space ruft die Funktion fire auf
 				fire();
-			}else if (key == KeyEvent.VK_V) {														// 2 te Waffe = Schwertkampf in versch Richtungen
+			}else if (key == KeyEvent.VK_V && get_sword==true) {														// 2 te Waffe = Schwertkampf in versch Richtungen
 				sword_play();
 			}
 
