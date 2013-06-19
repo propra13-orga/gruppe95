@@ -97,11 +97,8 @@ public class Board extends JPanel implements ActionListener{
 	
 
 	public Board() throws IOException{
-<<<<<<< HEAD
-		lr="l1r1";
-=======
-		lr="l1r1";																		//start des Levels in Level.Raum
->>>>>>> 1d2ef526a297842a5722c600518a9226cdc13c10
+
+		lr="l1r4";																//start des Levels in Level.Raum		
 		addKeyListener(new Ap());
 		setFocusable(true);		
 		initWorld(image4);																//Status des Spielers bei Start, z.B. ohne Mana
@@ -142,8 +139,6 @@ public class Board extends JPanel implements ActionListener{
 			Jay.move(movx,movy);																		    							//erst wenn es kein Stueck Mauer, keinen NPC/Ladenbesitzer oder einen Ein-Ausgang gibt(entweder xx oder yy <0 ist) darf/kann sich die Spielfigur bewegen
 			if (raum.charAt(yy*20+xx)=='a'){
 				ruban= ruban+1;
-				System.out.print("ruban = ");
-				System.out.println(ruban);
 				if (raum.contains("@") )
 				{	int c =raum.lastIndexOf("@");						
 					raum=raum.substring(0,c)+' '+raum.substring(c+1);
@@ -190,14 +185,11 @@ public class Board extends JPanel implements ActionListener{
 				else{
 				}
 			}
-<<<<<<< HEAD
+
 		
 		if (raum.charAt(yy*20+xx)=='q'){
 			if (ruban >= 20){
-=======
-		if (raum.charAt(yy*20+xx)=='q'){															//Nimmt bei Kollision den Manatrank auf und gibt 20 Gold aus
-			if((ruban >= 20)||(xruban >=20)){
->>>>>>> 1d2ef526a297842a5722c600518a9226cdc13c10
+															//Nimmt bei Kollision den Manatrank auf und gibt 20 Gold aus
 			magic = magic + 1;
 			mana = true;
 			spend_mana();
@@ -252,6 +244,7 @@ public class Board extends JPanel implements ActionListener{
 		else if (Jay.getX()<Monster.getX()){
 			Monster.move(-Monster_speed,0);
 		}
+		kollision_boss_spieler();
 	}
 		
 		public void movegeist() {
@@ -297,17 +290,38 @@ public class Board extends JPanel implements ActionListener{
 			ball.setY(Monster.getY());
 			mx=0;my=0;
 		}
-		if (counter % 150==0){
+		/*if (counter % 150==0){
 			ball.setX(Geist.getX());
 			ball.setY(Geist.getY());
 			mx=0;my=0;
-		}
+		}*/
 	}
 	
 			
 	
 	private void kollision_ball_spieler() {
 		if ((Math.abs(Jay.getX()-ball.getX())<50)&&(Math.abs(Jay.getY()-ball.getY())<50)){
+			if(life==1){
+				
+				Game_over();
+				
+				failed=true;
+				try {
+					restartLevel(true,Jay.getImage());
+				} catch (IOException e1) {
+
+					e1.printStackTrace();
+				}
+			}
+			else{
+				life=life-1;
+			}
+		}
+	}
+	
+	
+	private void kollision_boss_spieler() {
+		if ((Math.abs(Jay.getX()-Monster.getX())<50)&&(Math.abs(Jay.getY()-Monster.getY())<50)){
 			if(life==1){
 				
 				Game_over();
@@ -450,6 +464,7 @@ public class Board extends JPanel implements ActionListener{
 			}
 			else if(obj == 'k'){																	// Legt die Position des Bosses beim Tod fest
 				Monster = new Boss(x,y);
+				boss_leben=10;
 				x=x+BLOCK;
 			}
 			else if(obj == 'w'){																	// Legt die Position des Bosses beim Tod fest
@@ -534,58 +549,6 @@ public class Board extends JPanel implements ActionListener{
 	       			 			
 	}
     
-<<<<<<< HEAD
-        public void paint(Graphics g){
-		super.paint(g);
-
-		if(ingame){																					// falls Spiel nicht verloren
-			buildWorld(g);																			// zeichnet Welt mit Punktestand..
-			if (raum.contains("k")){
-				if (lr=="l3r4") Monster_speed=2;
-				else Monster_speed=1;
-				movemonster();
-			}
-			if (raum.contains("r")){
-   				if (mx==0)mx=Jay.getX();
-   				if (my==0)my=Jay.getY();
-   				if (lr.charAt(1)=='3') {
-   					schuss_speed=4;
-   				}
-   				else if (lr.charAt(1)=='2'){
-   					schuss_speed=3;
-   					
-   				}
-   				else if (lr.charAt(1)=='1'){
-   					schuss_speed=2;
-   					
-   				}
-   				counter+=1;
-   				moveBall();
-   			} 
-			int countsmoney= ruban + xruban;
-		        String s,w,l;
-
-		        g.setFont(smallfont);																// Geldanzeige
-		        g.setColor(new Color(98,150,255));
-		        s = "Money: " + (countsmoney);
-		        g.drawString(s,970,160);
-		    	g.drawImage(schatz,970,180,this);													// zeichnet Welt mit Punktestand..
-			
-		    	int lifebar= life;
-		    	
-				String t;
-																									// Lebensanzeige
-				t = "Leben: " + (lifebar);
-				g.drawString(t,970,40);
-				
-				if(life > 3){
-					life = 3;
-				}
-				if(life==3){																		// zeichnet 3 Herzchen fuer 3 Leben
-				g.drawImage(herz1,970,60,this);
-				g.drawImage(herz1,1020, 60, this);
-				g.drawImage(herz1,1070, 60, this);
-=======
 
 
     public void paint(Graphics g){
@@ -594,7 +557,7 @@ public class Board extends JPanel implements ActionListener{
 	if(ingame){																					// falls Spiel nicht verloren
 		buildWorld(g);																			// zeichnet Welt mit Punktestand..
 		if (raum.contains("k")){
-			if (lr=="l3r4") Monster_speed=2;
+			if (lr.charAt(1)=='3') Monster_speed=2;
 			else Monster_speed=1;
 			movemonster();
 		}
@@ -608,7 +571,6 @@ public class Board extends JPanel implements ActionListener{
 				if (my==0)my=Jay.getY();
 				if (lr.charAt(1)=='3') {
 					schuss_speed=4;
->>>>>>> 1d2ef526a297842a5722c600518a9226cdc13c10
 				}
 				else if (lr.charAt(1)=='2'){
 					schuss_speed=3;
@@ -618,7 +580,7 @@ public class Board extends JPanel implements ActionListener{
 					schuss_speed=2;
 					
 				}
-				counter=+1;
+				counter=counter+1;
 				moveBall();
 			} 
 		int countsmoney= ruban + xruban;
@@ -756,7 +718,8 @@ public class Board extends JPanel implements ActionListener{
 				if (lr.charAt(3)=='1') lr=lr.substring(0,3)+"2";									//Wenn der Spieler am Ausgang des 1. Raums ist dann ueberwechseln
 				else if (lr.charAt(3)=='2') lr=lr.substring(0,3)+'3';								//Wenn der Spieler am Ausgang des 2. Raums ist dann ueberwechseln
 				else if (lr.charAt(3)=='3') lr=lr.substring(0,3)+'4';								//Wenn der Spieler am Ausgang des 3. Raums ist dann ueberwechseln
-				else if (lr.charAt(3)=='4') lr=lr.substring(0,3)+'5';								//Wenn der Spieler am Ausgang des 4. Raums ist dann ueberwechseln
+				else if (lr.charAt(3)=='4') lr=lr.substring(0,3)+'5';//Wenn der Spieler am Ausgang des 4. Raums ist dann ueberwechseln
+				
 				xruban=xruban+ruban;
 				xlife=xlife+life;
 				ruban=0;
@@ -786,10 +749,6 @@ public class Board extends JPanel implements ActionListener{
 	}
 	
 	public void restartLevel(boolean test,Image image2) throws IOException {			
-		/*if (lr.length()==5){
-			if (lr.charAt(3)=='2') lr=lr.substring(0, 3)+'1';
-			else if (lr.charAt(3)=='3') lr=lr.substring(0, 3)+'2';
-		}*/
 		loeschen(test);
 		initWorld(Jay.getImage());
 	}
@@ -853,6 +812,9 @@ public class Board extends JPanel implements ActionListener{
     	 	check_shot_vs_wall();																	// Kollisionabfrage mit Schuss
 			check_shot_vs_enemy();
 			check_shot_vs_coin();
+			if (raum.contains("k")){
+				check_shot_vs_boss();
+			}
 	}
 			 ArrayList<Sword> swords = getSwords()
 					 ;
@@ -965,7 +927,35 @@ public class Board extends JPanel implements ActionListener{
 			        }
 			    }
 			}
-	
+
+		
+		private int boss_leben;
+		
+		public void check_shot_vs_boss() {																
+			ArrayList<Shot> shots = getShots();
+
+		    for (int i = 0; i < shots.size(); i++) {
+		        Shot m = (Shot) shots.get(i);
+		        Rectangle r1 = m.getBounds();
+		        
+		        if ((Math.abs(r1.x-Monster.getX())<50)&&(Math.abs(r1.y-Monster.getY())<50)) {													 		
+		        		boss_leben=boss_leben-1;
+		        		if (boss_leben==0){
+		        			if (lr.charAt(3)=='5')lr=lr.substring(0,3)+'6';
+		        			else if (lr.charAt(3)=='4')lr=lr.substring(0, 3)+'5';
+		        			loeschen(true);
+		        			try {
+		        				initWorld(Jay.getImage());
+		        			} catch (IOException e1) {
+
+		        				e1.printStackTrace();
+		        			}
+		        		}
+		        }
+	        }
+
+		}
+		
 		public void check_shot_vs_wall() {																// Wandkollision
 
 			ArrayList<Shot> shots = getShots();
