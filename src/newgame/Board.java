@@ -154,20 +154,20 @@ public class Board extends JPanel implements ActionListener{
 		}
 		if (raum.charAt(yy*20+xx)=='*'){    														// Kollision mit dem Gegner, Neustart des Spiels
 			//Game_over();
-			//life=life-1;
-			if(life!=0){
+			life=life-1;
+			if(life==0){
 				failed=true;
 				try {
 					
 					restartLevel(true,Jay.getImage());
-					life=life-1;
+					//life=life-1;
 				} catch (IOException e1) {
 					
 					e1.printStackTrace();
 				}
 			}
 			else{
-				Game_over();
+				//Game_over();
 			}
 	   }
 		if (raum.charAt(yy*20+xx)=='~'){    														//startet bei Kollision den Dialog des NPC
