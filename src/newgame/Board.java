@@ -98,7 +98,7 @@ public class Board extends JPanel implements ActionListener{
 
 	public Board() throws IOException{
 
-		lr="l1r4";																//start des Levels in Level.Raum		
+		lr="l1r1";																//start des Levels in Level.Raum		
 		addKeyListener(new Ap());
 		setFocusable(true);		
 		initWorld(image4);																//Status des Spielers bei Start, z.B. ohne Mana
@@ -256,7 +256,7 @@ public class Board extends JPanel implements ActionListener{
 		else if (Jay.getY()>Geist.getY()){
 			Geist.move(0,Geist_speed);
 		}
-		if (Jay.getX()>Geist.getX()){
+		else if (Jay.getX()>Geist.getX()){
 			Geist.move(Geist_speed,0);
 		}
 		else if (Jay.getX()<Geist.getX()){
