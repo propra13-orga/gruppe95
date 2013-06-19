@@ -9,6 +9,7 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -100,7 +101,8 @@ public class Board extends JPanel implements ActionListener{
 
 		lr="l1r1";																//start des Levels in Level.Raum		
 		addKeyListener(new Ap());
-		setFocusable(true);		
+		setFocusable(true);
+		setDoubleBuffered(true);
 		initWorld(image4);																//Status des Spielers bei Start, z.B. ohne Mana
 		ingame = true;
 		mana = false;
@@ -552,7 +554,7 @@ public class Board extends JPanel implements ActionListener{
 
     public void paint(Graphics g){
 	super.paint(g);
-
+	
 	if(ingame){																					// falls Spiel nicht verloren
 		buildWorld(g);																			// zeichnet Welt mit Punktestand..
 		if (raum.contains("k")){
@@ -635,23 +637,24 @@ public class Board extends JPanel implements ActionListener{
 	        				g.drawImage(trank,970,300,this);
 	        				g.drawImage(trank,1020,300, this);
 	        				g.drawImage(coin,970,400,this);
-	        				g.drawImage(herz1,1020,400, this);
-	        			    l = " Du erhaeltst volles Leben ! ";
-					        g.drawString(l,970,380);
-	        					if(need_life==1){
-	        						life = 3;
-	        					}
+	        				g.drawImage(sword,1020, 400, this);
+	        				  k = " Du hast ein Schwert!";
+	        				  g.drawString(k,970,380);
+	        				  get_sword = true;
+	        				
 	        			}
 	        	 if(magic==3){																	// beim 3 mana soll er eine Waffe kriegen ??
 	        			g.drawImage(trank,970,300,this);
 	        			g.drawImage(trank,1020, 300, this);
 	        			g.drawImage(trank,1070, 300, this);
 	        			g.drawImage(coin,970,400,this);
-	        			g.drawImage(herz1,1020,400, this);
-	        			g.drawImage(sword,1070, 400, this);
-	        			  k = " Du hast ein Schwert!";
-					        g.drawString(k,970,380);
-					        get_sword = true;
+	        			g.drawImage(sword,1020,400, this);
+	        			g.drawImage(herz1,1070, 400, this);
+	        			   l = " Du erhaeltst volles Leben ! ";
+	        			   g.drawString(l,970,380);
+					   	if(need_life==1){
+    						life = 3;
+    					}
 	        			
 	        	 }
 	        	 if (magic > 3){			
@@ -660,6 +663,8 @@ public class Board extends JPanel implements ActionListener{
 	       }
 	}else{																					 	// was bei Niederlage passieren soll..
 	}    
+    Toolkit.getDefaultToolkit().sync();
+    g.dispose();
 }
 
     public ArrayList<Shot> getShots() {																// gibt die Schuesse  wieder
