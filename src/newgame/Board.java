@@ -190,7 +190,7 @@ public class Board extends JPanel implements ActionListener{
 		
 		if (raum.charAt(yy*20+xx)=='q'){
 			if ((ruban >= 20)||(xruban>=20)){
-															//Nimmt bei Kollision den Manatrank auf und gibt 20 Gold aus
+																									//Nimmt bei Kollision den Manatrank auf und gibt 20 Gold aus
 			magic = magic + 1;
 			mana = true;
 			spend_mana();
