@@ -285,7 +285,7 @@ public class Board extends JPanel implements ActionListener{
 		
 		kollision_ball_spieler();
 		
-		if (counter % 1000==0){
+		if (counter % 150==0){
 			ball.setX(Monster.getX());
 			ball.setY(Monster.getY());
 			mx=0;my=0;
@@ -496,8 +496,8 @@ public class Board extends JPanel implements ActionListener{
 		g.drawImage(img, 0, 0, null);																//Background Image zeichnen
 		ArrayList<Movement> world = new ArrayList<Movement>();
 
-		world.add(check);																			//im levelend soll es kein Spielfigur geben
-		world.add(Jay);
+		if (raum.contains("b")==true)world.add(check);																			//im levelend soll es kein Spielfigur geben
+		if (lr!="l3r6")world.add(Jay);
 		if (raum.contains("k")) world.add(Monster);
 		if (raum.contains("r")) world.add(ball);
 		if (raum.contains("w")) world.add(Geist);
@@ -557,7 +557,7 @@ public class Board extends JPanel implements ActionListener{
 	if(ingame){																					// falls Spiel nicht verloren
 		buildWorld(g);																			// zeichnet Welt mit Punktestand..
 		if (raum.contains("k")){
-			if (lr.charAt(1)=='3') Monster_speed=2;
+			if (lr.charAt(1)=='3') Monster_speed=1;
 			else Monster_speed=1;
 			movemonster();
 		}
