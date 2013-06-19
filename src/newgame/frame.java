@@ -64,6 +64,7 @@ if (e.getSource()==beenden)																// schliesst Menue
 System.exit(0);
 }
 
+
 public static void game() throws IOException{																// Fenster fuer's Spiel
 	JFrame game = new JFrame("PLAY DUNGEON CRAWLER");
 	game.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);	
@@ -73,6 +74,5 @@ public static void game() throws IOException{																// Fenster fuer's S
 	game.setLocationRelativeTo(null);
 	game.add(new Board());																// oeffnet Klasse board (das eigentliche Spiel)
 	//game.removeAll();
-
 	}
 }

@@ -285,7 +285,7 @@ public class Board extends JPanel implements ActionListener{
 		
 		kollision_ball_spieler();
 		
-		if (counter % 150==0){
+		if (counter % 1000==0){
 			ball.setX(Monster.getX());
 			ball.setY(Monster.getY());
 			mx=0;my=0;
@@ -1076,8 +1076,8 @@ public class Board extends JPanel implements ActionListener{
 		}
 
 public void Game_over(){
-
-	JFrame Game_over = new JFrame();
+	
+	 JFrame Game_over = new JFrame();
 
 	 Game_over.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	 Game_over.setSize(500,500);

@@ -1,10 +1,14 @@
 package newgame;
 
 import java.awt.Color;
+import java.awt.Image;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class Game_over extends JPanel implements ActionListener {
@@ -13,15 +17,29 @@ public class Game_over extends JPanel implements ActionListener {
 	
 	public Game_over(){
 	
-	setBackground(Color.DARK_GRAY);				// hier kann ein Hintergrundbild 'Game Over' hinzugefügt werden
-	setFocusable(true);
+		setBackground(Color.BLACK);				// hier kann ein Hintergrundbild 'Game Over' hinzugefï¿½gt werden
+		
+		
+		setFocusable(true);
+		
 
-		ok = new JButton("OK");						
+		 ok = new JButton("OK");						
 		 ok.setFocusPainted(false);
 		 ok.setBackground(Color.BLACK);
 		 ok.setForeground(Color.RED);
 		 ok.addActionListener(this);
 		 add(ok);
+		 
+		 JButton over = new JButton("Game Over");
+		 over.setLocation(200, 0);
+		 over.setIcon(new ImageIcon("src/Resources/game_over.png"));
+		 over.setBackground(Color.DARK_GRAY);
+		 over.setForeground(Color.white);
+		 over.setBorderPainted(false);
+		 over.setBounds(200, 200, 200, 200);
+		 add(over);
+		 
+		 
 	}
 
 	@Override
@@ -31,7 +49,7 @@ public class Game_over extends JPanel implements ActionListener {
 	}
 }
 	
-	public  void restart_frame(){								// Methode für das Neusart des Menues
+	public  void restart_frame(){								// Methode fï¿½r das Neusart des Menues
 	 new frame("DUNGEON CRAWLER *Menue*");
 	}
 }
