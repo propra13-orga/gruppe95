@@ -72,6 +72,7 @@ public static void game() throws IOException{																// Fenster fuer's S
 	//game.getContentPane().setBackground(Color.LIGHT_GRAY);
 	game.setLocationRelativeTo(null);
 	game.add(new Board());																// oeffnet Klasse board (das eigentliche Spiel)
+	//game.removeAll();
 
 	}
 }

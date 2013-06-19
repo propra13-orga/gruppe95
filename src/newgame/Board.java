@@ -93,7 +93,7 @@ public class Board extends JPanel implements ActionListener{
 	
 
 	public Board() throws IOException{
-		lr="l2r3";
+		lr="l1r1";
 		addKeyListener(new Ap());
 		setFocusable(true);		
 		initWorld(image4);
@@ -152,16 +152,21 @@ public class Board extends JPanel implements ActionListener{
 		}
 		if (raum.charAt(yy*20+xx)=='*'){    														// Kollision mit dem Gegner, Neustart des Spiels
 			//Game_over();
-			life=life-1;
-			if(life==0){
-			failed=true;
-			try {
-				restartLevel(true,Jay.getImage());
-			} catch (IOException e1) {
-
-				e1.printStackTrace();
+			//life=life-1;
+			if(life!=0){
+				failed=true;
+				try {
+					
+					restartLevel(true,Jay.getImage());
+					life=life-1;
+				} catch (IOException e1) {
+					
+					e1.printStackTrace();
+				}
 			}
-		}
+			else{
+				Game_over();
+			}
 	   }
 		if (raum.charAt(yy*20+xx)=='~'){    														//startet bei Kollision den Dialog des NPC
 			Dialogue();
@@ -177,6 +182,7 @@ public class Board extends JPanel implements ActionListener{
 				spend_herzen();
 			}
 			}
+		
 		if (raum.charAt(yy*20+xx)=='q'){
 			if (ruban >= 20){
 			magic = magic + 1;
@@ -205,12 +211,8 @@ public class Board extends JPanel implements ActionListener{
 		}
 		else if (raum.charAt(yy*20+xx)=='b'){														//speichert Status des Raumes mit Muenzen, Gegner und Position
 			xruban=xruban+ruban;															
-			xlife=xlife+life;
-			System.out.print("xruban = ");
-			System.out.println(xruban);
+			//xlife=xlife+life;
 			ruban=0;
-			System.out.print("ruban = ");
-			System.out.println(ruban);
 			posX=Jay.getX();
 			posY=Jay.getY();
 			rooms=raum;
@@ -242,13 +244,13 @@ public class Board extends JPanel implements ActionListener{
 	public void moveBall() {
 			
 		if (ball.getX()<mx){
-			ball.move(4, 0);
+			ball.move(schuss_speed, 0);
 		}
 		else if (ball.getX()>mx){
-			ball.move(-4, 0);
+			ball.move(-schuss_speed, 0);
 		}
 		if (ball.getY()<my){
-			ball.move(0, 4);
+			ball.move(0, schuss_speed);
 		}
 		else if (ball.getY()>my){
 			ball.move(0,-schuss_speed);
@@ -264,10 +266,13 @@ public class Board extends JPanel implements ActionListener{
 	}
 	
 			
+	
 	private void kollision_ball_spieler() {
 		if ((Math.abs(Jay.getX()-ball.getX())<50)&&(Math.abs(Jay.getY()-ball.getY())<50)){
-			life=life-1;
-			if(life==0){
+			if(life==1){
+				
+				Game_over();
+				
 				failed=true;
 				try {
 					restartLevel(true,Jay.getImage());
@@ -275,6 +280,9 @@ public class Board extends JPanel implements ActionListener{
 
 					e1.printStackTrace();
 				}
+			}
+			else{
+				life=life-1;
 			}
 		}
 	}
@@ -506,7 +514,7 @@ public class Board extends JPanel implements ActionListener{
    					schuss_speed=2;
    					
    				}
-   				counter=+1;
+   				counter+=1;
    				moveBall();
    			} 
 			int countsmoney= ruban + xruban;
