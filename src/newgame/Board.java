@@ -46,7 +46,7 @@ public class Board extends JPanel implements ActionListener{
 	private int k,z,posX,posY;
 	boolean ingame,mana,failed,get_sword;
 	private checkpoint check;
-	private Ghost Geist;
+	private Ghost Geist,geist2;
 	private Boss Monster;
 	private Ball ball;
 	Font smallfont = new Font("Helvetica", Font.BOLD, 17);
@@ -145,6 +145,10 @@ public class Board extends JPanel implements ActionListener{
 				{	int c =raum.lastIndexOf("@");						
 					raum=raum.substring(0,c)+' '+raum.substring(c+1);
 					raum=raum.substring(0,yy*20+xx)+'@'+raum.substring(yy*20+xx+1);
+					g1x=Geist.getX();
+					g2x=geist2.getX();
+					g1y=Geist.getY();
+					g2y=geist2.getY();
 					try {
 						restartLevel(false,Jay.getImage());
 					} catch (IOException e1) {
@@ -248,22 +252,33 @@ public class Board extends JPanel implements ActionListener{
 		kollision_boss_spieler();
 	}
 		
-		public void movegeist() {
+	public void MoveGeist(Ghost b) {
+		if (counter<50)
+			b.move(0, -1);
+		if ((counter>50)&&(counter<200))b.move(-1, 0);
 			
+		if ((counter>200)&&(counter<250))b.move(0, 1);
 		
-		if (Jay.getY()<Geist.getY()){
-			Geist.move(0,-Geist_speed);
+		if (counter>250)b.move(1, 0);
+		if (counter==400)counter=0;
+	}
+	public void movegeist(Ghost b) {
+		int xx=b.getX()/50;
+		int yy=b.getY()/50;
+		 if ((Jay.getX()>b.getX())&&(raum.charAt(yy*20+xx+1)!='#')){
+				b.move(Geist_speed,0);
+			}
+		else if ((Jay.getY()>b.getY())&&(raum.charAt((yy+1)*20+xx)!='#')){
+			b.move(0,Geist_speed);
 		}
-		else if (Jay.getY()>Geist.getY()){
-			Geist.move(0,Geist_speed);
+		else if ((Jay.getY()<b.getY())&&(raum.charAt((yy-1)*20+xx)!='#')){
+			b.move(0,-Geist_speed);
 		}
-		else if (Jay.getX()>Geist.getX()){
-			Geist.move(Geist_speed,0);
+		else if ((Jay.getX()<b.getX())&&(raum.charAt(yy*20+xx-1)!='#')){
+			b.move(-Geist_speed,0);
 		}
-		else if (Jay.getX()<Geist.getX()){
-			Geist.move(-Geist_speed,0);
-		}
-		
+		else if (raum.charAt((yy-1)*20+xx)!='#') b.move(0,-Geist_speed);
+	
 	}
 	
 	private int mx,my,counter,Monster_speed,Geist_speed,schuss_speed;
@@ -291,11 +306,6 @@ public class Board extends JPanel implements ActionListener{
 			ball.setY(Monster.getY());
 			mx=0;my=0;
 		}
-		/*if (counter % 150==0){
-			ball.setX(Geist.getX());
-			ball.setY(Geist.getY());
-			mx=0;my=0;
-		}*/
 	}
 	
 			
@@ -472,6 +482,10 @@ public class Board extends JPanel implements ActionListener{
 				Geist = new Ghost(x,y);
 				x=x+BLOCK;
 			}
+			else if(obj == 'v'){																	// Legt die Position des Bosses beim Tod fest
+				geist2 = new Ghost(x,y);
+				x=x+BLOCK;
+			}
 			else if(obj == 'r'){																	
 				 ball = new Ball(x,y);
 				x=x+BLOCK;
@@ -501,7 +515,12 @@ public class Board extends JPanel implements ActionListener{
 		if (lr!="l3r6")world.add(Jay);
 		if (raum.contains("k")) world.add(Monster);
 		if (raum.contains("r")) world.add(ball);
-		if (raum.contains("w")) world.add(Geist);
+		if (raum.contains("w")) {
+			world.add(Geist);
+		}
+		if (raum.contains("v")) {
+			world.add(geist2);
+		}
 		world.addAll(keys);
 		world.addAll(wizards);
 		world.addAll(coins);
@@ -547,7 +566,7 @@ public class Board extends JPanel implements ActionListener{
 	       				if (c.isVisible())
 	       				g.drawImage(c.getImage(), c.getX(), c.getY(), this);
 	       			}
-	       			 			
+	      			 			
 	}
     
 
@@ -558,14 +577,37 @@ public class Board extends JPanel implements ActionListener{
 	if(ingame){																					// falls Spiel nicht verloren
 		buildWorld(g);																			// zeichnet Welt mit Punktestand..
 		if (raum.contains("k")){
-			if (lr.charAt(1)=='3') Monster_speed=1;
+			if (lr.charAt(1)=='3') Monster_speed=2;
 			else Monster_speed=1;
 			movemonster();
 		}
 		if (raum.contains("w")){
-			if (lr=="l1r1") Geist_speed=2;
+			if (lr.charAt(1)=='1') Geist_speed=1;
+			else if (lr.charAt(1)=='2')Geist_speed=1;
 			else Geist_speed=1;
-			movegeist();
+			if (g1x!=0){
+				Geist.setX(g1x);
+				g1x=0;
+			}
+			if (g1y!=0){
+				Geist.setY(g1y);
+				g1y=0;
+			}
+			MoveGeist(Geist);
+		}
+		if (raum.contains("v")){
+			if (lr.charAt(1)=='1') Geist_speed=1;
+			else if (lr.charAt(1)=='2')Geist_speed=1;
+			else Geist_speed=1;
+			if (g2x!=0){
+				geist2.setX(g2x);
+				g2x=0;
+			}
+			if (g2y!=0){
+				geist2.setY(g2y);
+				g2y=0;
+			}
+			movegeist(geist2);
 		}
 		if (raum.contains("r")){
 				if (mx==0)mx=Jay.getX();
@@ -581,9 +623,10 @@ public class Board extends JPanel implements ActionListener{
 					schuss_speed=2;
 					
 				}
-				counter=counter+1;
+				//counter=counter+1;
 				moveBall();
 			} 
+		counter=counter+1;
 		int countsmoney= ruban + xruban;
 	        String s,w,l,k;
 
@@ -1008,7 +1051,7 @@ public class Board extends JPanel implements ActionListener{
 		
 		        }
 			}
-		
+		private int g1x,g2x,g1y,g2y;
 		public void check_sword_vs_enemy() {	
 			 ArrayList<Sword> swords = getSwords();
 			
@@ -1020,21 +1063,24 @@ public class Board extends JPanel implements ActionListener{
 		            int xx = (int) ((r1.getX())/BLOCK);																	//xx und yy sind die imaginaere Koordinaten innerhalb des Strings Variable (level).
 	        		int yy=(int)(r1.getY())/BLOCK;
 
-	        		if (raum.charAt(yy*20+xx)=='*') {																	// wenn ein Gegner angeschossen wird wird der Gegner im txt mit ' ' ersetzt	Diggy bleibt dort wo er war															
-		        		int xxx = ((Jay.getX())/BLOCK);																	//xx und yy sind die imaginaere Koordinaten innerhalb des Strings Variable (level).
+	        		if (raum.charAt(yy*20+xx)=='*') {	// wenn ein Gegner angeschossen wird wird der Gegner im txt mit ' ' ersetzt	Diggy bleibt dort wo er war															
+	        			g1x=Geist.getX();
+		    			g2x=geist2.getX();
+		    			g1y=Geist.getY();
+		    			g2y=geist2.getY();
+	        			int xxx = ((Jay.getX())/BLOCK);																	//xx und yy sind die imaginaere Koordinaten innerhalb des Strings Variable (level).
 		        		int yyy=(Jay.getY())/BLOCK;	
 
 		        		raum=raum.substring(0,yy*20+xx)+' '+raum.substring(yy*20+xx+1);	
-		        				int c =raum.lastIndexOf("@");						
-		    					raum=raum.substring(0,c)+' '+raum.substring(c+1);
-		    					raum=raum.substring(0,yyy*20+xxx)+'@'+raum.substring(yyy*20+xxx+1);
-		    					try {
-		    						restartLevel(false, (Jay.getImage()));
-		    					} catch (IOException e1) {
-		    						e1.printStackTrace();
-		    					}
+		        		int c =raum.lastIndexOf("@");						
+		    			raum=raum.substring(0,c)+' '+raum.substring(c+1);
+		    			raum=raum.substring(0,yyy*20+xxx)+'@'+raum.substring(yyy*20+xxx+1);
+		    			try {
+		    				restartLevel(false, (Jay.getImage()));
+		    			} catch (IOException e1) {
+		    				e1.printStackTrace();
+		    			}
 	        		}
-	        		
 			}
 	}
 		public void spend_mana(){
@@ -1050,6 +1096,10 @@ public class Board extends JPanel implements ActionListener{
 		        				int c =raum.lastIndexOf("@");						
 		    					raum=raum.substring(0,c)+' '+raum.substring(c+1);
 		    					raum=raum.substring(0,yyy*20+xxx)+'@'+raum.substring(yyy*20+xxx+1);
+		    					g1x=Geist.getX();
+		    					g2x=geist2.getX();
+		    					g1y=Geist.getY();
+		    					g2y=geist2.getY();
 		    					try {
 		    						restartLevel(false, (Jay.getImage()));
 		    					}catch (IOException e1) {
@@ -1071,6 +1121,10 @@ public class Board extends JPanel implements ActionListener{
 		        				int c =raum.lastIndexOf("@");						
 		    					raum=raum.substring(0,c)+' '+raum.substring(c+1);
 		    					raum=raum.substring(0,yyy*20+xxx)+'@'+raum.substring(yyy*20+xxx+1);
+		    					g1x=Geist.getX();
+		    					g2x=geist2.getX();
+		    					g1y=Geist.getY();
+		    					g2y=geist2.getY();
 		    					try {
 		    						restartLevel(false, (Jay.getImage()));
 		    					}catch (IOException e1) {
