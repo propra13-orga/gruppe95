@@ -29,6 +29,7 @@ import javax.swing.Timer;
 public class Board extends JPanel implements ActionListener{
 
 	private static final long serialVersionUID = 1L;
+	int a;
 	Image image;
 	Image img;  																		//Bild fuer den Hintergrund (WEG)
 	private Character Jay;
