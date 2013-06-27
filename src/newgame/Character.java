@@ -21,6 +21,7 @@ public class Character extends Movement {
 		super(x,y);
 		image = u.getImage();
 		this.setImage(image);
+		visible = true;
 	    width = image.getWidth(null);									// fuer die Kollision des Bildes mit Schuss
 	    height = image.getHeight(null);
 	}

@@ -13,7 +13,7 @@ private int x, y;
 
 	public Coin(int x, int y){
 		super(x,y);
-		ImageIcon i = new ImageIcon("src/Resources/Coin.png");					// holt sich die Grafik fuer die Waende, die in Board aufgerufen werden
+		ImageIcon i = new ImageIcon("src/Resources/Coink.png");					// holt sich die Grafik fuer die Waende, die in Board aufgerufen werden
 		image = i.getImage();
 		this.setImage(image);
 		   	width = image.getWidth(null);										// fuer Kollsion mit Schuss
