@@ -5,14 +5,14 @@ import java.awt.Rectangle;
 
 import javax.swing.ImageIcon;
 
-public class Ball extends Movement  {
+public class Ice extends Movement  {
 	Image image;
 	private int width;
 	private int height;
 	private int x, y;
-	ImageIcon u = new ImageIcon("src/Resources/ball2.png");			// holt sich die noetigen Grafiken fuer den Checkpoint
+	ImageIcon u = new ImageIcon("src/Resources/ice.png");			// holt sich die noetigen Grafiken fuer den Checkpoint
 	
-	public Ball(int x, int y){
+	public Ice(int x, int y){
 		super(x,y);
 		image = u.getImage();
 		this.setImage(image);

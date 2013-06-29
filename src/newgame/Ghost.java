@@ -11,7 +11,7 @@ public class Ghost extends Movement  {
 	private int width;
 	private int height;
 	private int x, y;
-	ImageIcon u = new ImageIcon("src/Resources/Ghost.png");			// holt sich die noetigen Grafiken fuer den Checkpoint
+	ImageIcon u = new ImageIcon("src/Resources/ep.png");			// holt sich die noetigen Grafiken fuer den Checkpoint
 	
 	public Ghost(int x, int y){
 		super(x,y);

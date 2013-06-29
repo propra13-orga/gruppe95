@@ -15,7 +15,7 @@ private int x, y;
 	public Enemy(int x, int y){
 		super(x,y);
 		
-		ImageIcon i = new ImageIcon("src/Resources/pilz1.png");					// holt sich die Grafiken für das Feuer, die im Board eingebunden werden
+		ImageIcon i = new ImageIcon("src/Resources/epi1.png");					// holt sich die Grafiken für das Feuer, die im Board eingebunden werden
 		image = i.getImage();
 		this.setImage(image);
 	    width = image.getWidth(null);											// fuer Kollision mit Schuss
