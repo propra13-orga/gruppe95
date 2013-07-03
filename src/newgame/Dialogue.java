@@ -6,8 +6,6 @@ import javax.swing.*;
 
 import java.awt.*;
 
-import java.io.IOException;
-
 public class Dialogue extends JFrame implements ActionListener{
 	
 private JButton weiter;																										//definiert 3 JButtons und 1 JLabel
@@ -22,15 +20,15 @@ public Dialogue(String Title){
 	text.setFont(new Font("Serif", Font.PLAIN, 14));																		//Legt Schriftgroesse und Font fest
 	getContentPane().add(text);
 
-	weiter = new JButton("Weiter");																							//definiert Position und Größe für die Buttons
+	weiter = new JButton("Weiter");																							//definiert Position und Grï¿½ï¿½e fï¿½r die Buttons
 	weiter.setBounds(80,200,90,30);
 	weiter.addActionListener(this);
 	
-	weiter2 = new JButton("Weiter2");																						//definiert Position und Größe für die Buttons
+	weiter2 = new JButton("Weiter2");																						//definiert Position und Grï¿½ï¿½e fï¿½r die Buttons
 	weiter2.setBounds(80,200,90,30);
 	weiter2.addActionListener(this);
 
-	schliessen = new JButton("Schliessen");																					//definiert Position und Größe für die Buttons
+	schliessen = new JButton("Schliessen");																					//definiert Position und Grï¿½ï¿½e fï¿½r die Buttons
 	schliessen.setBounds(400,200,100,30);
 	schliessen.addActionListener(this);
 

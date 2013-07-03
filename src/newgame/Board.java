@@ -54,6 +54,7 @@ public class Board extends JPanel implements ActionListener{
 	private Boss3 Monster3;
 	private Ball ball;
 	private Ice ice;
+	private boolean besuch=false;
 	Font smallfont = new Font("Helvetica", Font.BOLD, 17);
 
 	ImageIcon r = new ImageIcon("src/Resources/r1.png");								//fuer versch. Positionen rechts, links, oben, unten
@@ -144,17 +145,39 @@ public class Board extends JPanel implements ActionListener{
 			life=3;																	
 		}
 	}
-
+	private static int puzzle_nr=0;
 	public void collision(int movx,int movy,Image image){																				// char pos mit image geaendert um statt mit  t,v Bild festzulegen man abfragt wo er guckt 
-
-
-
-
 		int xx = ((Jay.getX()+movx)/BLOCK);																	 							//xx und yy sind die imaginaere Koordinaten innerhalb des Strings Variable (level).
 		int yy=(Jay.getY()+movy)/BLOCK;																									//xx und yy werden dafuer gerechnet um zu erkennen, ob an der Stelle wohin sich die Spielfigur bewegen will, kein # im variable level bzw kein Stueck Mauer im Spielfeld gibt
 		if ((raum.charAt(yy*20+xx)!='#')&&(raum.charAt(yy*20+xx)!='~')&&(raum.charAt(yy*20+xx)!='s')&&(xx>=0)||(Jay.getY()<0))		    //yy wird mal 20 multipliziert da es in jeder linie des Spielfelds 20 Bloecke gibt(also in jeder linie des strings level gibt es 20 zeichen)
 		{																							        							//Wandkollision
 			Jay.move(movx,movy);																		    							//erst wenn es kein Stueck Mauer, keinen NPC/Ladenbesitzer oder einen Ein-Ausgang gibt(entweder xx oder yy <0 ist) darf/kann sich die Spielfigur bewegen
+			System.out.println(Jay.getY());
+			if ((raum.charAt(yy*20+xx)=='n')&&(ps.visible==true)){
+				if (besuch==false)puzzle_nr=puzzle_nr+1;
+				System.out.println(puzzle_nr);
+				ps.setVisible(false);
+				
+				if (raum.contains("@") )
+				{	int c =raum.lastIndexOf("@");						
+					raum=raum.substring(0,c)+' '+raum.substring(c+1);
+					raum=raum.substring(0,yy*20+xx)+'@'+raum.substring(yy*20+xx+1);
+					try {
+						restartLevel(false,Jay.getImage());
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					}
+		
+				}	
+				try {
+					raetsel();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				
+			}
 			if (raum.charAt(yy*20+xx)=='a'){
 				ruban= ruban+1;
 				if (raum.contains("@") )
@@ -170,6 +193,14 @@ public class Board extends JPanel implements ActionListener{
 					} catch (IOException e1) {
 						e1.printStackTrace();
 					}
+				}
+			}
+		}
+		else {
+			if ((raum.charAt(yy*20+xx)=='#')&&((luecke.visible==false))){
+				if ((xx==0)&&(yy==1)){
+					Jay.move(movx,movy);
+					
 				}
 			}
 		}
@@ -202,7 +233,7 @@ public class Board extends JPanel implements ActionListener{
 		if (raum.charAt(yy*20+xx)=='s'){    														//startet bei Kollision den Dialog des Ladenbesitzers
 			DialogueShop();
 		}
-		if (raum.charAt(yy*20+xx)=='h'){															// kauft ein schwert für 30 $
+		if (raum.charAt(yy*20+xx)=='h'){															// kauft ein schwert fï¿½r 30 $
 			if((ruban>= 20)||(xruban>=20)){
 			get_sword = true;
 			xruban = xruban - 20;
@@ -460,7 +491,7 @@ public class Board extends JPanel implements ActionListener{
 		return room;
 	}
 
-
+	private PuzzleSt ps;
 	public final void initWorld(Image image) throws IOException{										// zeichnet das Level mit Inhalten
 
 		//ImageIcon ii= new ImageIcon ("src/Resources/back"+lr.charAt(1)+".png");						// Den Pfad fuers Hintergrundbild angeben.
@@ -477,6 +508,7 @@ public class Board extends JPanel implements ActionListener{
 		Shopkeeper shopkeeper;
 		Buy1 buy1;
 		Buy2 buy2;
+
 
 		for(int i = 0; i < raum.length(); i++){																		// level variable Buchstabe fuer Buchstabe durchgehen.
 			char obj = raum.charAt(i);										
@@ -520,9 +552,13 @@ public class Board extends JPanel implements ActionListener{
 						image =	db.getImage();
 						Jay.setImage(image);}
 					}
-					x = x + BLOCK;}
+					x = x + BLOCK;
+				}
 		
-			
+			else if(obj == 'n'){	
+				ps= new PuzzleSt(x,y);
+				x = x + BLOCK;
+			}
 			else if(obj == ' '){																	//x erhoeht sich um einen Block(' ':Bereich wo sich der Spieler bewegen kann)
 					x = x + BLOCK;
 			}else if(obj == '*'){                													// stellt den Enemy in den Levels als * dar
@@ -562,7 +598,7 @@ public class Board extends JPanel implements ActionListener{
 				x=x+BLOCK;
 			}else if(obj == 'o'){																	
 				Monster3 = new Boss3(x,y);
-				boss_leben=10;
+				boss_leben=5;
 				x=x+BLOCK;	
 			}else if(obj == 'w'){																	
 				Geist = new Ghost(x,y);
@@ -581,6 +617,7 @@ public class Board extends JPanel implements ActionListener{
 				buycannons.add(buy2);
 				x=x+BLOCK;
 			}
+			
 		
 		}
 	}
@@ -597,6 +634,7 @@ public class Board extends JPanel implements ActionListener{
 		if (raum.contains("o")) world.add(Monster3);
 		if (raum.contains("r")) world.add(ball);
 		if (raum.contains("i")) world.add(ice);
+		if (raum.contains("n")) world.add(ps);
 		if (raum.contains("w")) {
 			world.add(Geist);
 		}
@@ -812,7 +850,7 @@ public class Board extends JPanel implements ActionListener{
   public ArrayList<Cannon> getCannons() {																// gibt die Schuesse  wieder
         return cannons;
   }
-
+private String room;
   private class Ap extends KeyAdapter{															// fuer rechts: holt das Bild mit Position rechts
 																									// durch die class Character bewegt sich Diggy in die entsprechende Richtung
 		public  void keyPressed(KeyEvent e){
@@ -873,10 +911,7 @@ public class Board extends JPanel implements ActionListener{
 				else if (lr.charAt(3)=='2') lr=lr.substring(0,3)+'3';								//Wenn der Spieler am Ausgang des 2. Raums ist dann ueberwechseln
 				else if (lr.charAt(3)=='3') lr=lr.substring(0,3)+'4';								//Wenn der Spieler am Ausgang des 3. Raums ist dann ueberwechseln
 				else if (lr.charAt(3)=='4') lr=lr.substring(0,3)+'5';//Wenn der Spieler am Ausgang des 4. Raums ist dann ueberwechseln
-
-
-
-
+				besuch=false;
 				xruban=xruban+ruban;
 				xlife=xlife+life;
 				ruban=0;
@@ -888,19 +923,51 @@ public class Board extends JPanel implements ActionListener{
 				}																					//world initialisieren 
 			}
 			if (Jay.getX() ==950 ){																	//Bedingung erfuellt nur am Ausgang des 2. Raums
-				if (lr.charAt(3)=='1') lr=lr.substring(0,3)+"2";									//Wenn der Spieler am Ausgang des 1. Raums ist dann ueberwechseln
-				else if (lr.charAt(3)=='2') lr=lr.substring(0,3)+'3';								//Wenn der Spieler am Ausgang des 2. Raums ist dann ueberwechseln
-				else if (lr.charAt(3)=='3') lr=lr.substring(0,3)+'4';								//Wenn der Spieler am Ausgang des 3. Raums ist dann ueberwechseln
-				else if (lr.charAt(3)=='4') lr=lr.substring(0,3)+'5';								//Wenn der Spieler am Ausgang des 4. Raums ist dann ueberwechseln
-				xruban=xruban+ruban;
-				xlife=xlife+life;
-				ruban=0;
-				loeschen(true);
-				try {
-					initWorld(Jay.getImage());
-				} catch (IOException e1) {
-					e1.printStackTrace();
+				if (lr.length()==5){
+					lr=lr.substring(0,4);
+					raum=room;
+					besuch=true;
+					loeschen(false);
+					try {
+						initWorld(Jay.getImage());
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					}
 				}
+				else {
+					if (lr.charAt(3)=='1') lr=lr.substring(0,3)+"2";									//Wenn der Spieler am Ausgang des 1. Raums ist dann ueberwechseln
+					else if (lr.charAt(3)=='2') lr=lr.substring(0,3)+'3';								//Wenn der Spieler am Ausgang des 2. Raums ist dann ueberwechseln
+					else if (lr.charAt(3)=='3') lr=lr.substring(0,3)+'4';								//Wenn der Spieler am Ausgang des 3. Raums ist dann ueberwechseln
+					else if (lr.charAt(3)=='4') lr=lr.substring(0,3)+'5';								//Wenn der Spieler am Ausgang des 4. Raums ist dann ueberwechseln
+					besuch=false;
+					xruban=xruban+ruban;
+					xlife=xlife+life;
+					ruban=0;
+					loeschen(true);
+					try {
+						initWorld(Jay.getImage());
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					}
+				}
+			}
+			if ((Jay.getX() ==0 )&&(Jay.getY()<500)){
+				if (luecke.visible==false)
+				{	lr=lr+'a';
+					
+					room=raum;
+					int c =room.lastIndexOf("@");						
+					room=room.substring(0,c)+' '+room.substring(c+1);
+					room=room.substring(0,(Jay.getY()/50)*20+(Jay.getX()/50)+1)+'@'+room.substring((Jay.getY()/50)*20+(Jay.getX()/50)+2);
+					luecke.setVisible(true);
+					loeschen(true);
+					try {
+						initWorld(Jay.getImage());
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					}
+				}
+				
 			}
 		}
 	}
@@ -1055,7 +1122,21 @@ public class Board extends JPanel implements ActionListener{
 			return new Rectangle(Jay.getX(),Jay.getY(),50,50);				
 		}
 
-		public void Dialogue(){																	//definiert die Methode Dialogue genauer, mit Close-Operation, Name, Layout und Position
+
+public static void raetsel() throws IOException{																// Fenster fuer's Spiel
+	JFrame Raetsel = new Raetsel(puzzle_nr);
+	Raetsel.setSize(600,600);
+	Raetsel.setLocationRelativeTo(null);
+	Raetsel.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+	Raetsel.setVisible(true);
+	Raetsel.setFocusable(true);
+	Raetsel.setLayout(new BorderLayout());
+	Raetsel.setLayout(null);
+	Raetsel.add(new Raetsel(puzzle_nr));
+	}
+
+		
+		public void Dialogue(){																	//definiert die Methode raetsel genauer, mit Close-Operation, Name, Layout und Position
 
 			JFrame Dialogue = new Dialogue("Weiser Zauberer");
 			Dialogue.setSize(600,300);
@@ -1067,6 +1148,7 @@ public class Board extends JPanel implements ActionListener{
 			Dialogue.setLayout(null);
 			Dialogue.add(new Dialogue("Weiser Zauberer"));
 		}
+
 
 		public void DialogueShop(){                                  								//definiert die Methode DialogueShop genauer, mit Close-Operation, Name, Layout und Position      
 			
@@ -1334,7 +1416,7 @@ public class Board extends JPanel implements ActionListener{
 		    }
 
 		}*/
-
+private Wall luecke;
 		public void check_shot_vs_wall() {																// Wandkollision
 
 
@@ -1354,9 +1436,15 @@ public class Board extends JPanel implements ActionListener{
 
 
 		            if (r1.intersects(r2)) {													 		//  schuss ist auf der Wand nicht sichtbar
-		                m.setVisible(false);
-		                w.setVisible(true);
-
+		                if ((w.getX()==0)&&(w.getY()==50)){
+		                	m.setVisible(false);
+		                    w.setVisible(false);
+		                    luecke=w;
+		                }
+		                else{
+		                	m.setVisible(false);
+		                    w.setVisible(true);
+		                }
 
 		             }
 		        }
