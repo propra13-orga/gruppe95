@@ -6,7 +6,6 @@ import javax.swing.*;
 
 import java.awt.*;
 
-import java.io.IOException;
 
 public class DialogueShop extends JFrame implements ActionListener{
 	

@@ -3,6 +3,10 @@ package newgame;
 import java.awt.Image;
 import java.awt.Rectangle;
 
+/*
+ * In der Klasse Movement werden alle sich wiederholenden Funktionen gesammelt die in den Klassen gebraucht werden
+ * und durch 'extends Movement' genutzt.
+ */
 public class Movement {
 
 	private Image image;

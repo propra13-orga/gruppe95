@@ -5,6 +5,10 @@ import java.awt.Rectangle;
 
 import javax.swing.ImageIcon;
 
+/* Die Klasse Character stellt die Hauptfigur 'Diggy' dar.
+ * 
+ */
+
 public class Character extends Movement {
 	
 	Image image;
@@ -12,28 +16,24 @@ public class Character extends Movement {
     private int height;
     private int x,y;
 
-	ImageIcon u = new ImageIcon("src/Resources/Character.png");			// holt sich die noetigen Grafiken fuer den Charakter
-	ImageIcon dr = new ImageIcon("src/Resources/digright.png");
-	ImageIcon dl = new ImageIcon("src/Resources/digleft.png");
-	ImageIcon du = new ImageIcon("src/Resources/digup.png");
-	ImageIcon db = new ImageIcon("src/Resources/digb.png");
+	ImageIcon u = new ImageIcon("src/Resources/Character.png");
+	
 	public Character(int x, int y){
 		super(x,y);
 		image = u.getImage();
 		this.setImage(image);
 		visible = true;
-	    width = image.getWidth(null);									// fuer die Kollision des Bildes mit Schuss
-	    height = image.getHeight(null);
+	    width = image.getWidth(null);									
 	}
 	
-	public void move(int x, int y){										// fuehrt die Berechnung zb. fuer rechts aus(BLOCK,0)
-		int nx = this.getX() + x;										// legt die Bewegungsbedingungen fest
-		int ny = this.getY() + y;
-		this.setX(nx);
-		this.setY(ny);
-	}
+		public void move(int x, int y){										
+			int nx = this.getX() + x;										
+			int ny = this.getY() + y;
+			this.setX(nx);
+			this.setY(ny);
+		}
 	
 		public Rectangle getBounds() {
 	        return new Rectangle(x, y, width, height);
 	    }
-}
+	}

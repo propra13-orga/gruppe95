@@ -1,33 +1,27 @@
 package newgame;
 
 import java.awt.Image;
-import java.awt.Rectangle;
-
 import javax.swing.ImageIcon;
 
-public class Ball extends Movement  {
-	Image image;
-	private int width;
-	private int height;
-	private int x, y;
-	ImageIcon u = new ImageIcon("src/Resources/ball2.png");			// holt sich die noetigen Grafiken fuer den Checkpoint
+
+	public class Ball extends Movement  {
+		Image image;
+		ImageIcon u = new ImageIcon("src/Resources/ball2.png");			
 	
-	public Ball(int x, int y){
-		super(x,y);
-		image = u.getImage();
-		this.setImage(image);
-	}
-	public void move(int x, int y){										// fuehrt die Berechnung zb. fuer rechts aus(BLOCK,0)
-		int nx = this.getX() + x;										// legt die Bewegungsbedingungen fest
+		public Ball(int x, int y){
+			super(x,y);
+			image = u.getImage();
+			this.setImage(image);
+		}
+		
+		/* Methode fuer die Bewegung vom Schuss des Gegners Boss3
+		 * 
+		 */
+		
+		public void move(int x, int y){									
+		int nx = this.getX() + x;										
 		int ny = this.getY() + y;
 		this.setX(nx);
 		this.setY(ny);
+		}
 	}
-	public Image getImage() {
-        return image;
-    }
-
-	public Rectangle getBounds() {
-        return new Rectangle(x, y, width, height);
-    }
-}

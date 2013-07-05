@@ -4,18 +4,18 @@ import java.awt.Image;
 
 import javax.swing.ImageIcon;
 
-public class Wizard extends Movement {
+/* Der NPC im ersten Level gibt Auskunft.
+ * 
+ */
+public class Wizard extends Movement{
 
 private Image image;
+ImageIcon i = new ImageIcon("src/Resources/shopkeeper.png");
 
 	public Wizard(int x, int y){	
-		
-		super(x,y);
-
-		ImageIcon i = new ImageIcon("src/Resources/shopkeeper.png");					// holt sich die Grafiken fuer den NPC, wird im Board aufgerufen
+		super(x,y);		
 		image = i.getImage();
 		this.setImage(image);
-
 	}
 
 }
