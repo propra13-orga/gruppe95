@@ -14,20 +14,16 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
 
-
+/*
+ * Durch diese Klasse kann Diggy ein Puzzle sammeln oder erraten.
+ */
 
 public class Raetsel extends JFrame implements ActionListener{
 
-
-/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+private static final long serialVersionUID = 1L;
 private Image imgcode;
 private ImageIcon ii;
 private String s;
-
-
 
 
 
@@ -41,7 +37,7 @@ private String s;
 		repaint();
 		
 	}
-	 private class Ap extends KeyAdapter{															// fuer rechts: holt das Bild mit Position rechts
+	 private class Ap extends KeyAdapter{						
 		
 		 	public  void keyPressed(KeyEvent e){
 
@@ -61,9 +57,9 @@ private String s;
 		 g.drawImage(imgcode,0,0,this);	
 	}
 	
-	public void codeAngabe(){																	//definiert die Methode raetsel genauer, mit Close-Operation, Name, Layout und Position
+	public void codeAngabe(){											
 
-		JFrame CodeAn = new Code("Code Eingeben");
+		JFrame CodeAn = new Code(  "Code Eingeben");
 		CodeAn.setSize(200,100);
 		CodeAn.setLocationRelativeTo(null);
 		CodeAn.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
@@ -71,7 +67,7 @@ private String s;
 		CodeAn.setFocusable(true);
 		CodeAn.setLayout(new BorderLayout());
 		CodeAn.setLayout(null);
-		CodeAn.add(new Code("Code Eingeben"));
+		CodeAn.add(new Code(  "Code Eingeben"));
 	}
 
 	@Override
