@@ -7,7 +7,7 @@ import javax.swing.ImageIcon;
 /* Diese Klasse stellt die Eisruestung im Shop dar.
  * Bei Kollision mit Eisruestung und Diggy, 
  * also beim Kauf der Eisruestung, ist sie in anderen Shops nicht mehr verfuegbar.  
- * Wenn Diggy die Eisruestung trägt, erleidet er kein Schaden durch Boss2, der mit Eisbaellen wirft.
+ * Wenn Diggy die Eisruestung trï¿½gt, erleidet er kein Schaden durch Boss2, der mit Eisbaellen wirft.
  */
 
 public class Buy_Armor_Ice extends Movement  {
@@ -16,7 +16,7 @@ public class Buy_Armor_Ice extends Movement  {
 	private int height;
 	private int x, y;
     
-	ImageIcon u = new ImageIcon("src/Resources/rüstungeis.png");		
+	ImageIcon u = new ImageIcon("src/Resources/ruestungeis.png");		
 	
 	
 	public Buy_Armor_Ice(int x, int y){

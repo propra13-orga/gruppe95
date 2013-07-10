@@ -26,6 +26,9 @@ public class Board extends JPanel implements ActionListener{
 
 
 	private static final long serialVersionUID = 1L;
+	/*
+	 * variable declaration  *
+ 	 */
 	int a;
 	Image image;
 	Image img;  																		
@@ -48,8 +51,8 @@ public class Board extends JPanel implements ActionListener{
 	private checkpoint check;
 	private Ghost Geist,geist2;
 	private Boss Monster;
-	private Boss2 Monster2;
-	private Boss3 Monster3;
+	private Boss Monster2;
+	private Boss Monster3;
 	private Ball ball;
 	private Ice ice;
 	private boolean besuch = false;
@@ -135,7 +138,7 @@ public class Board extends JPanel implements ActionListener{
 	 */
 	public Board() throws IOException{
 
-		lr="l1r3";																		
+		lr="l1r4";					//l1r1 steht fuer Level 1, Raum 1													
 		addKeyListener(new Ap());
 		setFocusable(true);
 		setDoubleBuffered(true);
@@ -189,6 +192,7 @@ public class Board extends JPanel implements ActionListener{
 	 * Durch Kollision mit Buy_Armor_Fire (2) kauft Diggy im Shop eine Feuerruestung, das 5 $ kostet.
 	 * Durch Kollision mit Key ($) gelangt Diggy im naechsten Level.
 	 * Durch Kollision mit checkpoint (b) gelangt Diggy bei Niederlage wieder im checkpoint statt das Spiel neu zu starten.
+	 * Durch Kollision mit Puzzlestueck (n) sammelt Diggy die Puzzlestuecke um das erraten zu koennen und das Raetsel zu loesen.
 	 */
 
 	private static int puzzle_nr = 0;
@@ -198,11 +202,12 @@ public class Board extends JPanel implements ActionListener{
 		if ((raum.charAt(yy*20+xx)!='#')&&(raum.charAt(yy*20+xx)!='~')&&(raum.charAt(yy*20+xx)!='s')&&(xx>=0)||(Jay.getY()<0))		    //yy wird mal 20 multipliziert da es in jeder linie des Spielfelds 20 Bloecke gibt(also in jeder linie des strings level gibt es 20 zeichen)
 		{																							        							//Wandkollision
 			Jay.move(movx,movy);																		    							//erst wenn es kein Stueck Mauer, keinen NPC/Ladenbesitzer oder einen Ein-Ausgang gibt(entweder xx oder yy <0 ist) darf/kann sich die Spielfigur bewegen
-			System.out.println(Jay.getY());
+			
 			if ((raum.charAt(yy*20+xx)=='n')&&(ps.visible==true)){
 				if (besuch==false)puzzle_nr=puzzle_nr+1;
-				System.out.println(puzzle_nr);
+				
 				ps.setVisible(false);
+		
 
 				if (raum.contains("@") )
 				{	int c =raum.lastIndexOf("@");						
@@ -217,7 +222,6 @@ public class Board extends JPanel implements ActionListener{
 				try {
 					raetsel();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 
@@ -241,8 +245,14 @@ public class Board extends JPanel implements ActionListener{
 				}
 			}
 		}else {
-			if ((raum.charAt(yy*20+xx)=='#')&&((luecke.visible==false))){
-				if ((xx==0)&&(yy==1)){
+			if ((raum.charAt(yy*20+xx)=='#')&&((luecke.visible==false))){						//wenn Diggy vor sich die Wandluecke findet dann kann er dadurch zu einem anderen Raum durchgehen
+				if ((xx==0)&&(yy==1)&&(lr.charAt(1)=='1')){										//lr.charAt(1)=='1'  ist da um zu ueberpruefen ob sich Diggy im ersten Level befindet
+					Jay.move(movx,movy);
+				}
+				else if ((xx==0)&&(yy==4)&&(lr.charAt(1)=='2')){
+					Jay.move(movx,movy);
+				}
+				else if ((xx==0)&&(yy==6)&&(lr.charAt(1)=='3')){
 					Jay.move(movx,movy);
 				}
 			}
@@ -326,9 +336,9 @@ public class Board extends JPanel implements ActionListener{
 	/*
 	 * Die Obergegner Boss, Boss2, Boss3 bewegen sich durch diese drei Methoden, die in Richtung Diggy laufen.
 	 */
-	public void movemonster() {
+	public void movemonster(Boss Monster) {
 
-			if (Jay.getY()<Monster.getY()){
+			if (Jay.getY()<Monster.getY()){						//Der Obergegner wird je nach Level immer schneller, und dadurch auch schwieriger
 				Monster.move(0,-Monster_speed);
 			}
 			else if (Jay.getY()>Monster.getY()){
@@ -341,38 +351,6 @@ public class Board extends JPanel implements ActionListener{
 				Monster.move(-Monster_speed,0);
 			}
 		kollision_boss_spieler();	
-	}
-
-	public void movemonster2() {
-
-		if (Jay.getY()<Monster2.getY()){
-			Monster2.move(0,-Monster_speed);
-		}
-		else if (Jay.getY()>Monster2.getY()){
-			Monster2.move(0,Monster_speed);
-		}
-		if (Jay.getX()>Monster2.getX()){
-			Monster2.move(Monster_speed,0);
-		}
-		else if (Jay.getX()<Monster2.getX()){
-			Monster2.move(-Monster_speed,0);
-		}
-		
-	}
-	public void movemonster3() {
-
-		if (Jay.getY()<Monster3.getY()){
-			Monster3.move(0,-Monster_speed);
-		}
-		else if (Jay.getY()>Monster3.getY()){
-			Monster3.move(0,Monster_speed);
-		}
-		if (Jay.getX()>Monster3.getX()){
-			Monster3.move(Monster_speed,0);
-		}
-		else if (Jay.getX()<Monster3.getX()){
-			Monster3.move(-Monster_speed,0);
-		}
 	}
 
 
@@ -406,7 +384,7 @@ public class Board extends JPanel implements ActionListener{
 	private int mx,my,counter,Monster_speed,Geist_speed,schuss_speed;
 	
 	/*
-	 * Der erste Obergegner hat keine Schussfunktion. Der zweite Obergegner schiesst mit Eisbällen in richtung Diggy.
+	 * Der erste Obergegner hat keine Schussfunktion. Der zweite Obergegner schiesst mit Eisbï¿½llen in richtung Diggy.
 	 * Der dritte Obergegner schiesst mit Feuerbaellen in richtung Diggy.
 	 */
 
@@ -464,7 +442,7 @@ public class Board extends JPanel implements ActionListener{
 	 */
 	
 	private void kollision_boss_spieler() {
-		if ((Math.abs(Jay.getX()-Monster.getX())<50)&&(Math.abs(Jay.getY()-Monster.getY())<50)){
+		if ((Math.abs(Jay.getX()-Monster.getX())<50)&&(Math.abs(Jay.getY()-Monster.getY())<50)&&(get_invisible==false)){
 			if(life==1){
 				Game_over();
 				failed=true;
@@ -659,13 +637,13 @@ public class Board extends JPanel implements ActionListener{
 				check = new checkpoint(x,y);
 				x=x+BLOCK;
 			}else if(obj == 'k'){															
-				Monster = new Boss(x,y);
+				Monster = new Boss(x,y,"e1");
 				x=x+BLOCK;
 			}else if(obj == 'p'){															
-				Monster2 = new Boss2(x,y);
+				Monster2 = new Boss(x,y,"e2");
 				x=x+BLOCK;
 			}else if(obj == 'o'){																	
-				Monster3 = new Boss3(x,y);
+				Monster3 = new Boss(x,y,"e3");
 				x=x+BLOCK;	
 			}else if(obj == 'w'){																	
 				Geist = new Ghost(x,y);
@@ -823,18 +801,28 @@ public class Board extends JPanel implements ActionListener{
 		
 	if(ingame){																					
 		buildWorld(g);																			
-		if (raum.contains("k")){
-			if (lr.charAt(1)=='1') Monster_speed=2;
-			else Monster_speed=1;
-			movemonster();
+		if ((raum.contains("k"))||(raum.contains("p"))||(raum.contains("o"))){
+			if (lr.charAt(1)=='1') {
+				Monster_speed=2;
+				movemonster(Monster);
+			}
+			else if (lr.charAt(1)=='2'){
+				Monster_speed=2;
+				movemonster(Monster2);
+			}
+			else if (lr.charAt(1)=='3'){
+				Monster_speed=2;
+				movemonster(Monster3);
+			}
+			/*movemonster(Monster);
 		}if (raum.contains("p")){
 			if (lr.charAt(1)=='2') Monster_speed=2;
 			else Monster_speed=1;
-			movemonster2();
+			movemonster(Monster2);
 		}if (raum.contains("o")){
 			if (lr.charAt(1)=='3') Monster_speed=2;
 			else Monster_speed=1;
-			movemonster3();
+			movemonster(Monster3); */
 		}if (raum.contains("w")){
 			if (lr.charAt(1)=='1') Geist_speed=1;
 			else if (lr.charAt(1)=='2')Geist_speed=1;
@@ -924,9 +912,9 @@ public class Board extends JPanel implements ActionListener{
 				g.drawImage(im3,970,300,this);
 				w = "Mach dich unsichtbar (i)";
 				g.drawString(w,970,380);
-				l = "Benutze deine Feuerrüstung (f)";
+				l = "Benutze deine Feuerrï¿½stung (f)";
 				g.drawString(l,970,400);
-				k = "Benutze deine Eisrüstung (e)";
+				k = "Benutze deine Eisrï¿½stung (e)";
 				g.drawString(k,970,420);
 				
 		    }
@@ -934,18 +922,18 @@ public class Board extends JPanel implements ActionListener{
 		    	g.drawImage(im2,970, 300, this);
 				w = "Mach dich unsichtbar (i)";
 				g.drawString(w,970,380);
-				l = "Benutze deine Feuerrüstung (f)";
+				l = "Benutze deine Feuerrï¿½stung (f)";
 				g.drawString(l,970,400);
-				k = "Benutze deine Eisrüstung (e)";
+				k = "Benutze deine Eisrï¿½stung (e)";
 				g.drawString(k,970,420);
 		    }
 		    if(mana==1){
 				g.drawImage(im1,970,300,this);
 				w = "Mach dich unsichtbar (i)";
 				g.drawString(w,970,380);
-				l = "Benutze deine Feuerrüstung (f)";
+				l = "Benutze deine Feuerrï¿½stung (f)";
 				g.drawString(l,970,400);
-				k = "Benutze deine Eisrüstung (e)";
+				k = "Benutze deine Eisrï¿½stung (e)";
 				g.drawString(k,970,420);
 		    }
         	
@@ -983,7 +971,7 @@ public class Board extends JPanel implements ActionListener{
   }
   
   /*
-   * Falls Diggy ein Mana fuer eine Eis- bzw. Feuerruesstung verbraucht traegt er diese Rüstung als Schutz gegen die Obergegner.
+   * Falls Diggy ein Mana fuer eine Eis- bzw. Feuerruesstung verbraucht traegt er diese Rï¿½stung als Schutz gegen die Obergegner.
    * Mit der Eisrusestung schuetzt er sich vor dem zweiten Obergegner.
    * Mit der Feuerruestung schuetzt er sich vor dem dritten Obergegner.
    */
@@ -1000,6 +988,7 @@ public class Board extends JPanel implements ActionListener{
 				Image image1 = image = r.getImage();										
 				Jay.setImage(image1);
 				position = 1;
+				
 				collision(BLOCK,0, image1);
 				
 			}else if(armor_ice == true && key == KeyEvent.VK_RIGHT){
@@ -1007,6 +996,7 @@ public class Board extends JPanel implements ActionListener{
 				Image image1i = image = ir.getImage();										
 				Jay.setImage(image1i);
 				position = 1;
+				
 				collision(BLOCK,0, image1i);
 				
 			}else if(armor_fire == true && key == KeyEvent.VK_RIGHT){
@@ -1014,6 +1004,7 @@ public class Board extends JPanel implements ActionListener{
 				Image image1f = image = dfr.getImage();										
 				Jay.setImage(image1f);
 				position = 1;
+				
 				collision(BLOCK,0, image1f);
 				
 			}else if(key == KeyEvent.VK_LEFT && armor_ice != true && armor_fire != true){
@@ -1021,6 +1012,7 @@ public class Board extends JPanel implements ActionListener{
 				Image image2 = image = l.getImage();
 				Jay.setImage(image);
 				position = 2;
+				
 				collision(-BLOCK,0, image2);
 				
 			}else if(armor_ice == true && key == KeyEvent.VK_LEFT){
@@ -1028,6 +1020,7 @@ public class Board extends JPanel implements ActionListener{
 					Image image2i = image = il.getImage();										
 					Jay.setImage(image2i);
 					position = 2;
+					
 					collision(-BLOCK,0, image2i);
 					
 			}else if(armor_fire == true && key == KeyEvent.VK_LEFT){
@@ -1035,6 +1028,7 @@ public class Board extends JPanel implements ActionListener{
 				Image image2f = image = dfl.getImage();										
 				Jay.setImage(image2f);
 				position = 2;
+				
 				collision(-BLOCK,0, image2f);
 
 			}else if(key == KeyEvent.VK_UP && armor_ice !=true && armor_fire != true){
@@ -1042,6 +1036,7 @@ public class Board extends JPanel implements ActionListener{
 				Image image3= image = t.getImage() ;
 				Jay.setImage(image);
 				position = 3;
+				
 				collision(0,-BLOCK,image3);
 				
 			}else if(armor_ice == true && key == KeyEvent.VK_UP){
@@ -1049,6 +1044,7 @@ public class Board extends JPanel implements ActionListener{
 					Image image3i = image = ib.getImage();										
 					Jay.setImage(image3i);
 					position = 3;
+					
 					collision(0,-BLOCK, image3i);
 					
 			}else if(armor_fire == true && key == KeyEvent.VK_UP){
@@ -1056,6 +1052,7 @@ public class Board extends JPanel implements ActionListener{
 				Image image3f = image = dfb.getImage();										
 				Jay.setImage(image3f);
 				position = 3;
+				
 				collision(0,-BLOCK, image3f);
 
 			}else if(key == KeyEvent.VK_DOWN && armor_ice != true && armor_fire != true){
@@ -1063,6 +1060,7 @@ public class Board extends JPanel implements ActionListener{
 				Image image4 = image = b.getImage();
 				Jay.setImage(image);
 				position = 4;
+				
 				collision(0,BLOCK, image4);
 				
 			}else if(armor_ice == true && key == KeyEvent.VK_DOWN){
@@ -1070,6 +1068,7 @@ public class Board extends JPanel implements ActionListener{
 					Image image4i = image = it.getImage();										
 					Jay.setImage(image4i);
 					position = 4;
+					
 					collision(0,BLOCK, image4i);
 					
 			}else if(armor_fire == true && key == KeyEvent.VK_DOWN){
@@ -1077,6 +1076,7 @@ public class Board extends JPanel implements ActionListener{
 				Image image4f = image = dff.getImage();										
 				Jay.setImage(image4f);
 				position = 4;
+				
 				collision(0,BLOCK, image4f);
 
 			}else if (key == KeyEvent.VK_SPACE) {													
@@ -1174,8 +1174,6 @@ public class Board extends JPanel implements ActionListener{
 			if ((Jay.getX() ==0 )&&(Jay.getY()<500)){
 				if (luecke.visible==false)
 				{	lr=lr+'a';
-
-
 					room=raum;
 					int c =room.lastIndexOf("@");						
 					room=room.substring(0,c)+' '+room.substring(c+1);
@@ -1534,7 +1532,17 @@ public class Board extends JPanel implements ActionListener{
 			        Rectangle r2 = w.getBounds();
 
 		            if (r1.intersects(r2)) {												
-		                if ((w.getX()==0)&&(w.getY()==50)){
+		                if ((w.getX()==0)&&(w.getY()==50) &&(lr.charAt(1)=='1')){
+		                	m.setVisible(false);
+		                    w.setVisible(false);
+		                    luecke=w;
+		                }
+		                else if ((w.getX()==0)&&(w.getY()==200) &&(lr.charAt(1)=='2')){
+		                	m.setVisible(false);
+		                    w.setVisible(false);
+		                    luecke=w;
+		                }
+		                else if ((w.getX()==0)&&(w.getY()==300) &&(lr.charAt(1)=='3')){
 		                	m.setVisible(false);
 		                    w.setVisible(false);
 		                    luecke=w;

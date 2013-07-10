@@ -6,10 +6,10 @@ import javax.swing.ImageIcon;
 
 	public class Boss extends Movement{
 		Image image;
-		ImageIcon u = new ImageIcon("src/Resources/e1.png");			
-	
-		public Boss(int x, int y){
+		
+		public Boss(int x, int y,String s){
 			super(x,y);
+			ImageIcon u = new ImageIcon("src/Resources/"+s+".png");	
 			image = u.getImage();
 			this.setImage(image);	
 		}

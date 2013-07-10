@@ -7,7 +7,7 @@ import javax.swing.ImageIcon;
 /* Diese Klasse stellt die Feuerruestung im Shop dar.
  * Bei Kollision mit Feuerruestung und Diggy, 
  * also beim Kauf der Feuerruestung, ist sie in anderen Shops nicht mehr verfuegbar.  
- * Wenn Diggy die Feuerruestung trägt, erleidet er kein Schaden durch Boss3, der mit Feuerbaellen wirft.
+ * Wenn Diggy die Feuerruestung trï¿½gt, erleidet er kein Schaden durch Boss3, der mit Feuerbaellen wirft.
  */
 
 
@@ -17,7 +17,7 @@ import javax.swing.ImageIcon;
 	private int height;
 	private int x, y;
     
-	ImageIcon u = new ImageIcon("src/Resources/rüstungfeuer.png");			
+	ImageIcon u = new ImageIcon("src/Resources/ruestungfeuer.png");			
 	
 		public Buy_Armor_Fire(int x, int y){
 			super(x,y);
