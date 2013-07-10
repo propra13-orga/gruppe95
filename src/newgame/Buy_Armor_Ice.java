@@ -16,7 +16,7 @@ public class Buy_Armor_Ice extends Movement  {
 	private int height;
 	private int x, y;
     
-	ImageIcon u = new ImageIcon("src/Resources/rüstungeis.png");		
+	ImageIcon u = new ImageIcon("src/Resources/ruestungeis.png");		
 	
 	
 	public Buy_Armor_Ice(int x, int y){

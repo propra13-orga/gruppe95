@@ -130,12 +130,16 @@ public class Board extends JPanel implements ActionListener{
 	Image invisib = image = sb.getImage();
 
 	
-	/* l1r1 steht fuer Level 1, Raum 1
+	/* @lr levelx,levely
+	 * @param ingame ist wahr waehrend das Spiel laeuft
+	 * @param armor_ice, armor_fire Ruestungen, die Diggy nicht traegt
+	 * @param image4, Position von Diggy Anfang des Spiels
+	 * @param shots, sowrds, cannons Arrays fuer Angriffe
 	 * 
 	 */
 	public Board() throws IOException{
 
-		lr="l1r3";																		
+		lr="l1r1";																		
 		addKeyListener(new Ap());
 		setFocusable(true);
 		setDoubleBuffered(true);
@@ -465,7 +469,8 @@ public class Board extends JPanel implements ActionListener{
 	
 	private void kollision_boss_spieler() {
 		if ((Math.abs(Jay.getX()-Monster.getX())<50)&&(Math.abs(Jay.getY()-Monster.getY())<50)){
-			if(life==1){
+			if(life==1 ){
+				if(Jay.isVisible()== false){
 				Game_over();
 				failed=true;
 				try {
@@ -473,10 +478,12 @@ public class Board extends JPanel implements ActionListener{
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
+			}
 			}else{
 				life=life-1;
 			}
-		}
+			}
+		
 	}
 	
 	private void kollision_eis_spieler() {
@@ -512,6 +519,7 @@ public class Board extends JPanel implements ActionListener{
 			}
 		}
 	}
+
 
 
 	public Image getImage(){																	
@@ -924,9 +932,9 @@ public class Board extends JPanel implements ActionListener{
 				g.drawImage(im3,970,300,this);
 				w = "Mach dich unsichtbar (i)";
 				g.drawString(w,970,380);
-				l = "Benutze deine Feuerrüstung (f)";
+				l = "Benutze deine Feuerruestung (f)";
 				g.drawString(l,970,400);
-				k = "Benutze deine Eisrüstung (e)";
+				k = "Benutze deine Eisruestung (e)";
 				g.drawString(k,970,420);
 				
 		    }
@@ -934,18 +942,18 @@ public class Board extends JPanel implements ActionListener{
 		    	g.drawImage(im2,970, 300, this);
 				w = "Mach dich unsichtbar (i)";
 				g.drawString(w,970,380);
-				l = "Benutze deine Feuerrüstung (f)";
+				l = "Benutze deine Feuerruestung (f)";
 				g.drawString(l,970,400);
-				k = "Benutze deine Eisrüstung (e)";
+				k = "Benutze deine Eisruestung (e)";
 				g.drawString(k,970,420);
 		    }
 		    if(mana==1){
 				g.drawImage(im1,970,300,this);
 				w = "Mach dich unsichtbar (i)";
 				g.drawString(w,970,380);
-				l = "Benutze deine Feuerrüstung (f)";
+				l = "Benutze deine Feuerruestung (f)";
 				g.drawString(l,970,400);
-				k = "Benutze deine Eisrüstung (e)";
+				k = "Benutze deine Eisruestung (e)";
 				g.drawString(k,970,420);
 		    }
         	
@@ -1092,12 +1100,12 @@ public class Board extends JPanel implements ActionListener{
 				if(mana>0){
 				use_mana_invisible();
 				use_invisible = use_invisible -1;
-				if(use_invisible==0){
+				 if(use_invisible==0){
 					get_invisible = false;
 					mana = mana -1;
 				}
 			}
-				
+			
 				/*
 				 * Falls die Taste F fuer Feuerruestung oder E fuer Eisruestung bedient wird, und Diggy noch die 
 				 * Ruestung nihct hat traegt er diese und verliert ein Mana
@@ -1119,8 +1127,8 @@ public class Board extends JPanel implements ActionListener{
 							armor_fire =false;
 						}
 					}
-			}	
-	
+			}
+		
 			repaint();
 
 			/*
@@ -1259,6 +1267,7 @@ public class Board extends JPanel implements ActionListener{
 		 	}
 	 
 	 	public void use_mana_invisible(){
+	 		
 	 		if(get_invisible==true){
 	 			image = sb.getImage();
 	 			Jay.setImage(image);

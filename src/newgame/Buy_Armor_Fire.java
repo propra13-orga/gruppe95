@@ -17,7 +17,7 @@ import javax.swing.ImageIcon;
 	private int height;
 	private int x, y;
     
-	ImageIcon u = new ImageIcon("src/Resources/rüstungfeuer.png");			
+	ImageIcon u = new ImageIcon("src/Resources/ruestungfeuer.png");			
 	
 		public Buy_Armor_Fire(int x, int y){
 			super(x,y);
