@@ -138,7 +138,7 @@ public class Board extends JPanel implements ActionListener{
 	 */
 	public Board() throws IOException{
 
-		lr="l1r4";					//l1r1 steht fuer Level 1, Raum 1													
+		lr="l1r1";					//l1r1 steht fuer Level 1, Raum 1													
 		addKeyListener(new Ap());
 		setFocusable(true);
 		setDoubleBuffered(true);
