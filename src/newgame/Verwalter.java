@@ -16,7 +16,7 @@ import java.net.Socket;
  public static void main(String [] args){
 	 try {
 		 new Server().start(); 														
-	//	 new Chatter().start(); 													
+	     new Chatter().start(); 							//						
 	 }catch (Exception e){
 		 	e.printStackTrace();
 	 }

@@ -88,7 +88,7 @@ public static void main(String[] args){
 			if (e.getSource()==chat)	
 				 try {
 					 new Server().start(); 													
-				//	 new Chatter().start(); 													
+					 new Chatter().start(); 					//								
 				 } catch (Exception e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
