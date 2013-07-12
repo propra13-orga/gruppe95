@@ -180,8 +180,8 @@ public class Board extends JPanel implements ActionListener{
 				raum=rooms;
 			}
 			ruban = 0;
-			life = 3;
-			mana = 3;
+			//life = 3;
+			//mana = 3;
 		}
 	}
 	
@@ -207,7 +207,7 @@ public class Board extends JPanel implements ActionListener{
 		if ((raum.charAt(yy*20+xx)!='#')&&(raum.charAt(yy*20+xx)!='~')&&(raum.charAt(yy*20+xx)!='s')&&(xx>=0)||(Jay.getY()<0))		    //yy wird mal 20 multipliziert da es in jeder linie des Spielfelds 20 Bloecke gibt(also in jeder linie des strings level gibt es 20 zeichen)
 		{																							        							//Wandkollision
 			Jay.move(movx,movy);																		    							//erst wenn es kein Stueck Mauer, keinen NPC/Ladenbesitzer oder einen Ein-Ausgang gibt(entweder xx oder yy <0 ist) darf/kann sich die Spielfigur bewegen
-
+			beweg=true;
 
 			if ((raum.charAt(yy*20+xx)=='n')&&(ps.visible==true)){
 				if (besuch==false)puzzle_nr=puzzle_nr+1;
@@ -259,12 +259,15 @@ public class Board extends JPanel implements ActionListener{
 			if ((raum.charAt(yy*20+xx)=='#')&&((luecke.visible==false))){						//wenn Diggy vor sich die Wandluecke findet dann kann er dadurch zu einem anderen Raum durchgehen
 				if ((xx==0)&&(yy==1)&&(lr.charAt(1)=='1')){										//lr.charAt(1)=='1'  ist da um zu ueberpruefen ob sich Diggy im ersten Level befindet
 					Jay.move(movx,movy);
+					beweg=true;
 				}
 				else if ((xx==0)&&(yy==4)&&(lr.charAt(1)=='2')){
 					Jay.move(movx,movy);
+					beweg=true;
 				}
 				else if ((xx==0)&&(yy==6)&&(lr.charAt(1)=='3')){
 					Jay.move(movx,movy);
+					beweg=true;
 				}
 			}
 		}
@@ -272,7 +275,7 @@ public class Board extends JPanel implements ActionListener{
 
 		if (raum.charAt(yy*20+xx)=='*'){    											
 			life=life-1;
-			if(life==0){
+			if(life!=0){
 				failed=true;
 				try {
 					restartLevel(true,Jay.getImage());
@@ -282,7 +285,7 @@ public class Board extends JPanel implements ActionListener{
 				}
 			}
 			else{
-				//Game_over();
+				Game_over();
 			}
 	   }
 		if (raum.charAt(yy*20+xx)=='~'){    														
@@ -349,7 +352,7 @@ public class Board extends JPanel implements ActionListener{
 
 
 	/*
-	 * Die Obergegner Boss, Boss2, Boss3 bewegen sich durch diese drei Methoden, die in Richtung Diggy laufen.
+	 * Die Obergegner Boss, Boss2, Boss3 bewegen sich durch diese Methode, die in Richtung Diggy laufen.
 	 */
 	public void movemonster(Boss Monster) {
 
@@ -375,10 +378,11 @@ public class Board extends JPanel implements ActionListener{
 	public void MoveGeist(Ghost b) {
 		if (counter<50)
 			b.move(0, -1);
-		if ((counter>50)&&(counter<200))b.move(-1, 0);
-		if ((counter>200)&&(counter<250))b.move(0, 1);
-		if (counter>250)b.move(1, 0);
+		else if ((counter>50)&&(counter<200))b.move(-1, 0);
+		else if ((counter>200)&&(counter<250))b.move(0, 1);
+		else if (counter>250)b.move(1, 0);
 		if (counter==400)counter=0;
+		collision_ghost_Diggy(b);
 	}
 
 
@@ -387,19 +391,47 @@ public class Board extends JPanel implements ActionListener{
 		int yy=b.getY()/50;
 		 if ((Jay.getX()>b.getX())&&(raum.charAt(yy*20+xx+1)!='#')){
 				b.move(Geist_speed,0);
+				 collision_ghost_Diggy(b);
 			}
 		else if ((Jay.getY()>b.getY())&&(raum.charAt((yy+1)*20+xx)!='#')){
 			b.move(0,Geist_speed);
+			 collision_ghost_Diggy(b);
 		}
 		else if ((Jay.getY()<b.getY())&&(raum.charAt((yy-1)*20+xx)!='#')){
 			b.move(0,-Geist_speed);
+			 collision_ghost_Diggy(b);
 		}
 		else if ((Jay.getX()<b.getX())&&(raum.charAt(yy*20+xx-1)!='#')){
 			b.move(-Geist_speed,0);
+			 collision_ghost_Diggy(b);
 		}
 		else if (raum.charAt((yy-1)*20+xx)!='#') b.move(0,-Geist_speed);
+		 collision_ghost_Diggy(b);
 	}
 
+/*
+ * Kollision vom Diggy mit den beweglichen Gegnern
+ * 
+ */
+	private boolean beweg=false;
+	private void collision_ghost_Diggy(Ghost b2) {
+		if ((Math.abs(Jay.getX()-b2.getX())<30)&&(Math.abs(Jay.getY()-b2.getY())<30)&&(beweg==true)){
+			beweg=false;
+			life=life-1;
+			if(life!=0){
+				failed=true;
+				try {
+					restartLevel(true,Jay.getImage());
+					//life=life-1;
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+			}
+			else{
+				Game_over();
+			}
+		}
+	}
 
 	private int mx,my,counter,Monster_speed,Geist_speed,schuss_speed;
 
@@ -472,15 +504,16 @@ public class Board extends JPanel implements ActionListener{
 
 
 	private void kollision_boss_spieler() {
-		if ((Math.abs(Jay.getX()-Monster.getX())<50)&&(Math.abs(Jay.getY()-Monster.getY())<50)&&(get_invisible==false)){
+		if ((Math.abs(Jay.getX()-Monster.getX())<50)&&(Math.abs(Jay.getY()-Monster.getY())<50)&&(beweg==true)){
+			beweg=false;
 			if(life==1){
 				Game_over();
 				failed=true;
-				try {
+				/*try {
 					restartLevel(true,Jay.getImage());
 				} catch (IOException e1) {
 					e1.printStackTrace();
-				}
+				}*/
 			}else{
 				life=life-1;
 			}

@@ -21,7 +21,7 @@ import java.util.Scanner;
 	 			
 	 			Chatter(){
 	 					try{
-	 						_Socket = new Socket("localhost", 4711);				
+	 						_Socket = new Socket("Localhost", 4711);				
 	 						_out = new PrintWriter(_Socket.getOutputStream(), true);
 	 						_in = new BufferedReader(new InputStreamReader(_Socket.getInputStream()));
 	 						frame = new Chat_Frame("Chat :: Client", _out, _in);
