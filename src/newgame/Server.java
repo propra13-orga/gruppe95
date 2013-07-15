@@ -29,13 +29,8 @@ import javax.swing.UIManager;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-/**
- * 
- * @author Vallentin <vallentinsource@gmail.com>
- * @since April 8, 2012
- * 
- */
 
+//
 public class Server
 {
 	public static int port = 2406;
