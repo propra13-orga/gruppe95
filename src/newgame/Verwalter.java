@@ -1,4 +1,4 @@
-package newgame;
+/*package newgame;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -11,6 +11,7 @@ import java.net.Socket;
   * Auf einem Rechner wird (new Chatter().start()) auskommentiert.
   * Auf dem anderen (new Server().start())
   */
+/*
  public class Verwalter {
 	 
  public static void main(String [] args){
@@ -21,11 +22,12 @@ import java.net.Socket;
 		 	e.printStackTrace();
 	 }
  	}
- }
+ }*/
  
 /*
  *  Server erzeugt Serversocket auf Port 4711
  */
+ /*
  class Server extends Thread{
  Chat_Frame frame;
  ServerSocket _ServerSocket = null;
@@ -36,7 +38,8 @@ import java.net.Socket;
  	Server() throws Exception{
  	_ServerSocket = new ServerSocket(4711);										
  }
- 	
+ 	*/
+ 
  	/*
  	 * Es wird auf Verbindung gewartet. 
  	 * @param _out Ausgabestrom
@@ -44,7 +47,7 @@ import java.net.Socket;
  	 * Methode addAusgabe zeigt Eingabe des Empfaengers an.
  	 * 
  	 */
- 
+ /*
  public void run(){
 	 while(true){
 		 try {
@@ -62,4 +65,4 @@ import java.net.Socket;
 	}
    }
   }
- }
+ }*/

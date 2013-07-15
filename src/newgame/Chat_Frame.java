@@ -16,7 +16,11 @@ import javax.swing.JFrame;
  * Zwei Textfelder fuer die Eingabe und fuer die Ausgabe werden erzeugt.<<<<<<
  */
  public class Chat_Frame extends JFrame{
- TextArea _Eingabe;										
+ /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+TextArea _Eingabe;										
  TextArea _Ausgabe;
  JButton   _Send;
  

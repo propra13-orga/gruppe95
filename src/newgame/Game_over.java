@@ -9,6 +9,10 @@ import javax.swing.JPanel;
 
 public class Game_over extends JPanel implements ActionListener {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JButton ok;
 	
 	public Game_over(){

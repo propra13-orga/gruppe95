@@ -1,4 +1,4 @@
-package newgame;
+/*package newgame;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -18,7 +18,7 @@ import java.util.Scanner;
  /*
   * Der zweite Rechner muss "localhost" durch die IP-Adresse des ersten Rechners ersetzen.
   */
-	 			
+/*	 			
 	 			Chatter(){
 	 					try{
 	 						_Socket = new Socket("Localhost", 4711);				
@@ -42,4 +42,4 @@ import java.util.Scanner;
 	 		} 
 	 			 
 	 	}
- }
+ }*/
