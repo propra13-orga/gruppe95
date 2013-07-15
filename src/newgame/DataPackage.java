@@ -10,6 +10,10 @@ import javax.swing.Timer;
 
 public class DataPackage implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	public Image image;
 	public float n = 0.0f;
 	public float m = 0.0f;
@@ -18,8 +22,6 @@ public class DataPackage implements Serializable
 	public int y ;
 	public int nx = this.getX() + x;										
 	public int ny = this.getY() + y;
-	//this.setX(nx);
-	//this.setY(ny);
 	
 	public int getX(){
 		return this.x;
@@ -72,7 +74,7 @@ public class DataPackage implements Serializable
 	public boolean bought1, bought2, bought3, bought4;
 	public checkpoint check;
 	public Ghost Geist,geist2;
-	public Boss Monster,Monster2,Monster3;
+	public Boss Monster;
 	public Ball ball;
 	public Ice ice;
 	public boolean besuch = false;

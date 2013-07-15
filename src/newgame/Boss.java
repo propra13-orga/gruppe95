@@ -2,6 +2,7 @@ package newgame;
 
 
 import java.awt.Image;
+
 import javax.swing.ImageIcon;
 
 
@@ -23,6 +24,8 @@ import javax.swing.ImageIcon;
 		 * 
 		 */
 
+
+	
 
 		public void move(int x, int y){										
 			int nx = this.getX() + x;										

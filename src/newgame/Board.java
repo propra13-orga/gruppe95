@@ -2,7 +2,6 @@ package newgame;
 
 
 
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
@@ -23,25 +22,6 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionListener;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.net.InetAddress;
-import java.net.Socket;
-import java.net.UnknownHostException;
-import java.util.ArrayList;
-
-import javax.swing.JComponent;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-
-
-
 
 public class Board extends JPanel implements ActionListener{
 	
@@ -51,7 +31,6 @@ public class Board extends JPanel implements ActionListener{
 	Image image;
 	Image img;  																		
 	private Character Jay;
-	private Shot shoti;
 	private String raum="";
 	private String lr,rooms,lrs; 														
 	private ArrayList<Shot> shots;													
@@ -151,219 +130,13 @@ public class Board extends JPanel implements ActionListener{
 	Image invisib = image = sb.getImage();
 
 	
-	/* l1r1 steht fuer Level 1, Raum 1
+	/*
+	 *  l1r1 steht fuer Level 1, Raum 1
 	 * 
 	 */
-	//protected void paintComponent( Graphics g ){
-	//  super.paintComponent( g );
-	//	  ...
-	//	}
+	
 	public Board(){
-		this.addMouseMotionListener(new MouseMotionListener()
-		{
-			@Override
-			public void mouseDragged(MouseEvent e)
-			{
-				n = e.getX();
-				m = e.getY();
-			}
-
-			@Override
-			public void mouseMoved(MouseEvent arg0) {}
-		});
-	
-		this.addKeyListener(new KeyAdapter()
-		{
-		public  void keyPressed(KeyEvent e){
-
-			int key = e.getKeyCode();
-
-	/*		if(key == KeyEvent.VK_RIGHT ){		
-				x = x + BLOCK;
-			}
-			if(key == KeyEvent.VK_LEFT ){		
-				x = x - BLOCK;
-				
-			}*/
-			if(key == KeyEvent.VK_RIGHT && armor_ice != true && armor_fire != true){		
-					
-					Image image1 = image = r.getImage();										
-					Jay.setImage(image1);
-					position = 1;
-					collision(BLOCK,0, image1);
-					
-				}else if(armor_ice == true && key == KeyEvent.VK_RIGHT){
-					
-					Image image1i = image = ir.getImage();										
-					Jay.setImage(image1i);
-					position = 1;
-					collision(BLOCK,0, image1i);
-					
-				}else if(armor_fire == true && key == KeyEvent.VK_RIGHT){
-					
-					Image image1f = image = dfr.getImage();										
-					Jay.setImage(image1f);
-					position = 1;
-					collision(BLOCK,0, image1f);
-					
-				}else if(key == KeyEvent.VK_LEFT && armor_ice != true && armor_fire != true){
-
-					Image image2 = image = l.getImage();
-					Jay.setImage(image);
-					position = 2;
-					collision(-BLOCK,0, image2);
-					
-				}else if(armor_ice == true && key == KeyEvent.VK_LEFT){
-						
-						Image image2i = image = il.getImage();										
-						Jay.setImage(image2i);
-						position = 2;
-						collision(-BLOCK,0, image2i);
-						
-				}else if(armor_fire == true && key == KeyEvent.VK_LEFT){
-					
-					Image image2f = image = dfl.getImage();										
-					Jay.setImage(image2f);
-					position = 2;
-					collision(-BLOCK,0, image2f);
-
-				}else if(key == KeyEvent.VK_UP && armor_ice !=true && armor_fire != true){
-
-					Image image3= image = t.getImage() ;
-					Jay.setImage(image);
-					position = 3;
-					collision(0,-BLOCK,image3);
-					
-				}else if(armor_ice == true && key == KeyEvent.VK_UP){
-						
-						Image image3i = image = ib.getImage();										
-						Jay.setImage(image3i);
-						position = 3;
-						collision(0,-BLOCK, image3i);
-						
-				}else if(armor_fire == true && key == KeyEvent.VK_UP){
-					
-					Image image3f = image = dfb.getImage();										
-					Jay.setImage(image3f);
-					position = 3;
-					collision(0,-BLOCK, image3f);
-
-				}else if(key == KeyEvent.VK_DOWN && armor_ice != true && armor_fire != true){
-					
-					Image image4 = image = b.getImage();
-					Jay.setImage(image);
-					position = 4;
-					collision(0,BLOCK, image4);
-					
-				}else if(armor_ice == true && key == KeyEvent.VK_DOWN){
-						
-						Image image4i = image = it.getImage();										
-						Jay.setImage(image4i);
-						position = 4;
-						collision(0,BLOCK, image4i);
-						
-				}else if(armor_fire == true && key == KeyEvent.VK_DOWN){
-					
-					Image image4f = image = dff.getImage();										
-					Jay.setImage(image4f);
-					position = 4;
-					collision(0,BLOCK, image4f);
-
-				}else if (key == KeyEvent.VK_SPACE) {													
-					fire();
-					
-				}else if (key == KeyEvent.VK_M && get_cannon==true) {								
-					cannon();
-					
-				}else if (key == KeyEvent.VK_V && get_sword==true) {								
-					sword_play();
-					
-				}else if (key == KeyEvent.VK_I && get_invisible==true) {									
-					if(mana>0){
-					use_mana_invisible();
-					use_invisible = use_invisible -1;
-					 if(use_invisible==0){
-						get_invisible = false;
-						mana = mana -1;
-					}
-					 
-				}
-				
-					/*
-					 * Falls die Taste F fuer Feuerruestung oder E fuer Eisruestung bedient wird, und Diggy noch die 
-					 * Ruestung nihct hat traegt er diese und verliert ein Mana
-					 */
-				}else if(key == KeyEvent.VK_F && armor_fire!=true){
-				
-					if(mana>1)	{
-						armor_fire=true;
-						mana = mana -1;
-						if(armor_ice!=false){
-							armor_ice =false;
-						}
-					}
-				}else if(key == KeyEvent.VK_E && armor_ice!=true){
-						if(mana>1)	{
-							armor_ice = true;
-							mana = mana - 1;
-							if(armor_fire!=false){
-								armor_fire =false;
-							}
-						}
-				}	
 		
-				repaint();
-		}
-		});
-		
-	    	try
-			{
-				String local;
-				
-				try
-				{
-					local = InetAddress.getLocalHost().getHostAddress() + ":" + port;
-				}
-				catch (UnknownHostException ex)
-				{
-					local = "Network Error";
-				}
-				
-				ip = (String) JOptionPane.showInputDialog(null, "IP: ", "Info", JOptionPane.INFORMATION_MESSAGE, null, null, local);
-				
-				port = Integer.parseInt(ip.substring(ip.indexOf(":") + 1));
-				ip = ip.substring(0, ip.indexOf(":"));
-				
-				socket = new Socket(ip, port);
-				
-				String set_username = System.getProperty("user.name");
-				set_username = (String) JOptionPane.showInputDialog(null, "Username: ", "Info", JOptionPane.INFORMATION_MESSAGE, null, null, set_username);
-				username = set_username;
-				
-				ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
-				oos.writeObject(username);
-				
-				ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
-				String response = (String) ois.readObject();
-				
-				JOptionPane.showMessageDialog(null, response, "Message", JOptionPane.INFORMATION_MESSAGE);
-				
-				if (response.equals("Your name is already taken!"))
-				{
-					System.exit(0);
-				}
-				
-				new Thread(send).start();
-				new Thread(receive).start();
-			}
-			catch (Exception ex)
-			{
-				JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage(), "Alert", JOptionPane.ERROR_MESSAGE);
-				System.exit(0);
-			}
-		
-		
-	
 		lr="l1r1";																		
 		addKeyListener(new Ap());
 		setFocusable(true);
@@ -383,161 +156,7 @@ public class Board extends JPanel implements ActionListener{
 	    cannons = new ArrayList<Cannon>();
 	    timer = new Timer(5, this);														
         timer.start();
-	}
-
-public int state = 0;
-public boolean connected = true;
-
-
-Runnable send = new Runnable()
-{
-	@Override
-	public void run()
-	{
-		ObjectOutputStream oos;
-		
-		while (connected)
-		{
-			if (socket != null)
-			{
-				try
-				{
-					DataPackage dp = new DataPackage();
-					
-					
-					dp.n = n;
-					dp.m = m;
-					dp.x = Jay.getX();
-					dp.y = Jay.getY();
-					ArrayList<Shot> shots = getShots();
-			       	for (int j = 0; j < shots.size(); j++){
-			       		Shot m = (Shot) shots.get(j);
-			       		dp.shotx = m.getX();
-			       		dp.shoty = m.getY();
-			       		
-		            }
-		            	
-					
-					dp.nx = getX() + x;										
-					dp.ny = getY() + y;
-					
-					dp.username = username;
-					
-					oos = new ObjectOutputStream(socket.getOutputStream());
-					oos.writeObject(state);
-					
-					oos = new ObjectOutputStream(socket.getOutputStream());
-					oos.writeObject(dp);
-					
-					if (state == 1) // Client Disconnected
-					{
-						connected = false;
-						socket = null;
-						
-						JOptionPane.showMessageDialog(null, "Client Disconnected", "Info", JOptionPane.INFORMATION_MESSAGE);
-						System.exit(0);
-					}
-				
-				}
-				catch (Exception ex) {}
-			}
-			else
-			{
-				break;
-			}
-		}
-	}
-};
-
-
-
-Runnable receive = new Runnable()
-{
-	@Override
-	public void run()
-	{
-		ObjectInputStream ois;
-		
-		while (connected)
-		{
-			try
-			{
-				ois = new ObjectInputStream(socket.getInputStream());
-				int receive_state = (Integer) ois.readObject();
-				
-				if (receive_state == 1) // Kicked / Disconnected by Server
-				{
-					connected = false;
-					socket = null;
-					
-					JOptionPane.showMessageDialog(null, "Disconnected by Server", "Info", JOptionPane.INFORMATION_MESSAGE);
-					System.exit(0);
-				}
-				else if (receive_state == 2) // Server Disconnected
-				{
-					connected = false;
-					socket = null;
-					
-					JOptionPane.showMessageDialog(null, "Server Disconnected", "Info", JOptionPane.INFORMATION_MESSAGE);
-					System.exit(0);
-				}
-				
-				ois = new ObjectInputStream(socket.getInputStream());
-				ArrayList<DataPackage> list_data = (ArrayList<DataPackage>) ois.readObject();
-				
-				for (int i = 0; i < list_data.size(); i++)
-				{
-					DataPackage dp = list_data.get(i);
-					
-					if (list_data.size() != others.size())
-					{
-						if (list_data.size() > others.size())
-						{
-							others.add(dp);
-						}
-						
-						if (list_data.size() < others.size())
-						{
-							others.remove(0);
-						}
-					}
-					else
-					{
-						others.set(i, dp);
-					}
-				}
-			}
-			catch (Exception ex) {}
-		}
-	}
-	
-};
-
-
-
-public static Socket socket;
-
-public static int port = 2406;
-public static String ip = "";
-
-
-
-public int n ;
-public int m ;
-public int x  = 1;
-public int y = 1 ;
-public int shotx ;
-public int shoty ;
-
-public int nx ;
-public int ny ;
-
-public String username = "Vallentin";
-
-public ArrayList<DataPackage> others = new ArrayList<DataPackage>();
-
-
-    
+	} 
 
 	/*
 	 * Methode, die die Objekte des Raumes fuer einen neuen Raum loescht
@@ -731,38 +350,7 @@ public ArrayList<DataPackage> others = new ArrayList<DataPackage>();
 		kollision_boss_spieler();	
 	}
 
-/*	public void movemonster2() {
-
-		if (Jay.getY()<Monster2.getY()){
-			Monster2.move(0,-Monster_speed);
-		}
-		else if (Jay.getY()>Monster2.getY()){
-			Monster2.move(0,Monster_speed);
-		}
-		if (Jay.getX()>Monster2.getX()){
-			Monster2.move(Monster_speed,0);
-		}
-		else if (Jay.getX()<Monster2.getX()){
-			Monster2.move(-Monster_speed,0);
-		}
-		
-	}
-	public void movemonster3() {
-
-		if (Jay.getY()<Monster3.getY()){
-			Monster3.move(0,-Monster_speed);
-		}
-		else if (Jay.getY()>Monster3.getY()){
-			Monster3.move(0,Monster_speed);
-		}
-		if (Jay.getX()>Monster3.getX()){
-			Monster3.move(Monster_speed,0);
-		}
-		else if (Jay.getX()<Monster3.getX()){
-			Monster3.move(-Monster_speed,0);
-		}
-	}*/
-
+	
 
 	public void MoveGeist(Ghost b) {
 		if (counter<50)
@@ -1051,7 +639,7 @@ public ArrayList<DataPackage> others = new ArrayList<DataPackage>();
 				check = new checkpoint(x,y);
 				x=x+BLOCK;
 			}else if(obj == 'k'){															
-				Monster = new Boss(x,y,"e1");
+				Monster = new Boss(x,y, "e1");
 				x=x+BLOCK;
 			}else if(obj == 'p'){															
 				Monster2 = new Boss(x,y,"e2");
@@ -1119,104 +707,13 @@ public ArrayList<DataPackage> others = new ArrayList<DataPackage>();
 	 * Fuer die grafische Zeichnung mit Graphics g
 	 */
 
-	public void buildWorld( Graphics g){
-
-	/*	g.drawImage(img, 0, 0, null);																
-		ArrayList<Movement> world = new ArrayList<Movement>();
-
-		if (raum.contains("b")==true)world.add(check);															
-		if (lr!="l3r6")world.add(Jay);
-		if (raum.contains("k")) world.add(Monster);
-		if (raum.contains("p")) world.add(Monster2);
-		if (raum.contains("o")) world.add(Monster3);
-		if (raum.contains("r")) world.add(ball);
-		if (raum.contains("i")) world.add(ice);
-		if (raum.contains("n")) world.add(ps);
-		if (raum.contains("w")) {
-			world.add(Geist);
-		}
-		if (raum.contains("v")) {
-			world.add(geist2);
-		}
-		world.addAll(keys);
-		world.addAll(wizards);
-		world.addAll(coins);
-		world.addAll(shopkeepers);
-
-		for(int i = 0; i < world.size(); i++){													
-			Movement obj = (Movement) world.get(i);
-			g.drawImage(obj.getImage(), obj.getX(), obj.getY(), this);								
-		}
-		
-		ArrayList<Shot> shots = getShots();
-	       	for (int j = 0; j < shots.size(); j++){
-	       		Shot m = (Shot) shots.get(j);
-	       		g.drawImage(m.getImage(), m.getX(), m.getY(), this);
-            }
-
-        ArrayList<Sword> swords = getSwords();
-	       		for (int i = 0; i < swords.size(); i++){
-	       			Sword s = (Sword) swords.get(i);
-	       			g.drawImage(s.getImage(), s.getX(), s.getY(), this);
-               }
-	       		
-	    ArrayList<Cannon> cannons = getCannons();
-	       		for (int j = 0; j < cannons.size(); j++){
-	       			Cannon m = (Cannon) cannons.get(j);
-	       		if (m.isVisible())
-	       			g.drawImage(m.getImage(), m.getX(), m.getY(), this);
-                }	
-
-	       		for (int i = 0; i < enemys.size(); i++){									
-	       			Enemy e = (Enemy) enemys.get(i);
-	       			if (e.isVisible())
-	       				g.drawImage(e.getImage(), e.getX(), e.getY(), this);
-	       			}
-	       			
-	       		for (int i = 0; i < buyswords.size(); i++){										
-	       			Buy1 s = (Buy1) buyswords.get(i);
-	       			if (s.isVisible())
-	       				g.drawImage(s.getImage(), s.getX(), s.getY(), this);
-	       			}
-	       		
-	       		for (int i = 0; i < buycannons.size(); i++){									
-	       			Buy2 ca = (Buy2) buycannons.get(i);
-	       			if (ca.isVisible())
-	       				g.drawImage(ca.getImage(), ca.getX(), ca.getY(), this);
-	       			}
-	
-	       		for (int i = 0; i < walls.size(); i++){											
-	       			Wall w = (Wall) walls.get(i);
-	       			if (w.isVisible())
-	       				g.drawImage(w.getImage(), w.getX(), w.getY(), this);
-	       			}
-	       		
-	       		for (int i = 0; i < coins.size(); i++){										
-	       			Coin c = (Coin) coins.get(i);
-	       			if (c.isVisible())
-	       				g.drawImage(c.getImage(), c.getX(), c.getY(), this);
-	       			}
-	       		for (int i = 0; i < buyarmorsice.size(); i++){											
-	       			Buy_Armor_Ice bi = (Buy_Armor_Ice) buyarmorsice.get(i);
-	       			if (bi.isVisible())
-	       				g.drawImage(bi.getImage(), bi.getX(), bi.getY(), this);
-	       			}
-	       		for (int i = 0; i < buyarmorsfire.size(); i++){											
-	       			Buy_Armor_Fire bf = (Buy_Armor_Fire) buyarmorsfire.get(i);
-	       			if (bf.isVisible())
-	       				g.drawImage(bf.getImage(), bf.getX(), bf.getY(), this);
-	       			}*/
-	}
-	
-    
+	   
 
 	public void paint(Graphics g){
 		super.paint(g);
-		//protected void paintComponent( Graphics g ){
-		//  super.paintComponent( g );
 		
 	if(ingame){																					
-		buildWorld(g);
+	
 		g.drawImage(img, 0, 0, null);																
 		ArrayList<Movement> world = new ArrayList<Movement>();
 
@@ -1301,69 +798,8 @@ public ArrayList<DataPackage> others = new ArrayList<DataPackage>();
 	       			Buy_Armor_Fire bf = (Buy_Armor_Fire) buyarmorsfire.get(i);
 	       			if (bf.isVisible())
 	       				g.drawImage(bf.getImage(), bf.getX(), bf.getY(), this);
-	       			}
-		
-	
-	//		Graphics2D g2d = (Graphics2D) g;
+	       			}	
 			
-			
-			
-			
-	       		for (int i = 0; i < others.size(); i++)
-				{
-					try
-					{
-						DataPackage dp = others.get(i);
-						
-						if (!dp.username.toLowerCase().equals(username.toLowerCase()))
-						{
-					
-					       	for (int j = 0; j < shots.size(); j++){
-					       		Shot m = (Shot) shots.get(j);
-					       		dp.shotx = m.getX();
-					       		dp.shoty = m.getY();
-					       		g.drawImage(m.getImage(), dp.shotx, dp.shoty , this);
-					       	}
-					       	
-						///	shots.add(new Shot(Jay.getX() + BLOCK, Jay.getY()));		
-							g.drawImage(Jay.getImage(), dp.x, dp.y,this);	
-							
-							
-							g.setColor(Color.RED);
-							g.fillOval((int) dp.n - 50, (int) dp.m - 50, 100, 100);
-							
-							g.setColor(Color.BLACK);
-							//g.drawString(dp.username, dp.n - 50, dp.m - 70);
-						
-					}	
-					}
-					catch (Exception ex) {}
-				}
-						
-			
-			g.drawImage(Jay.getImage(),Jay.getX(),Jay.getY(),this);
-			
-		
-	       	for (int j = 0; j < shots.size(); j++){
-	       		Shot m = (Shot) shots.get(j);
-			g.drawImage(m.getImage(), m.getX()+BLOCK, m.getY(), this);
-	       	
-	       	}
-	       
-				g.setColor(Color.BLUE);
-				g.fillOval(n - 50, m - 50, 100, 100);
-				
-				g.setColor(Color.BLACK);
-				g.drawString(username, n - 50, m - 70);
-				
-				
-				
-				try
-				{
-					Thread.sleep(1);
-				}
-				catch (Exception ex) {}
-				
 				repaint();
 			}
 		if (raum.contains("k")){
@@ -1373,7 +809,6 @@ public ArrayList<DataPackage> others = new ArrayList<DataPackage>();
 		}if (raum.contains("p")){
 			if (lr.charAt(1)=='2') Monster_speed=2;
 			else Monster_speed=1;
-			
 			movemonster(Monster2);
 		}if (raum.contains("o")){
 			if (lr.charAt(1)=='3') Monster_speed=2;
@@ -1540,7 +975,7 @@ public ArrayList<DataPackage> others = new ArrayList<DataPackage>();
 
 			int key = e.getKeyCode();
 
-	/*		if(key == KeyEvent.VK_RIGHT && armor_ice != true && armor_fire != true){		
+		if(key == KeyEvent.VK_RIGHT && armor_ice != true && armor_fire != true){		
 				
 				Image image1 = image = r.getImage();										
 				Jay.setImage(image1);
@@ -1648,7 +1083,7 @@ public ArrayList<DataPackage> others = new ArrayList<DataPackage>();
 				 * Falls die Taste F fuer Feuerruestung oder E fuer Eisruestung bedient wird, und Diggy noch die 
 				 * Ruestung nihct hat traegt er diese und verliert ein Mana
 				 */
-	/*		}else if(key == KeyEvent.VK_F && armor_fire!=true){
+			}else if(key == KeyEvent.VK_F && armor_fire!=true){
 			
 				if(mana>1)	{
 					armor_fire=true;
