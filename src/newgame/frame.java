@@ -20,14 +20,12 @@ private JButton starten;
 private JButton beenden;
 private JButton chat;
 private JButton info;
-private  static JLabel text;
-
 private JLabel l1;
+private Server server;
 
 
-
-public static void main(String[] args){	
-	frame frame = new frame ("DUNGEON CRAWLER");
+public static void main(String[] args){ 
+	frame frame = new frame ("DUNGEON CRAWLER");								
 }
 
 	public frame(String title){
@@ -43,23 +41,27 @@ public static void main(String[] args){
 		l1=new JLabel();
 
 		starten = new JButton("Spiel Starten");
-		starten.setBounds(170,85,150,60);//170,95,150,80);
+		starten.setBounds(170,85,150,60);
+		starten.setFocusPainted(false);
 		starten.setIcon(new ImageIcon("src/Resources/starten.png")); 			
 		starten.addActionListener(this);	
 		
 		chat = new JButton("Chat");
 		chat.setBounds(170,165,150,60);
+		starten.setFocusPainted(false);
 		chat.setIcon(new ImageIcon("src/Resources/chat.png"));				
 		chat.addActionListener(this);
 		
 		info = new JButton("Information");
 		info.setBounds(170,250,150,60);
+		starten.setFocusPainted(false);
 		info.setIcon(new ImageIcon("src/Resources/info.png"));				
 		info.addActionListener(this);
 
 
 		beenden = new JButton("Beenden");
 		beenden.setBounds(170,330,150,60);
+		starten.setFocusPainted(false);
 		beenden.setIcon(new ImageIcon("src/Resources/beenden.png"));				
 		beenden.addActionListener(this);
 
@@ -67,13 +69,11 @@ public static void main(String[] args){
 		add(l1);
 		add(starten);
 		add(chat);	
-		add(info);
+		add(info);	
 		add(beenden);
 		setSize(499,499);
 		setSize(500,500);																		
 	}
-	
-
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -83,23 +83,23 @@ public static void main(String[] args){
 	
 				}catch(IOException e1) {
 					e1.printStackTrace();
-				}
+				
+			}
 			
+		
 			if (e.getSource()==chat)	
 				 try {
-					 new Server().start(); 													
-					 new Chatter().start(); 					//								
-				 } catch (Exception e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				 	}
-		 
-			if (e.getSource()==info) Info();
+					// new Server().start(); 														// Server
+					 new Chatter().start(); 													// Client
 			
-		 	
-			if (e.getSource()==beenden)	System.exit(0);
-			}
+				 } catch (Exception e1) {
 
+					e1.printStackTrace();
+				}
+		 
+		
+			if (e.getSource()==beenden)	System.exit(0);
+		 	}
 
 				/* Beim starten wird das Spielfeld mit (1200 x 720) erstellt.
 				 * 
@@ -115,14 +115,4 @@ public static void main(String[] args){
 				 
 				  	
 				 }
-				public static void Info(){																
-					JFrame info = new JFrame("Information");
-					info.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);	
-					info.setSize(500,200);
-					info.setVisible(true);
-					info.setLocationRelativeTo(null);
-					text = new JLabel("\r\nDieses Spiel wurde entwickelt von Asma Ben Janete und Ani Dawidjan.");
-					text.setFont(new Font("Serif", Font.PLAIN, 14));			
-					info.getContentPane().add(text);
-				}
 	}

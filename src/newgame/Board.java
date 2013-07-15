@@ -142,7 +142,7 @@ public class Board extends JPanel implements ActionListener{
 	 */
 	public Board() throws IOException{
 
-		lr="l1r1";					//l1r1 steht fuer Level 1, Raum 1													
+		lr="l1r4";					//l1r1 steht fuer Level 1, Raum 1													
 		addKeyListener(new Ap());
 		setFocusable(true);
 		setDoubleBuffered(true);
@@ -1762,17 +1762,17 @@ public class Board extends JPanel implements ActionListener{
 
 
 		            if (r1.intersects(r2)) {												
-		                if ((w.getX()==0)&&(w.getY()==50) &&(lr.charAt(1)=='1')){
+		                if ((w.getX()==0)&&(w.getY()==50) &&(lr.charAt(1)=='1')&&(lr!="l1r5")){
 		                	m.setVisible(false);
 		                    w.setVisible(false);
 		                    luecke=w;
 		                }
-		                else if ((w.getX()==0)&&(w.getY()==200) &&(lr.charAt(1)=='2')){
+		                else if ((w.getX()==0)&&(w.getY()==200) &&(lr.charAt(1)=='2')&&(lr!="l2r5")){
 		                	m.setVisible(false);
 		                    w.setVisible(false);
 		                    luecke=w;
 		                }
-		                else if ((w.getX()==0)&&(w.getY()==300) &&(lr.charAt(1)=='3')){
+		                else if ((w.getX()==0)&&(w.getY()==300) &&(lr.charAt(1)=='3')&&(lr!="l3r4")){
 		                	m.setVisible(false);
 		                    w.setVisible(false);
 		                    luecke=w;
