@@ -11,11 +11,16 @@ import javax.swing.JFrame;
 
  
  
+
+ /*
+  * Auf einem Rechner wird (new Chatter().start()) auskommentiert.
+  * Auf dem anderen (new Server().start())
+  */
  public class Verwalter {
 	 
  public static void main(String [] args){
 	 try {
-	//	 new Server().start(); 														// Server
+	//	 new server1().start(); 														// Server
 		 new Chatter().start(); 													// Client
 	 }catch (Exception e){
 		 	e.printStackTrace();
@@ -23,7 +28,12 @@ import javax.swing.JFrame;
  	}
  }
  
- class Server extends Thread{
+
+/*
+ *  Server erzeugt Serversocket auf Port 4711
+ */
+
+ class server1 extends Thread{
  Chat_Frame frame;
  ServerSocket _ServerSocket = null;
  Socket _ClientSocket = null;
@@ -31,10 +41,20 @@ import javax.swing.JFrame;
  BufferedReader _in = null;
  
  
- 	Server() throws Exception{
+ 	server1() throws Exception{
  	_ServerSocket = new ServerSocket(4711);											// Server erzeugt Serversocket
  }
+
  
+ 	/*
+ 	 * Es wird auf Verbindung gewartet. 
+ 	 * @param _out Ausgabestrom
+ 	 * @param _in Eingabestrom
+ 	 * Methode addAusgabe zeigt Eingabe des Empfaengers an.
+ 	 * 
+ 	 */
+
+
  public void run(){
 	 while(true){
 		 try {

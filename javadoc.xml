@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="javadoc">
+    <target name="javadoc">
+        <javadoc access="public" author="true" classpath="." destdir="doc" nodeprecated="false" nodeprecatedlist="false" noindex="false" nonavbar="false" notree="false" source="1.6" sourcefiles="src/newgame/Sword.java,src/newgame/PuzzleSt.java,src/newgame/Game_over.java,src/newgame/Buy1.java,src/newgame/Shopkeeper.java,src/newgame/ergebnis.java,src/newgame/Board.java,src/newgame/Ice.java,src/newgame/Dialogue.java,src/newgame/checkpoint.java,src/newgame/Character.java,src/newgame/Enemy.java,src/newgame/Shot.java,src/newgame/Wizard.java,src/newgame/Coin.java,src/newgame/Buy_Armor_Fire.java,src/newgame/Raetsel.java,src/newgame/Verwalter.java,src/newgame/DataPackage.java,src/newgame/Chatter.java,src/newgame/Code.java,src/newgame/Buy_Armor_Ice.java,src/newgame/Wall.java,src/newgame/Buy2.java,src/newgame/DialogueShop.java,src/newgame/Movement.java,src/newgame/Ghost.java,src/newgame/Chat_Frame.java,src/newgame/Cannon.java,src/newgame/Server.java,src/newgame/Boss.java,src/newgame/Key.java,src/newgame/Ball.java" sourcepath="src" splitindex="true" use="true" version="true"/>
+    </target>
+</project>

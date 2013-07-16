@@ -5,7 +5,7 @@ import java.awt.Rectangle;
 
 import javax.swing.ImageIcon;
 
-/* Klasse für den Schwertkampf.
+/* Klasse fuer den Schwertkampf.
  * 
  */
 

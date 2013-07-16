@@ -3,8 +3,6 @@ import java.awt.event.*;
 
 import javax.swing.*; //JButton, JFrame..
 
-
-
 import java.awt.*;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -78,19 +76,17 @@ public static void main(String[] args){
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource()==starten)
-				try {
-					game();
+								game();
 	
-				}catch(IOException e1) {
-					e1.printStackTrace();
+
 				
-			}
 			
-		
+
 			if (e.getSource()==chat)	
 				 try {
-					// new Server().start(); 														// Server
-					 new Chatter().start(); 													// Client
+				//	 new Server().start(); 														// Server
+				//	 new Chatter().start(); 													// Client
+
 			
 				 } catch (Exception e1) {
 
@@ -105,13 +101,15 @@ public static void main(String[] args){
 				 * 
 				 */
 
-				public static void game() throws IOException{																
+				public static void game(){																
 					JFrame game = new JFrame("PLAY DUNGEON CRAWLER");
 					game.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);	
+					game.add(new Board());	
+					game.pack();	
 					game.setSize(1200,720);
 					game.setVisible(true);
 					game.setLocationRelativeTo(null);
-					game.add(new Board());															
+			
 				 
 				  	
 				 }
