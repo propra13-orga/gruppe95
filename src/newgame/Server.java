@@ -29,13 +29,6 @@ import javax.swing.UIManager;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-/**
- * 
- * @author Vallentin <vallentinsource@gmail.com>
- * @since April 8, 2012
- * 
- */
-
 public class Server
 {
 	public static int port = 2406;
@@ -83,7 +76,7 @@ public class Server
 					
 					if (accepted)
 					{
-						oos.writeObject("Welcome To This Server...");
+						oos.writeObject("Willkommen");
 						
 						list_clients_model.addElement(username + " - " + socket.getInetAddress().getHostAddress() + " - " + socket.getInetAddress().getHostName());
 						list_client_states.add(0);
@@ -93,7 +86,7 @@ public class Server
 					}
 					else
 					{
-						oos.writeObject("Your name is already taken!");
+						oos.writeObject("Der Name ist bereits Vergeben");
 					}
 				}
 				catch (Exception ex) {}
@@ -216,14 +209,14 @@ public class Server
 		}
 		catch (IOException ex)
 		{
-			JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage(), "Alert", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage(), "Meldung", JOptionPane.ERROR_MESSAGE);
 			System.exit(0);
 		}
 		
 		
 		
 		btn_disconnect = new JButton();
-		btn_disconnect.setText("Disconnet");
+		btn_disconnect.setText("Unterbrechen");
 		btn_disconnect.addActionListener(new ActionListener()
 		{
 			@Override
@@ -239,7 +232,7 @@ public class Server
 					}
 					catch (Exception ex)
 					{
-						JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage(), "Alert", JOptionPane.ERROR_MESSAGE);
+						JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage(), "Meldung", JOptionPane.ERROR_MESSAGE);
 					}
 				}
 			}
