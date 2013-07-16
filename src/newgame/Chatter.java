@@ -1,11 +1,7 @@
-<<<<<<< HEAD
-
-		package newgame;
 
 
-
-=======
 package newgame;
+
 /*
 >>>>>>> 32abf7ebb36ac55cc6d14777fd18bf4af5deaaec
 import java.io.BufferedReader;
@@ -73,4 +69,4 @@ import java.util.Scanner;
 	 	
  }
 */
->>>>>>> 32abf7ebb36ac55cc6d14777fd18bf4af5deaaec
+

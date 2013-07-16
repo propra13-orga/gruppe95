@@ -25,21 +25,21 @@ private JLabel l1;
 
 
 public static void main(String[] args){ 
-	frame frame = new frame ("DUNGEON CRAWLER");								
+	frame frame = new frame ("DUNGEON CRAWLER");
+	frame.setSize(500,500);
+	frame.setLocationRelativeTo(null);															
+	frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
+	frame.setVisible(true);	
+	
 }
 
 	public frame(String title){
 		super(title);
-
-		setSize(500,500);
-		setLocationRelativeTo(null);															
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		setVisible(true);
-		setLayout(new BorderLayout());
-		setContentPane(new JLabel(new ImageIcon("src/Resources/Start Screen2.png")));			
-		setLayout(null);
+		
 		l1=new JLabel();
-
+		setLayout(new BorderLayout());
+		setContentPane(new JLabel(new ImageIcon("src/Resources/Start Screen2.png")));		
+		
 		starten = new JButton();
 		starten.setBounds(160,85,150,60);
 		starten.setIcon(new ImageIcon("src/Resources/spielstarten.png")); 			
@@ -77,14 +77,12 @@ public static void main(String[] args){
 			if (e.getSource()==starten)
 								game();
 						setVisible(false);
+	
 			if (e.getSource()==chat)	
 				 try {
-
-					// new Server().start(); 														// Server
-					 //new Chatter().start(); 													// Client
-
-			
-
+				 new Servera().start(); 													
+				//new Chatter().start(); 												
+				 
 				 } catch (Exception e1) {
 
 					e1.printStackTrace();
@@ -98,7 +96,7 @@ public static void main(String[] args){
 					online();
 					setVisible(false);
 			}
-		 }
+		 	}
 
 				/* Beim starten wird das Spielfeld mit (1200 x 720) erstellt.
 				 * 

@@ -29,6 +29,8 @@ import javax.swing.UIManager;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+
+
 public class Server
 {
 	public static int port = 2406;
@@ -44,6 +46,7 @@ public class Server
 	
 	private static Runnable accept = new Runnable()
 	{
+		@SuppressWarnings("unchecked")
 		@Override
 		public void run()
 		{
@@ -191,11 +194,14 @@ public class Server
 	
 	public static JButton btn_disconnect;
 	
+	@SuppressWarnings("rawtypes")
 	public static JList list_clients;
+	@SuppressWarnings("rawtypes")
 	public static DefaultListModel list_clients_model;
 	
 	
 	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static void main(String[] args)
 	{
 		try { UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); } catch (Exception ex) {}
