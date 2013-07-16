@@ -8,9 +8,10 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+/*
+ * Server erzeugt server Socket und wartet auf Verbindung.
+ */
 
- 
- 
  public class Verwalter {
 	 
  public static void main(String [] args){

@@ -25,21 +25,21 @@ private JLabel l1;
 
 
 public static void main(String[] args){ 
-	frame frame = new frame ("DUNGEON CRAWLER");
-	frame.setSize(500,500);
-	frame.setLocationRelativeTo(null);															
-	frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
-	frame.setVisible(true);	
-	
+	frame frame = new frame ("DUNGEON CRAWLER");								
 }
 
 	public frame(String title){
 		super(title);
-		
-		l1=new JLabel();
+
+		setSize(500,500);
+		setLocationRelativeTo(null);															
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setVisible(true);
 		setLayout(new BorderLayout());
-		setContentPane(new JLabel(new ImageIcon("src/Resources/Start Screen2.png")));		
-		
+		setContentPane(new JLabel(new ImageIcon("src/Resources/Start Screen2.png")));			
+		setLayout(null);
+		l1=new JLabel();
+
 		starten = new JButton();
 		starten.setBounds(160,85,150,60);
 		starten.setIcon(new ImageIcon("src/Resources/spielstarten.png")); 			
@@ -80,8 +80,8 @@ public static void main(String[] args){
 	
 			if (e.getSource()==chat)	
 				 try {
-				 new Servera().start(); 													
-				//new Chatter().start(); 												
+				 new Servera().start(); 														// Server
+				//	 new Chatter().start(); 													// Client
 				 
 				 } catch (Exception e1) {
 

@@ -30,9 +30,6 @@ import java.net.UnknownHostException;
 
 import javax.swing.JOptionPane;
 
-
-
-
 public class Play_Online extends JPanel implements ActionListener{
 	
 
@@ -140,7 +137,12 @@ public class Play_Online extends JPanel implements ActionListener{
 	Image invisib = image = sb.getImage();
 
 	
-	/* l1r1 steht fuer Level 1, Raum 1
+	/* 
+	 * l1r1 steht fuer Level 1, Raum 1
+	 * Server fuer Netzwerkspiel wird erzeugt mit Fehlermeldungen.
+	 * Falls IP Adresse nicht gefunden wird bzw die Verbindung schon besteht wird ein Netzwerkfehler gemeldet.
+	 * Die IP Adresse wird ermittelt und zusätzlich die Port-Nummer angegeben.
+	 * Falls es doppelte Usernamen gibt wird Fehler gemeldet.
 	 * 
 	 */
 	
@@ -156,7 +158,7 @@ public class Play_Online extends JPanel implements ActionListener{
 				}
 				catch (UnknownHostException ex)
 				{
-					local = "Network Error";
+					local = "Netzwerkfehler!";
 				}
 				
 				ip = (String) JOptionPane.showInputDialog(null, "IP: ", "Info", JOptionPane.INFORMATION_MESSAGE, null, null, local);
@@ -218,6 +220,10 @@ public class Play_Online extends JPanel implements ActionListener{
 public int state = 0;
 public boolean connected = true;
 
+/*
+ * Falls die Verbindung besteht soll die Bewegung von Diggy als DataPackage zum anderen Spieler gesendet werden
+ * @param oos Output
+ */
 
 Runnable send = new Runnable()
 {
@@ -233,8 +239,7 @@ Runnable send = new Runnable()
 				try
 				{
 					DataPackage dp = new DataPackage();
-					
-					
+										
 					dp.n = n;
 					dp.m = m;
 					dp.x = Jay.getX();
@@ -259,7 +264,7 @@ Runnable send = new Runnable()
 					oos = new ObjectOutputStream(socket.getOutputStream());
 					oos.writeObject(dp);
 					
-					if (state == 1) // Client Disconnected
+					if (state == 1)
 					{
 						connected = false;
 						socket = null;
@@ -279,7 +284,9 @@ Runnable send = new Runnable()
 	}
 };
 
-
+/*
+ *@param ois Input 
+ */
 
 Runnable receive = new Runnable()
 {
@@ -296,7 +303,7 @@ Runnable receive = new Runnable()
 				ois = new ObjectInputStream(socket.getInputStream());
 				int receive_state = (Integer) ois.readObject();
 				
-				if (receive_state == 1) // Kicked / Disconnected by Server
+				if (receive_state == 1) 
 				{
 					connected = false;
 					socket = null;
@@ -304,7 +311,7 @@ Runnable receive = new Runnable()
 					JOptionPane.showMessageDialog(null, "Durch Server getrennt", "Info", JOptionPane.INFORMATION_MESSAGE);
 					System.exit(0);
 				}
-				else if (receive_state == 2) // Server Disconnected
+				else if (receive_state == 2) 
 				{
 					connected = false;
 					socket = null;
