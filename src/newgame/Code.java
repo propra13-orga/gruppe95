@@ -25,7 +25,7 @@ private JTextField text;
 		public void ergebnis( String t){															
 
 			JFrame ergebnis = new ergebnis(t);
-			ergebnis.setSize(400,250);
+			ergebnis.setSize(600,250);
 			ergebnis.setLocationRelativeTo(null);
 			ergebnis.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 			ergebnis.setVisible(true);
@@ -41,14 +41,14 @@ private JTextField text;
 			if (e.getSource()==text){	
 				setVisible(false);
 				String s=text.getText();
-				s=s.substring(15,21);
+				//s=s.substring(15,21);
 				
 				if (s.contains("158273")){
-					ergebnis("   Raetsel erfolgreich geloest!  :) ");
+					ergebnis("   Raetsel erfolgreich geloest! dafür kriegst du Diggy eine besondere Hilfe");
 					
 					}else {
-						System.out.println(s);
-						ergebnis("   Code falsch eingegeben");
+						
+					ergebnis("   Code falsch eingegeben");
 					}
  				}
 			}
