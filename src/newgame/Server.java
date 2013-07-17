@@ -29,6 +29,8 @@ import javax.swing.UIManager;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+
+
 public class Server
 {
 	public static int port = 2406;
@@ -40,10 +42,16 @@ public class Server
 	public static ArrayList<Integer> list_client_states = new ArrayList<Integer>();
 	public static ArrayList<DataPackage> list_data = new ArrayList<DataPackage>();
 	
-	
+	/*
+	 * Verbindung wir hergestellt, Username ausgelesen, falls Usernamen gleich sind wird keine Verbindung hergestellt,
+	 * sonst wird Verbindung hergestellt und Username, IP- Adresse und POrt in der Liste des Serverfensters angezeigt.
+	 * Alle Packete werden nun empfangen
+	 * 
+	 */
 	
 	private static Runnable accept = new Runnable()
 	{
+		@SuppressWarnings("unchecked")
 		@Override
 		public void run()
 		{
@@ -94,6 +102,9 @@ public class Server
 		}
 	};
 	
+	/*
+	 * Packete werden verschickt, wenn Verbindung besteht.
+	 */
 	private static Runnable send = new Runnable()
 	{
 		@Override
@@ -114,12 +125,12 @@ public class Server
 						oos = new ObjectOutputStream(list_sockets.get(i).getOutputStream());
 						oos.writeObject(list_data);
 						
-						if (client_state == 1) // Kicked by Server
+						if (client_state == 1) 
 						{
 							disconnectClient(i);
 							i--;
 						}
-						else if (client_state == 2) // Server Disconnected
+						else if (client_state == 2) 
 						{
 							disconnectClient(i);
 							i--;
@@ -131,6 +142,9 @@ public class Server
 		}
 	};
 	
+	/*
+	 * Packete empfangen, wennn Verbindung besteht.
+	 */
 	private static Runnable receive = new Runnable()
 	{
 		@Override
@@ -152,13 +166,13 @@ public class Server
 						
 						list_data.set(i, dp);
 						
-						if (receive_state == 1) // Client Disconnected by User
+						if (receive_state == 1)
 						{
 							disconnectClient(i);
 							i--;
 						}
 					}
-					catch (Exception ex) // Client Disconnected (Client Didn't Notify Server About Disconnecting)
+					catch (Exception ex) 
 					{
 						disconnectClient(i);
 						i--;
@@ -168,6 +182,9 @@ public class Server
 		}
 	};
 	
+	/*
+	 * Methode, wenn die Verbindung  eines Clienten nicht mehr besteht, vom vom Server entfernen.
+	 */
 	public static void disconnectClient(int index)
 	{
 		try
@@ -191,14 +208,22 @@ public class Server
 	
 	public static JButton btn_disconnect;
 	
+	@SuppressWarnings("rawtypes")
 	public static JList list_clients;
+	@SuppressWarnings("rawtypes")
 	public static DefaultListModel list_clients_model;
 	
 	
 	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	
+	/*
+	 * Oberfläche der Anzeige wird waehrend der Anzeige angepasst
+	 */
 	public static void main(String[] args)
 	{
-		try { UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); } catch (Exception ex) {}
+		try { UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); 
+			} catch (Exception ex) {}
 		
 		try
 		{
@@ -283,6 +308,10 @@ public class Server
 			public void windowIconified(WindowEvent e) {}
 			public void windowOpened(WindowEvent e) {}
 		});
+		
+		/*
+		 * Fenster fuer den Server
+		 */
 		
 		panel1 = new JPanel();
 		panel1.setLayout(new GridLayout(1, 1, 1, 1));

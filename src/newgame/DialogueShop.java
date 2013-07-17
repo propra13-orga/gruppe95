@@ -9,6 +9,10 @@ import java.awt.*;
 
 public class DialogueShop extends JFrame implements ActionListener{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JButton weiter;																	
 	private JButton schliessen;
 	private JLabel text;

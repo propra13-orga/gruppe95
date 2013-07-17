@@ -12,6 +12,10 @@ import java.awt.*;
 
 public class Dialogue extends JFrame implements ActionListener{
 	
+/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 private JButton weiter;																										
 private JButton schliessen;
 private JLabel text;
@@ -22,7 +26,6 @@ private JButton weiter2,weiter3,weiter4;
 	
 	text = new JLabel("           Ich bin hier um dir zu helfen Diggy!");	
 	text.setFont(new Font("Serif", Font.PLAIN, 14));
-	//text.setBackground(Color.MAGENTA);
 	getContentPane().add(text);
 
 	weiter = new JButton("Weiter");																						

@@ -22,17 +22,13 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionListener;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
+
 import javax.swing.JOptionPane;
-
-
-
 
 public class Play_Online extends JPanel implements ActionListener{
 	
@@ -59,7 +55,7 @@ public class Play_Online extends JPanel implements ActionListener{
 	boolean bought1, bought2, bought3, bought4;
 	private checkpoint check;
 	private Ghost Geist,geist2;
-	private Boss Monster, Monster2, Monster3;
+	private Boss Monster,Monster2, Monster3;
 	private Ball ball;
 	private Ice ice;
 	private boolean besuch = false;
@@ -141,160 +137,16 @@ public class Play_Online extends JPanel implements ActionListener{
 	Image invisib = image = sb.getImage();
 
 	
-	/* l1r1 steht fuer Level 1, Raum 1
-	 * (Mausbewegung zum testen)
+	/* 
+	 * l1r1 steht fuer Level 1, Raum 1
+	 * Server fuer Netzwerkspiel wird erzeugt mit Fehlermeldungen.
+	 * Falls IP Adresse nicht gefunden wird bzw die Verbindung schon besteht wird ein Netzwerkfehler gemeldet.
+	 * Die IP Adresse wird ermittelt und zusätzlich die Port-Nummer angegeben.
+	 * Falls es doppelte Usernamen gibt wird Fehler gemeldet.
+	 * 
 	 */
 	
 	public Play_Online(){
-		this.addMouseMotionListener(new MouseMotionListener()
-		{
-			@Override
-			public void mouseDragged(MouseEvent e)
-			{
-				n = e.getX();
-				m = e.getY();
-			}
-
-			@Override
-			public void mouseMoved(MouseEvent arg0) {}
-		});
-	
-		this.addKeyListener(new KeyAdapter()
-		{
-		public  void keyPressed(KeyEvent e){
-
-			int key = e.getKeyCode();
-
-			if(key == KeyEvent.VK_RIGHT && armor_ice != true && armor_fire != true){		
-					
-					Image image1 = image = r.getImage();										
-					Jay.setImage(image1);
-					position = 1;
-					collision(BLOCK,0, image1);
-					
-				}else if(armor_ice == true && key == KeyEvent.VK_RIGHT){
-					
-					Image image1i = image = ir.getImage();										
-					Jay.setImage(image1i);
-					position = 1;
-					collision(BLOCK,0, image1i);
-					
-				}else if(armor_fire == true && key == KeyEvent.VK_RIGHT){
-					
-					Image image1f = image = dfr.getImage();										
-					Jay.setImage(image1f);
-					position = 1;
-					collision(BLOCK,0, image1f);
-					
-				}else if(key == KeyEvent.VK_LEFT && armor_ice != true && armor_fire != true){
-
-					Image image2 = image = l.getImage();
-					Jay.setImage(image);
-					position = 2;
-					collision(-BLOCK,0, image2);
-					
-				}else if(armor_ice == true && key == KeyEvent.VK_LEFT){
-						
-						Image image2i = image = il.getImage();										
-						Jay.setImage(image2i);
-						position = 2;
-						collision(-BLOCK,0, image2i);
-						
-				}else if(armor_fire == true && key == KeyEvent.VK_LEFT){
-					
-					Image image2f = image = dfl.getImage();										
-					Jay.setImage(image2f);
-					position = 2;
-					collision(-BLOCK,0, image2f);
-
-				}else if(key == KeyEvent.VK_UP && armor_ice !=true && armor_fire != true){
-
-					Image image3= image = t.getImage() ;
-					Jay.setImage(image);
-					position = 3;
-					collision(0,-BLOCK,image3);
-					
-				}else if(armor_ice == true && key == KeyEvent.VK_UP){
-						
-						Image image3i = image = ib.getImage();										
-						Jay.setImage(image3i);
-						position = 3;
-						collision(0,-BLOCK, image3i);
-						
-				}else if(armor_fire == true && key == KeyEvent.VK_UP){
-					
-					Image image3f = image = dfb.getImage();										
-					Jay.setImage(image3f);
-					position = 3;
-					collision(0,-BLOCK, image3f);
-
-				}else if(key == KeyEvent.VK_DOWN && armor_ice != true && armor_fire != true){
-					
-					Image image4 = image = b.getImage();
-					Jay.setImage(image);
-					position = 4;
-					collision(0,BLOCK, image4);
-					
-				}else if(armor_ice == true && key == KeyEvent.VK_DOWN){
-						
-						Image image4i = image = it.getImage();										
-						Jay.setImage(image4i);
-						position = 4;
-						collision(0,BLOCK, image4i);
-						
-				}else if(armor_fire == true && key == KeyEvent.VK_DOWN){
-					
-					Image image4f = image = dff.getImage();										
-					Jay.setImage(image4f);
-					position = 4;
-					collision(0,BLOCK, image4f);
-
-				}else if (key == KeyEvent.VK_SPACE) {													
-					fire();
-					
-				}else if (key == KeyEvent.VK_M && get_cannon==true) {								
-					cannon();
-					
-				}else if (key == KeyEvent.VK_V && get_sword==true) {								
-					sword_play();
-					
-				}else if (key == KeyEvent.VK_I && get_invisible==true) {									
-					if(mana>0){
-					use_mana_invisible();
-					use_invisible = use_invisible -1;
-					 if(use_invisible==0){
-						get_invisible = false;
-						mana = mana -1;
-					}
-					 
-				}
-				
-					/*
-					 * Falls die Taste F fuer Feuerruestung oder E fuer Eisruestung bedient wird, und Diggy noch die 
-					 * Ruestung nihct hat traegt er diese und verliert ein Mana
-					 */
-				}else if(key == KeyEvent.VK_F && armor_fire!=true){
-				
-					if(mana>1)	{
-						armor_fire=true;
-						mana = mana -1;
-						if(armor_ice!=false){
-							armor_ice =false;
-						}
-					}
-				}else if(key == KeyEvent.VK_E && armor_ice!=true){
-						if(mana>1)	{
-							armor_ice = true;
-							mana = mana - 1;
-							if(armor_fire!=false){
-								armor_fire =false;
-							}
-						}
-				}	
-		
-				repaint();
-		}
-		});
 		
 	    	try
 			{
@@ -345,6 +197,7 @@ public class Play_Online extends JPanel implements ActionListener{
 		
 	
 		lr="l1r1";																		
+		addKeyListener(new Ap());
 		setFocusable(true);
 		try {
 			initWorld(image4);
@@ -367,6 +220,10 @@ public class Play_Online extends JPanel implements ActionListener{
 public int state = 0;
 public boolean connected = true;
 
+/*
+ * Falls die Verbindung besteht soll die Bewegung von Diggy als DataPackage zum anderen Spieler gesendet werden
+ * @param oos Output
+ */
 
 Runnable send = new Runnable()
 {
@@ -382,8 +239,7 @@ Runnable send = new Runnable()
 				try
 				{
 					DataPackage dp = new DataPackage();
-					
-					
+										
 					dp.n = n;
 					dp.m = m;
 					dp.x = Jay.getX();
@@ -408,7 +264,7 @@ Runnable send = new Runnable()
 					oos = new ObjectOutputStream(socket.getOutputStream());
 					oos.writeObject(dp);
 					
-					if (state == 1) // Client Disconnected
+					if (state == 1)
 					{
 						connected = false;
 						socket = null;
@@ -428,10 +284,13 @@ Runnable send = new Runnable()
 	}
 };
 
-
+/*
+ *@param ois Input 
+ */
 
 Runnable receive = new Runnable()
 {
+	@SuppressWarnings("unchecked")
 	@Override
 	public void run()
 	{
@@ -693,7 +552,7 @@ public ArrayList<DataPackage> others = new ArrayList<DataPackage>();
 	/*
 	 * Die Obergegner Boss, Boss2, Boss3 bewegen sich durch diese drei Methoden, die in Richtung Diggy laufen.
 	 */
-	public void movemonster(Boss Monster) {
+	public void movemonster() {
 
 			if (Jay.getY()<Monster.getY()){
 				Monster.move(0,-Monster_speed);
@@ -710,7 +569,38 @@ public ArrayList<DataPackage> others = new ArrayList<DataPackage>();
 		kollision_boss_spieler();	
 	}
 
-	
+	public void movemonster2() {
+
+		if (Jay.getY()<Monster2.getY()){
+			Monster2.move(0,-Monster_speed);
+		}
+		else if (Jay.getY()>Monster2.getY()){
+			Monster2.move(0,Monster_speed);
+		}
+		if (Jay.getX()>Monster2.getX()){
+			Monster2.move(Monster_speed,0);
+		}
+		else if (Jay.getX()<Monster2.getX()){
+			Monster2.move(-Monster_speed,0);
+		}
+		
+	}
+	public void movemonster3() {
+
+		if (Jay.getY()<Monster3.getY()){
+			Monster3.move(0,-Monster_speed);
+		}
+		else if (Jay.getY()>Monster3.getY()){
+			Monster3.move(0,Monster_speed);
+		}
+		if (Jay.getX()>Monster3.getX()){
+			Monster3.move(Monster_speed,0);
+		}
+		else if (Jay.getX()<Monster3.getX()){
+			Monster3.move(-Monster_speed,0);
+		}
+	}
+
 
 	public void MoveGeist(Ghost b) {
 		if (counter<50)
@@ -742,7 +632,7 @@ public ArrayList<DataPackage> others = new ArrayList<DataPackage>();
 	private int mx,my,counter,Monster_speed,Geist_speed,schuss_speed;
 	
 	/*
-	 * Der erste Obergegner hat keine Schussfunktion. Der zweite Obergegner schiesst mit Eisbï¿½llen in richtung Diggy.
+	 * Der erste Obergegner hat keine Schussfunktion. Der zweite Obergegner schiesst mit Eisbällen in richtung Diggy.
 	 * Der dritte Obergegner schiesst mit Feuerbaellen in richtung Diggy.
 	 */
 
@@ -999,7 +889,7 @@ public ArrayList<DataPackage> others = new ArrayList<DataPackage>();
 				check = new checkpoint(x,y);
 				x=x+BLOCK;
 			}else if(obj == 'k'){															
-				Monster = new Boss(x,y, "e1");
+				Monster = new Boss(x,y,"e1");
 				x=x+BLOCK;
 			}else if(obj == 'p'){															
 				Monster2 = new Boss(x,y,"e2");
@@ -1067,12 +957,11 @@ public ArrayList<DataPackage> others = new ArrayList<DataPackage>();
 	 * Fuer die grafische Zeichnung mit Graphics g
 	 */
 
-	
-
 	public void paint(Graphics g){
 		super.paint(g);
-
-	if(ingame){																					
+		
+	if(ingame){	
+		
 		g.drawImage(img, 0, 0, null);																
 		ArrayList<Movement> world = new ArrayList<Movement>();
 
@@ -1158,11 +1047,6 @@ public ArrayList<DataPackage> others = new ArrayList<DataPackage>();
 	       			if (bf.isVisible())
 	       				g.drawImage(bf.getImage(), bf.getX(), bf.getY(), this);
 	       			}
-		
-	
-	//		Graphics2D g2d = (Graphics2D) g;
-			
-			
 			
 			
 	       		for (int i = 0; i < others.size(); i++)
@@ -1174,22 +1058,22 @@ public ArrayList<DataPackage> others = new ArrayList<DataPackage>();
 						if (!dp.username.toLowerCase().equals(username.toLowerCase()))
 						{
 					
-					 /*      	for (int j = 0; j < shots.size(); j++){
+					       	for (int j = 0; j < shots.size(); j++){
 					       		Shot m = (Shot) shots.get(j);
 					       		dp.shotx = m.getX();
 					       		dp.shoty = m.getY();
 					       		g.drawImage(m.getImage(), dp.shotx, dp.shoty , this);
-					       	}*/
+					       	}
 					       	
 						///	shots.add(new Shot(Jay.getX() + BLOCK, Jay.getY()));		
 							g.drawImage(Jay.getImage(), dp.x, dp.y,this);	
 							
-							
+							/*
 							g.setColor(Color.RED);
 							g.fillOval((int) dp.n - 50, (int) dp.m - 50, 100, 100);
 							
 							g.setColor(Color.BLACK);
-							//g.drawString(dp.username, dp.n - 50, dp.m - 70);
+							*/
 						
 					}	
 					}
@@ -1200,18 +1084,20 @@ public ArrayList<DataPackage> others = new ArrayList<DataPackage>();
 			g.drawImage(Jay.getImage(),Jay.getX(),Jay.getY(),this);
 			
 		
-	  /*     	for (int j = 0; j < shots.size(); j++){
+	       	for (int j = 0; j < shots.size(); j++){
 	       		Shot m = (Shot) shots.get(j);
 			g.drawImage(m.getImage(), m.getX()+BLOCK, m.getY(), this);
 	       	
-	       	}*/
-	       
+	       	}
+	       /*
 				g.setColor(Color.BLUE);
 				g.fillOval(n - 50, m - 50, 100, 100);
 				
 				g.setColor(Color.BLACK);
 				g.drawString(username, n - 50, m - 70);
-								
+				*/
+				
+				
 				try
 				{
 					Thread.sleep(1);
@@ -1223,16 +1109,16 @@ public ArrayList<DataPackage> others = new ArrayList<DataPackage>();
 		if (raum.contains("k")){
 			if (lr.charAt(1)=='1') Monster_speed=2;
 			else Monster_speed=1;
-			movemonster(Monster);
+			movemonster();
 		}if (raum.contains("p")){
 			if (lr.charAt(1)=='2') Monster_speed=2;
 			else Monster_speed=1;
 			
-			movemonster(Monster2);
+			movemonster2();
 		}if (raum.contains("o")){
 			if (lr.charAt(1)=='3') Monster_speed=2;
 			else Monster_speed=1;
-			movemonster(Monster3);
+			movemonster3();
 		}if (raum.contains("w")){
 			if (lr.charAt(1)=='1') Geist_speed=1;
 			else if (lr.charAt(1)=='2')Geist_speed=1;
@@ -1382,7 +1268,7 @@ public ArrayList<DataPackage> others = new ArrayList<DataPackage>();
   }
   
   /*
-   * Falls Diggy ein Mana fuer eine Eis- bzw. Feuerruesstung verbraucht traegt er diese Rï¿½stung als Schutz gegen die Obergegner.
+   * Falls Diggy ein Mana fuer eine Eis- bzw. Feuerruesstung verbraucht traegt er diese Rüstung als Schutz gegen die Obergegner.
    * Mit der Eisrusestung schuetzt er sich vor dem zweiten Obergegner.
    * Mit der Feuerruestung schuetzt er sich vor dem dritten Obergegner.
    */
@@ -1394,7 +1280,7 @@ public ArrayList<DataPackage> others = new ArrayList<DataPackage>();
 
 			int key = e.getKeyCode();
 
-	/*		if(key == KeyEvent.VK_RIGHT && armor_ice != true && armor_fire != true){		
+			if(key == KeyEvent.VK_RIGHT && armor_ice != true && armor_fire != true){		
 				
 				Image image1 = image = r.getImage();										
 				Jay.setImage(image1);
@@ -1502,7 +1388,8 @@ public ArrayList<DataPackage> others = new ArrayList<DataPackage>();
 				 * Falls die Taste F fuer Feuerruestung oder E fuer Eisruestung bedient wird, und Diggy noch die 
 				 * Ruestung nihct hat traegt er diese und verliert ein Mana
 				 */
-	/*		}else if(key == KeyEvent.VK_F && armor_fire!=true){
+				
+			}else if(key == KeyEvent.VK_F && armor_fire!=true){
 			
 				if(mana>1)	{
 					armor_fire=true;

@@ -77,14 +77,12 @@ public static void main(String[] args){
 			if (e.getSource()==starten)
 								game();
 						setVisible(false);
+	
 			if (e.getSource()==chat)	
 				 try {
-
-					// new Server().start(); 														// Server
-					 //new Chatter().start(); 													// Client
-
-			
-
+				 new Servera().start(); 														// Server
+				//	 new Chatter().start(); 													// Client
+				 
 				 } catch (Exception e1) {
 
 					e1.printStackTrace();
@@ -98,7 +96,7 @@ public static void main(String[] args){
 					online();
 					setVisible(false);
 			}
-		 }
+		 	}
 
 				/* Beim starten wird das Spielfeld mit (1200 x 720) erstellt.
 				 * 
